@@ -1,2 +1,3 @@
 # coursework
-course work in college
+Моя тема: Школа. Автоматизация школы.
+4-5 таблиц минимум
