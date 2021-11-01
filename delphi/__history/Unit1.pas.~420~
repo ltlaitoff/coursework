@@ -47,7 +47,7 @@ var
 implementation
 
 {$R *.dfm}
-{$APPTYPE CONSOLE}
+//{$APPTYPE CONSOLE}
 
 uses Unit2;
 
@@ -56,6 +56,7 @@ uses Unit2;
   [x] Поддержка добавления оценок только в даты,
       в которые возможно проведение пары у данной группы согласно рассписанию
   [x] Добавить надпись которая будет показывать дни
+
   [ ] Добавить возможность изменение оценок студента
   [ ] Добавить возможность удаление оценок у студента
   [ ] Переделать запросы на params
@@ -115,7 +116,6 @@ begin
   + 'PIVOT j.date; ';
   DataModule1.ADOQueryMain.Open;
 
-
   DataModule1.ADOQueryStudentsFromGroup.Close;
   DataModule1.ADOQueryStudentsFromGroup.SQL.Text :=
   'SELECT '
@@ -148,8 +148,8 @@ begin
       DataModule1.ADOQueryTimetableGet.Next();
     end;
   end;
-
-  setDaysLabel();
+//
+//  setDaysLabel();
 end;
 
 procedure TForm1.setDaysLabel();
@@ -248,7 +248,7 @@ begin
       'INSERT INTO Journal (user_id, subject_id, mark_id, [date]) '   +
       'VALUES (' + IntToStr(student_id) + ', ' + IntToStr(subject_id) +
       ', ' +  IntToStr(mark_id)
-      + ', DateValue("' + FormatDateTime('mm/dd/yyyy', DateTimePicker1.Date) + '"))';
+      + ', DateValue("' + DateTimeToStr(DateTimePicker1.Date) + '"))';
       DataModule1.ADOQueryAddMarks.ExecSQL;
 
       DataModule1.ADOQueryMain.Close;

@@ -47,15 +47,16 @@ var
 implementation
 
 {$R *.dfm}
-{$APPTYPE CONSOLE}
+//{$APPTYPE CONSOLE}
 
 uses Unit2;
 
 {
   TODO:
-  [ ] Поддержка добавления оценок только в даты,
+  [x] Поддержка добавления оценок только в даты,
       в которые возможно проведение пары у данной группы согласно рассписанию
-  [ ] Добавить надпись которая будет показывать дни
+  [x] Добавить надпись которая будет показывать дни
+
   [ ] Добавить возможность изменение оценок студента
   [ ] Добавить возможность удаление оценок у студента
   [ ] Переделать запросы на params
@@ -114,7 +115,6 @@ begin
   + 'GROUP BY u.surname  '
   + 'PIVOT j.date; ';
   DataModule1.ADOQueryMain.Open;
-
 
   DataModule1.ADOQueryStudentsFromGroup.Close;
   DataModule1.ADOQueryStudentsFromGroup.SQL.Text :=
@@ -243,40 +243,41 @@ begin
 
   for var i := 0 to len do begin
     if (timetableDaysOfWeek[i] = dayofweek(DateTimePicker1.Date) - 1) then begin
-//      DataModule1.ADOQueryAddMarks.Close;
-//      DataModule1.ADOQueryAddMarks.SQL.Text :=
-//      'INSERT INTO Journal (user_id, subject_id, mark_id, [date]) '   +
-//      'VALUES (' + IntToStr(student_id) + ', ' + IntToStr(subject_id) +
-//      ', ' +  IntToStr(mark_id)
-//      + ', DateValue("' + FormatDateTime('mm/dd/yyyy', DateTimePicker1.Date) + '"))';
-//      DataModule1.ADOQueryAddMarks.ExecSQL;
-//
-//      DataModule1.ADOQueryMain.Close;
-//      DataModule1.ADOQueryMain.SQL.Text :=
-//      'TRANSFORM Max(j.mark_id) AS [Max-mark_id] '
-//      + 'SELECT u.surname AS fullname '
-//      + 'FROM '
-//      + '  ( '
-//      + '    SELECT * '
-//      + '    FROM Journal '
-//      + '    WHERE Journal.subject_id = ' + IntToStr(subject_id) + ' '
-//      + '  ) AS j '
-//      + '  RIGHT JOIN ( '
-//      + '    SELECT '
-//      + '      Users.id AS id, '
-//      + '      Users.surname as surname, '
-//      + '      Users.name AS name, '
-//      + '      Users.patronymic AS patronymic '
-//      + '    FROM Users '
-//      + '    INNER JOIN Groups ON Users.group_id = Groups.id '
-//      + '    WHERE Groups.id = ' + IntToStr(group_id) + ' '
-//      + '    ORDER BY Users.id '
-//      + '  ) AS u ON j.user_id = u.id '
-//      + 'GROUP BY u.surname  '
-//      + 'PIVOT j.date; ';
-//      DataModule1.ADOQueryMain.Open;
-//
+      DataModule1.ADOQueryAddMarks.Close;
+      DataModule1.ADOQueryAddMarks.SQL.Text :=
+      'INSERT INTO Journal (user_id, subject_id, mark_id, [date]) '   +
+      'VALUES (' + IntToStr(student_id) + ', ' + IntToStr(subject_id) +
+      ', ' +  IntToStr(mark_id)
+      + ', DateValue("' + DateTimeToStr(DateTimePicker1.Date) + '"))';
+      DataModule1.ADOQueryAddMarks.ExecSQL;
+
+      DataModule1.ADOQueryMain.Close;
+      DataModule1.ADOQueryMain.SQL.Text :=
+      'TRANSFORM Max(j.mark_id) AS [Max-mark_id] '
+      + 'SELECT u.surname AS fullname '
+      + 'FROM '
+      + '  ( '
+      + '    SELECT * '
+      + '    FROM Journal '
+      + '    WHERE Journal.subject_id = ' + IntToStr(subject_id) + ' '
+      + '  ) AS j '
+      + '  RIGHT JOIN ( '
+      + '    SELECT '
+      + '      Users.id AS id, '
+      + '      Users.surname as surname, '
+      + '      Users.name AS name, '
+      + '      Users.patronymic AS patronymic '
+      + '    FROM Users '
+      + '    INNER JOIN Groups ON Users.group_id = Groups.id '
+      + '    WHERE Groups.id = ' + IntToStr(group_id) + ' '
+      + '    ORDER BY Users.id '
+      + '  ) AS u ON j.user_id = u.id '
+      + 'GROUP BY u.surname  '
+      + 'PIVOT j.date; ';
+      DataModule1.ADOQueryMain.Open;
+
       DBLookupComboBox3.KeyValue := '';
+      DBLookupComboBox4.KeyValue := '';
       insert_boolean := True;
 
       break;
@@ -289,7 +290,6 @@ begin
   end;
 
 end;
-
 
 procedure TForm1.DateTimePicker1OnChange(Sender: TObject);
 begin

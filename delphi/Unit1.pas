@@ -47,7 +47,7 @@ var
 implementation
 
 {$R *.dfm}
-{$APPTYPE CONSOLE}
+//{$APPTYPE CONSOLE}
 
 uses Unit2;
 
@@ -116,7 +116,6 @@ begin
   + 'PIVOT j.date; ';
   DataModule1.ADOQueryMain.Open;
 
-
   DataModule1.ADOQueryStudentsFromGroup.Close;
   DataModule1.ADOQueryStudentsFromGroup.SQL.Text :=
   'SELECT '
@@ -161,31 +160,26 @@ begin
   for var i := 0 to len do begin
     case(timetableDaysOfWeek[i]) of
       1: begin
-        write('case1');
         Label6.Caption := Label6.Caption + ' Понедельник';
         continue;
       end;
 
       2: begin
-        write('case2');
         Label6.Caption := Label6.Caption + ' Вторник';
         continue;
       end;
 
       3: begin
-        write('case3');
         Label6.Caption := Label6.Caption + ' Среда';
         continue;
       end;
 
       4: begin
-        write('case4');
         Label6.Caption := Label6.Caption + ' Четверг';
         continue;
       end;
 
       5: begin
-        write('case5');
         Label6.Caption := Label6.Caption + ' Пятница';
         continue;
       end;
@@ -207,7 +201,6 @@ begin
   DataModule1.ADOQueryAddMarks.Open;
 
   mark_id := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
-  writeln(IntToStr(mark_id));
 
   DataModule1.ADOQueryAddMarks.Close;
   DataModule1.ADOQueryAddMarks.SQL.Text :=
@@ -217,7 +210,6 @@ begin
   DataModule1.ADOQueryAddMarks.Open;
 
   student_id := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
-  writeln(student_id);
 
   DataModule1.ADOQueryTimetableGet.Close;
   DataModule1.ADOQueryTimetableGet.SQL.Text :=
@@ -249,7 +241,7 @@ begin
       'INSERT INTO Journal (user_id, subject_id, mark_id, [date]) '   +
       'VALUES (' + IntToStr(student_id) + ', ' + IntToStr(subject_id) +
       ', ' +  IntToStr(mark_id)
-      + ', DateValue("' + FormatDateTime('mm/dd/yyyy', DateTimePicker1.Date) + '"))';
+      + ', DateValue("' + DateTimeToStr(DateTimePicker1.Date) + '"))';
       DataModule1.ADOQueryAddMarks.ExecSQL;
 
       DataModule1.ADOQueryMain.Close;
