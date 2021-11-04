@@ -11,22 +11,22 @@ type
   TForm1 = class(TForm)
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
-    TabSheet3: TTabSheet;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
     DBGrid1: TDBGrid;
     Button1: TButton;
     DBLookupComboBox1: TDBLookupComboBox;
-    Label1: TLabel;
-    Label2: TLabel;
     DBLookupComboBox2: TDBLookupComboBox;
     DBLookupComboBox3: TDBLookupComboBox;
     Button2: TButton;
     DBLookupComboBox4: TDBLookupComboBox;
-    Label3: TLabel;
-    Label4: TLabel;
     DateTimePicker1: TDateTimePicker;
-    Label5: TLabel;
-    Label6: TLabel;
+    TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure DateTimePicker1OnChange(Sender: TObject);
@@ -47,7 +47,7 @@ var
 implementation
 
 {$R *.dfm}
-//{$APPTYPE CONSOLE}
+{$APPTYPE CONSOLE}
 
 uses Unit2;
 
@@ -56,6 +56,7 @@ uses Unit2;
   [x] Поддержка добавления оценок только в даты,
       в которые возможно проведение пары у данной группы согласно рассписанию
   [x] Добавить надпись которая будет показывать дни
+  [x] Скрыть пустой столбец
 
   [ ] Добавить возможность изменение оценок студента
   [ ] Добавить возможность удаление оценок у студента
@@ -115,6 +116,8 @@ begin
   + 'GROUP BY u.surname  '
   + 'PIVOT j.date; ';
   DataModule1.ADOQueryMain.Open;
+
+  DBGrid1.Columns[1].Visible := false;
 
   DataModule1.ADOQueryStudentsFromGroup.Close;
   DataModule1.ADOQueryStudentsFromGroup.SQL.Text :=
@@ -187,6 +190,7 @@ begin
   end;
 
 end;
+
 
 procedure TForm1.Button2Click(Sender: TObject);
 var

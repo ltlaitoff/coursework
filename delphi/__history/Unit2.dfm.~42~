@@ -5,8 +5,18 @@ object DataModule1: TDataModule1
   object ADOConnection: TADOConnection
     Connected = True
     ConnectionString = 
-      'Provider=Microsoft.ACE.OLEDB.15.0;Data Source=C:\My_projects\cou' +
-      'rsework\db.accdb;Persist Security Info=False'
+      'Provider=Microsoft.ACE.OLEDB.15.0;User ID=Admin;Data Source=..\d' +
+      'b.accdb;Mode=Share Deny None;Persist Security Info=False;Jet OLE' +
+      'DB:System database="";Jet OLEDB:Registry Path="";Jet OLEDB:Datab' +
+      'ase Password="";Jet OLEDB:Engine Type=6;Jet OLEDB:Database Locki' +
+      'ng Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;Jet OLEDB:Global B' +
+      'ulk Transactions=1;Jet OLEDB:New Database Password="";Jet OLEDB:' +
+      'Create System Database=False;Jet OLEDB:Encrypt Database=False;Je' +
+      't OLEDB:Don'#39't Copy Locale on Compact=False;Jet OLEDB:Compact Wit' +
+      'hout Replica Repair=False;Jet OLEDB:SFP=False;Jet OLEDB:Support ' +
+      'Complex Data=False;Jet OLEDB:Bypass UserInfo Validation=False;Je' +
+      't OLEDB:Limited DB Caching=False;Jet OLEDB:Bypass ChoiceField Va' +
+      'lidation=False'
     LoginPrompt = False
     Mode = cmShareDenyNone
     Provider = 'Microsoft.ACE.OLEDB.15.0'
@@ -14,13 +24,31 @@ object DataModule1: TDataModule1
     Top = 48
   end
   object ADOQueryMain: TADOQuery
-    Active = True
     Connection = ADOConnection
     CursorType = ctStatic
     Parameters = <>
     SQL.Strings = (
-      'SELECT * '
-      'FROM Journal')
+      'TRANSFORM Max(j.mark_id) AS [Max-mark_id]'
+      'SELECT u.surname AS fullname'
+      'FROM'
+      '  ('
+      '    SELECT *'
+      '    FROM Journal'
+      '    WHERE Journal.subject_id = 2'
+      '  ) AS j'
+      '  RIGHT JOIN ('
+      '    SELECT'
+      '      Users.id AS id,'
+      '      Users.surname as surname,'
+      '      Users.name AS name,'
+      '      Users.patronymic AS patronymic'
+      '    FROM Users'
+      '    INNER JOIN Groups ON Users.group_id = Groups.id'
+      '    WHERE Groups.id = 2'
+      '    ORDER BY Users.id'
+      '  ) AS u ON j.user_id = u.id'
+      'GROUP BY u.surname '
+      'PIVOT j.date;')
     Left = 112
     Top = 24
   end
@@ -30,7 +58,6 @@ object DataModule1: TDataModule1
     Top = 16
   end
   object ADOTableGroups: TADOTable
-    Active = True
     Connection = ADOConnection
     CursorType = ctStatic
     TableName = 'Groups'
@@ -38,7 +65,6 @@ object DataModule1: TDataModule1
     Top = 80
   end
   object ADOTableSubjects: TADOTable
-    Active = True
     Connection = ADOConnection
     CursorType = ctStatic
     TableName = 'Subjects'
@@ -56,7 +82,6 @@ object DataModule1: TDataModule1
     Top = 136
   end
   object ADOQueryStudentsFromGroup: TADOQuery
-    Active = True
     Connection = ADOConnection
     CursorType = ctStatic
     Parameters = <>
@@ -79,7 +104,6 @@ object DataModule1: TDataModule1
     Top = 208
   end
   object ADOQueryAddMarks: TADOQuery
-    Active = True
     Connection = ADOConnection
     CursorType = ctStatic
     Parameters = <>
@@ -94,7 +118,6 @@ object DataModule1: TDataModule1
     Top = 280
   end
   object ADOTableMarks: TADOTable
-    Active = True
     Connection = ADOConnection
     CursorType = ctStatic
     TableName = 'Marks'
@@ -107,7 +130,6 @@ object DataModule1: TDataModule1
     Top = 344
   end
   object ADOQueryTimetableGet: TADOQuery
-    Active = True
     Connection = ADOConnection
     CursorType = ctStatic
     Parameters = <>

@@ -1,6 +1,6 @@
 object DataModule1: TDataModule1
   OldCreateOrder = False
-  Height = 432
+  Height = 487
   Width = 486
   object ADOConnection: TADOConnection
     Connected = True
@@ -14,13 +14,31 @@ object DataModule1: TDataModule1
     Top = 48
   end
   object ADOQueryMain: TADOQuery
-    Active = True
     Connection = ADOConnection
     CursorType = ctStatic
     Parameters = <>
     SQL.Strings = (
-      'SELECT * '
-      'FROM Journal')
+      'TRANSFORM Max(j.mark_id) AS [Max-mark_id]'
+      'SELECT u.surname AS fullname'
+      'FROM'
+      '  ('
+      '    SELECT *'
+      '    FROM Journal'
+      '    WHERE Journal.subject_id = 2'
+      '  ) AS j'
+      '  RIGHT JOIN ('
+      '    SELECT'
+      '      Users.id AS id,'
+      '      Users.surname as surname,'
+      '      Users.name AS name,'
+      '      Users.patronymic AS patronymic'
+      '    FROM Users'
+      '    INNER JOIN Groups ON Users.group_id = Groups.id'
+      '    WHERE Groups.id = 2'
+      '    ORDER BY Users.id'
+      '  ) AS u ON j.user_id = u.id'
+      'GROUP BY u.surname '
+      'PIVOT j.date;')
     Left = 112
     Top = 24
   end
@@ -56,6 +74,7 @@ object DataModule1: TDataModule1
     Top = 136
   end
   object ADOQueryStudentsFromGroup: TADOQuery
+    Active = True
     Connection = ADOConnection
     CursorType = ctStatic
     Parameters = <>
@@ -96,7 +115,7 @@ object DataModule1: TDataModule1
     Active = True
     Connection = ADOConnection
     CursorType = ctStatic
-    TableName = 'Subjects'
+    TableName = 'Marks'
     Left = 112
     Top = 344
   end
@@ -104,5 +123,22 @@ object DataModule1: TDataModule1
     DataSet = ADOTableMarks
     Left = 288
     Top = 344
+  end
+  object ADOQueryTimetableGet: TADOQuery
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT *'
+      'FROM Timetable'
+      'WHERE (group_id = -1) AND (subject_id = -1);')
+    Left = 112
+    Top = 408
+  end
+  object DataSourceTimetableGet: TDataSource
+    DataSet = ADOQueryTimetableGet
+    Left = 288
+    Top = 408
   end
 end

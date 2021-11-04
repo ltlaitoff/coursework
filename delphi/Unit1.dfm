@@ -72,9 +72,9 @@ object Form1: TForm1
         Height = 13
       end
       object DBGrid1: TDBGrid
-        Left = 0
+        Left = 3
         Top = 0
-        Width = 537
+        Width = 574
         Height = 369
         DataSource = DataModule1.DataSourceMain
         TabOrder = 0

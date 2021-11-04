@@ -148,8 +148,8 @@ begin
       DataModule1.ADOQueryTimetableGet.Next();
     end;
   end;
-//
-//  setDaysLabel();
+
+  setDaysLabel();
 end;
 
 procedure TForm1.setDaysLabel();
@@ -160,31 +160,26 @@ begin
   for var i := 0 to len do begin
     case(timetableDaysOfWeek[i]) of
       1: begin
-        write('case1');
         Label6.Caption := Label6.Caption + ' Понедельник';
         continue;
       end;
 
       2: begin
-        write('case2');
         Label6.Caption := Label6.Caption + ' Вторник';
         continue;
       end;
 
       3: begin
-        write('case3');
         Label6.Caption := Label6.Caption + ' Среда';
         continue;
       end;
 
       4: begin
-        write('case4');
         Label6.Caption := Label6.Caption + ' Четверг';
         continue;
       end;
 
       5: begin
-        write('case5');
         Label6.Caption := Label6.Caption + ' Пятница';
         continue;
       end;
@@ -206,7 +201,6 @@ begin
   DataModule1.ADOQueryAddMarks.Open;
 
   mark_id := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
-  writeln(IntToStr(mark_id));
 
   DataModule1.ADOQueryAddMarks.Close;
   DataModule1.ADOQueryAddMarks.SQL.Text :=
@@ -216,7 +210,6 @@ begin
   DataModule1.ADOQueryAddMarks.Open;
 
   student_id := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
-  writeln(student_id);
 
   DataModule1.ADOQueryTimetableGet.Close;
   DataModule1.ADOQueryTimetableGet.SQL.Text :=
