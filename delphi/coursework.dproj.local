@@ -3,9 +3,9 @@
 	<Transactions>
     <Transaction>1899.12.30 00:00:00.000.432,=C:\My_projects\coursework\delphi\Unit2.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.598,=C:\My_projects\coursework\delphi\Unit3.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.352,C:\Users\eeone\OneDrive\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\My_projects\coursework\delphi\coursework.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.007,C:\Users\eeone\OneDrive\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\My_projects\coursework\delphi\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.007,C:\My_projects\coursework\delphi\Unit1.pas=C:\Users\eeone\OneDrive\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.659,=C:\Users\eeone\OneDrive\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.007,C:\Users\eeone\OneDrive\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\My_projects\coursework\delphi\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.007,C:\My_projects\coursework\delphi\Unit1.dfm=C:\Users\eeone\OneDrive\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.352,C:\My_projects\coursework\delphi\coursework.dproj=C:\Users\eeone\OneDrive\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
   </Transactions>
 </BorlandProject>
