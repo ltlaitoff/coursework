@@ -260,8 +260,6 @@ begin
   markId := getMarkId(markComboBox.KeyValue);
   studentId := getStudentId(studentComboBox.KeyValue);
 
-  updateArrayDaysOfWeek(); // Пересмотреть надобность
-
   var len := Length(timetableDaysOfWeek);
   var insert_boolean := false;
 
