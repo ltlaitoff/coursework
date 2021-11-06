@@ -1,4 +1,4 @@
-unit Unit1;
+﻿unit Unit1;
 
 interface
 
@@ -33,16 +33,24 @@ type
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure DateTimePicker1OnChange(Sender: TObject);
-    procedure setDaysLabel();
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
+
+    procedure showMainTable();
+    procedure getGroupId();
+    procedure getSubjectId();
+    procedure doQueryDaysOfWeek();
+    procedure updateArrayDaysOfWeek();
+    procedure updateStringDaysOfWeek();
+    function getMarkId(markName: String): Integer;
+    function getStudentId(studentSurname: String): Integer;
+    procedure addRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
+    procedure updateRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
   private
     { Private declarations }
   public
     { Public declarations }
   end;
-
-//const
 
 var
   Form1: TForm1;
@@ -56,26 +64,8 @@ implementation
 
 uses Unit2;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.showMainTable();
 begin
-  DataModule1.ADOQueryMain.Close;
-  DataModule1.ADOQueryMain.SQL.Text :=
-  'SELECT * ' +
-  'FROM Groups ' +
-  'WHERE name LIKE "' + DBLookupComboBox1.KeyValue + '"';
-  DataModule1.ADOQueryMain.Open;
-
-  group_id := DataModule1.DataSourceMain.DataSet.Fields[0].AsInteger;
-
-  DataModule1.ADOQueryMain.Close;
-  DataModule1.ADOQueryMain.SQL.Text :=
-  'SELECT * ' +
-  'FROM Subjects ' +
-  'WHERE name LIKE "' + DBLookupComboBox2.KeyValue + '"';
-  DataModule1.ADOQueryMain.Open;
-
-  subject_id := DataModule1.DataSourceMain.DataSet.Fields[0].AsInteger;
-
   DataModule1.ADOQueryMain.Close;
   DataModule1.ADOQueryMain.SQL.Text :=
   'TRANSFORM Max(j.mark_id) AS [Max-mark_id] '
@@ -102,6 +92,94 @@ begin
   DataModule1.ADOQueryMain.Open;
 
   DBGrid1.Columns[1].Visible := false;
+end;
+
+procedure TForm1.getGroupId();
+begin
+  DataModule1.ADOQueryMain.Close;
+  DataModule1.ADOQueryMain.SQL.Text :=
+  'SELECT * ' +
+  'FROM Groups ' +
+  'WHERE name LIKE "' + DBLookupComboBox1.KeyValue + '"';
+  DataModule1.ADOQueryMain.Open;
+
+  group_id := DataModule1.DataSourceMain.DataSet.Fields[0].AsInteger;
+end;
+
+procedure TForm1.getSubjectId();
+begin
+  DataModule1.ADOQueryMain.Close;
+  DataModule1.ADOQueryMain.SQL.Text :=
+  'SELECT * ' +
+  'FROM Subjects ' +
+  'WHERE name LIKE "' + DBLookupComboBox2.KeyValue + '"';
+  DataModule1.ADOQueryMain.Open;
+
+  subject_id := DataModule1.DataSourceMain.DataSet.Fields[0].AsInteger;
+end;
+
+procedure TForm1.doQueryDaysOfWeek();
+begin
+  DataModule1.ADOQueryTimetableGet.Close;
+  DataModule1.ADOQueryTimetableGet.SQL.Text :=
+    'SELECT  day_of_week '
+  + 'FROM Timetable '
+  + 'WHERE (group_id = ' + IntToStr(group_id) + ') AND '
+  + '(subject_id = ' + IntToStr(subject_id) + ')';
+  DataModule1.ADOQueryTimetableGet.Open;
+end;
+
+procedure TForm1.updateArrayDaysOfWeek();
+var
+  len, i: Integer;
+begin
+  doQueryDaysOfWeek();
+
+  len := DataModule1.DataSourceTimetableGet.DataSet.RecordCount;
+  SetLength(timetableDaysOfWeek, len);
+
+  DataModule1.DataSourceTimetableGet.DataSet.First();
+
+  while not DataModule1.DataSourceTimetableGet.DataSet.Eof do begin
+    for i := 0 to len - 1 do
+    begin
+      timetableDaysOfWeek[i] := 
+        DataModule1.DataSourceTimetableGet.DataSet.FieldByName('day_of_week').AsInteger;
+      DataModule1.DataSourceTimetableGet.DataSet.Next();
+    end;
+  end;
+end;
+
+procedure TForm1.updateStringDaysOfWeek();
+var
+  len, i: Integer;
+  result: String;
+begin
+  updateArrayDaysOfWeek();
+  
+  len := Length(timetableDaysOfWeek);
+  result := '';
+
+  for i := 0 to len - 1 do
+  begin
+    case(DataModule1.DataSourceTimetableGet.DataSet.FieldByName('day_of_week').AsInteger) of
+      1: result := result + ' Понедельник';
+      2: result := result + ' Вторник';
+      3: result := result + ' Среда';
+      4: result := result + ' Четверг';
+      5: result := result + ' Пятница';
+    end;
+  end;
+
+  Label6.Caption := result;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+  getGroupId();
+  getSubjectId();
+  showMainTable();
+  updateStringDaysOfWeek();
 
   DataModule1.ADOQueryStudentsFromGroup.Close;
   DataModule1.ADOQueryStudentsFromGroup.SQL.Text :=
@@ -115,147 +193,75 @@ begin
   + 'WHERE Groups.id = ' + IntToStr(group_id) + ' '
   + 'ORDER BY Users.id ';
   DataModule1.ADOQueryStudentsFromGroup.Open;
-
-  DataModule1.ADOQueryTimetableGet.Close;
-  DataModule1.ADOQueryTimetableGet.SQL.Text :=
-    'SELECT  day_of_week '
-  + 'FROM Timetable '
-  + 'WHERE (group_id = ' + IntToStr(group_id) + ') AND '
-  + '(subject_id = ' + IntToStr(subject_id) + ')';
-  DataModule1.ADOQueryTimetableGet.Open;
-
-  SetLength(timetableDaysOfWeek, DataModule1.ADOQueryTimetableGet.RecordCount);
-  DataModule1.ADOQueryTimetableGet.First();
-
-  while not DataModule1.ADOQueryTimetableGet.Eof do begin
-    for var i := 0 to DataModule1.ADOQueryTimetableGet.RecordCount - 1 do
-    begin
-      timetableDaysOfWeek[i] :=
-        DataModule1.ADOQueryTimetableGet.FieldByName('day_of_week').AsInteger;
-      DataModule1.ADOQueryTimetableGet.Next();
-    end;
-  end;
-
-  setDaysLabel();
 end;
 
-procedure TForm1.setDaysLabel();
-begin
-  var len := Length(timetableDaysOfWeek);
-  Label6.Caption := '';
-
-  for var i := 0 to len do begin
-    case(timetableDaysOfWeek[i]) of
-      1: begin
-        Label6.Caption := Label6.Caption + ' �����������';
-        continue;
-      end;
-
-      2: begin
-        Label6.Caption := Label6.Caption + ' �������';
-        continue;
-      end;
-
-      3: begin
-        Label6.Caption := Label6.Caption + ' �����';
-        continue;
-      end;
-
-      4: begin
-        Label6.Caption := Label6.Caption + ' �������';
-        continue;
-      end;
-
-      5: begin
-        Label6.Caption := Label6.Caption + ' �������';
-        continue;
-      end;
-    end;
-  end;
-
-end;
-
-
-procedure TForm1.Button2Click(Sender: TObject);
-var
-  mark_id, student_id: Integer;
-  a: String;
+function TForm1.getMarkId(markName: String): Integer;
 begin
   DataModule1.ADOQueryAddMarks.Close;
   DataModule1.ADOQueryAddMarks.SQL.Text :=
   'SELECT * '    +
   'FROM Marks ' +
-  'WHERE mark LIKE "' + DBLookupComboBox4.KeyValue + '"';
+  'WHERE mark LIKE "' + markName + '"';
   DataModule1.ADOQueryAddMarks.Open;
 
-  mark_id := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
+  getMarkId := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
+end;
 
+function TForm1.getStudentId(studentSurname: String): Integer;
+begin
   DataModule1.ADOQueryAddMarks.Close;
   DataModule1.ADOQueryAddMarks.SQL.Text :=
   'SELECT id '    +
   'FROM Users ' +
-  'WHERE surname LIKE "' + DBLookupComboBox3.KeyValue + '"';
+  'WHERE surname LIKE "' + studentSurname + '"';
   DataModule1.ADOQueryAddMarks.Open;
 
-  student_id := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
+  getStudentId := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
+end;
 
-  DataModule1.ADOQueryTimetableGet.Close;
-  DataModule1.ADOQueryTimetableGet.SQL.Text :=
-    'SELECT  day_of_week '
-  + 'FROM Timetable '
-  + 'WHERE (group_id = ' + IntToStr(group_id) + ') AND '
-  + '(subject_id = ' + IntToStr(subject_id) + ')';
-  DataModule1.ADOQueryTimetableGet.Open;
+procedure TForm1.addRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
+begin
+  DataModule1.ADOQueryAddMarks.Close;
+  DataModule1.ADOQueryAddMarks.SQL.Text :=
+  'INSERT INTO Journal (user_id, subject_id, mark_id, [date]) '   +
+  'VALUES (' + IntToStr(studentID) + ', ' + IntToStr(subjectID) +
+  ', ' +  IntToStr(markID)
+  + ', DateValue("' + DateTimeToStr(date) + '"))';
 
-  SetLength(timetableDaysOfWeek, DataModule1.ADOQueryTimetableGet.RecordCount);
-  DataModule1.ADOQueryTimetableGet.First();
+  DataModule1.ADOQueryAddMarks.ExecSQL;
+end;
 
-  while not DataModule1.ADOQueryTimetableGet.Eof do begin
-    for var i := 0 to DataModule1.ADOQueryTimetableGet.RecordCount - 1 do
-    begin
-      timetableDaysOfWeek[i] :=
-        DataModule1.ADOQueryTimetableGet.FieldByName('day_of_week').AsInteger;
-      DataModule1.ADOQueryTimetableGet.Next();
-    end;
-  end;
+procedure TForm1.updateRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
+begin
+  DataModule1.ADOQueryAddMarks.Close;
+  DataModule1.ADOQueryAddMarks.SQL.Text :=
+  'UPDATE Journal ' +
+  'SET ' +
+    'mark_id = ' + IntToStr(markID) + ' ' +
+  'WHERE '+
+  ' user_id = ' + IntToStr(studentID) + ' AND ' +
+  ' subject_id = ' + IntToStr(subjectID) + ' AND ' +
+  'date = DateValue("' + DateTimeToStr(date) + '"); ';
+  DataModule1.ADOQueryAddMarks.ExecSQL;
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+var
+  markId, studentId: Integer;
+  a: String;
+begin
+  markId := getMarkId(DBLookupComboBox4.KeyValue);
+  studentId := getStudentId(DBLookupComboBox3.KeyValue);
+
+  updateArrayDaysOfWeek(); // Пересмотреть надобность
 
   var len := Length(timetableDaysOfWeek);
   var insert_boolean := false;
 
   for var i := 0 to len do begin
     if (timetableDaysOfWeek[i] = dayofweek(DateTimePicker1.Date) - 1) then begin
-      DataModule1.ADOQueryAddMarks.Close;
-      DataModule1.ADOQueryAddMarks.SQL.Text :=
-      'INSERT INTO Journal (user_id, subject_id, mark_id, [date]) '   +
-      'VALUES (' + IntToStr(student_id) + ', ' + IntToStr(subject_id) +
-      ', ' +  IntToStr(mark_id)
-      + ', DateValue("' + DateTimeToStr(DateTimePicker1.Date) + '"))';
-      DataModule1.ADOQueryAddMarks.ExecSQL;
-
-      DataModule1.ADOQueryMain.Close;
-      DataModule1.ADOQueryMain.SQL.Text :=
-      'TRANSFORM Max(j.mark_id) AS [Max-mark_id] '
-      + 'SELECT u.surname AS fullname '
-      + 'FROM '
-      + '  ( '
-      + '    SELECT * '
-      + '    FROM Journal '
-      + '    WHERE Journal.subject_id = ' + IntToStr(subject_id) + ' '
-      + '  ) AS j '
-      + '  RIGHT JOIN ( '
-      + '    SELECT '
-      + '      Users.id AS id, '
-      + '      Users.surname as surname, '
-      + '      Users.name AS name, '
-      + '      Users.patronymic AS patronymic '
-      + '    FROM Users '
-      + '    INNER JOIN Groups ON Users.group_id = Groups.id '
-      + '    WHERE Groups.id = ' + IntToStr(group_id) + ' '
-      + '    ORDER BY Users.id '
-      + '  ) AS u ON j.user_id = u.id '
-      + 'GROUP BY u.surname  '
-      + 'PIVOT j.date; ';
-      DataModule1.ADOQueryMain.Open;
+      addRecordInJournal(studentID, subject_id, markID, DateTimePicker1.Date);
+      showMainTable();
 
       DBLookupComboBox3.KeyValue := '';
       DBLookupComboBox4.KeyValue := '';
@@ -269,7 +275,6 @@ begin
     Label5.Visible := True;
     Label5.Caption := '�������� ����!';
   end;
-
 end;
 
 procedure TForm1.Button3Click(Sender: TObject);
@@ -281,86 +286,20 @@ end;
 
 procedure TForm1.Button4Click(Sender: TObject);
 var
-  mark_id, student_id: Integer;
+  markId, studentId: Integer;
 begin
-  DataModule1.ADOQueryAddMarks.Close;
-  DataModule1.ADOQueryAddMarks.SQL.Text :=
-  'SELECT * '    +
-  'FROM Marks ' +
-  'WHERE mark LIKE "' + DBLookupComboBox4.KeyValue + '"';
-  DataModule1.ADOQueryAddMarks.Open;
+  markId := getMarkId(DBLookupComboBox4.KeyValue);
+  studentId := getStudentId(DBLookupComboBox3.KeyValue);
 
-  mark_id := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
-
-  DataModule1.ADOQueryAddMarks.Close;
-  DataModule1.ADOQueryAddMarks.SQL.Text :=
-  'SELECT id '    +
-  'FROM Users ' +
-  'WHERE surname LIKE "' + DBLookupComboBox3.KeyValue + '"';
-  DataModule1.ADOQueryAddMarks.Open;
-
-  student_id := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
-
-  DataModule1.ADOQueryTimetableGet.Close;
-  DataModule1.ADOQueryTimetableGet.SQL.Text :=
-    'SELECT  day_of_week '
-  + 'FROM Timetable '
-  + 'WHERE (group_id = ' + IntToStr(group_id) + ') AND '
-  + '(subject_id = ' + IntToStr(subject_id) + ')';
-  DataModule1.ADOQueryTimetableGet.Open;
-
-  SetLength(timetableDaysOfWeek, DataModule1.ADOQueryTimetableGet.RecordCount);
-  DataModule1.ADOQueryTimetableGet.First();
-
-  while not DataModule1.ADOQueryTimetableGet.Eof do begin
-    for var i := 0 to DataModule1.ADOQueryTimetableGet.RecordCount - 1 do
-    begin
-      timetableDaysOfWeek[i] :=
-        DataModule1.ADOQueryTimetableGet.FieldByName('day_of_week').AsInteger;
-      DataModule1.ADOQueryTimetableGet.Next();
-    end;
-  end;
+  // updateArrayDaysOfWeek(); // Пересмотреть надобность
 
   var len := Length(timetableDaysOfWeek);
   var insert_boolean := false;
 
   for var i := 0 to len do begin
     if (timetableDaysOfWeek[i] = dayofweek(DateTimePicker1.Date) - 1) then begin
-      DataModule1.ADOQueryAddMarks.Close;
-      DataModule1.ADOQueryAddMarks.SQL.Text :=
-      'UPDATE Journal ' +
-      'SET ' +
-        'mark_id = ' + IntToStr(mark_id) + ' ' +
-      'WHERE '+
-      ' user_id = ' + IntToStr(student_id) + ' AND ' +
-      ' subject_id = ' + IntToStr(subject_id) + ' AND ' +
-      'date = DateValue("' + DateTimeToStr(DateTimePicker1.Date) + '"); ';
-      DataModule1.ADOQueryAddMarks.ExecSQL;
-
-      DataModule1.ADOQueryMain.Close;
-      DataModule1.ADOQueryMain.SQL.Text :=
-      'TRANSFORM Max(j.mark_id) AS [Max-mark_id] '
-      + 'SELECT u.surname AS fullname '
-      + 'FROM '
-      + '  ( '
-      + '    SELECT * '
-      + '    FROM Journal '
-      + '    WHERE Journal.subject_id = ' + IntToStr(subject_id) + ' '
-      + '  ) AS j '
-      + '  RIGHT JOIN ( '
-      + '    SELECT '
-      + '      Users.id AS id, '
-      + '      Users.surname as surname, '
-      + '      Users.name AS name, '
-      + '      Users.patronymic AS patronymic '
-      + '    FROM Users '
-      + '    INNER JOIN Groups ON Users.group_id = Groups.id '
-      + '    WHERE Groups.id = ' + IntToStr(group_id) + ' '
-      + '    ORDER BY Users.id '
-      + '  ) AS u ON j.user_id = u.id '
-      + 'GROUP BY u.surname  '
-      + 'PIVOT j.date; ';
-      DataModule1.ADOQueryMain.Open;
+      updateRecordInJournal(studentID, subject_id, markID, DateTimePicker1.Date);
+      showMainTable();
 
       DBLookupComboBox3.KeyValue := '';
       DBLookupComboBox4.KeyValue := '';

@@ -18,11 +18,11 @@ object Form1: TForm1
     Top = 0
     Width = 991
     Height = 729
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     TabOrder = 0
     object TabSheet1: TTabSheet
       AlignWithMargins = True
-      Caption = 'Main'
+      Caption = '`'
       object Label1: TLabel
         Left = 3
         Top = 375
@@ -83,7 +83,7 @@ object Form1: TForm1
       end
       object Panel1: TPanel
         Left = 53
-        Top = 484
+        Top = 437
         Width = 572
         Height = 173
         TabOrder = 4
