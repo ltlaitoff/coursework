@@ -42,3 +42,20 @@ PIVOT j.date;
 + '  ) AS u ON j.user_id = u.id '
 + 'GROUP BY fullname  '
 + 'PIVOT j.date; ';
+
+
+UPDATE Journal
+SET
+  mark_id = 9
+WHERE
+user_id = 
+subject_id = 
+date = DateValue("");
+
+UPDATE Journal
+SET
+  mark_id = 9
+WHERE
+user_id = 1 AND
+subject_id = 1 AND
+date = DateValue("08.10.2021");
