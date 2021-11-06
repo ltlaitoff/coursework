@@ -196,12 +196,6 @@ begin
   DataModule1.ADOQueryStudentsFromGroup.Open;
 end;
 
-procedure TForm1.Button3Click(Sender: TObject);
-begin
-  Panel1.Visible := true;
-  DBLookupComboBox3.KeyValue := DBGrid1.Fields[0].AsString;
-end;
-
 
 function TForm1.getMarkId(markName: String): Integer;
 begin
@@ -267,9 +261,9 @@ begin
 
   for var i := 0 to len do begin
     if (timetableDaysOfWeek[i] = dayofweek(DateTimePicker1.Date) - 1) then begin
-      case StrUtils.IndexStr(action, ['add', 'update', 'delete']) of
-        0: addRecordInJournal(studentID, subject_id, markID, DateTimePicker1.Date);
-        1: updateRecordInJournal(studentID, subject_id, markID, DateTimePicker1.Date);
+      case IndexStr(action, ['add', 'update', 'delete']) of
+        'add': addRecordInJournal(studentID, subject_id, markID, DateTimePicker1.Date);
+        'update': updateRecordInJournal(studentID, subject_id, markID, DateTimePicker1.Date);
       end;
       
       showMainTable();
@@ -286,6 +280,12 @@ begin
     Label5.Visible := True;
     Label5.Caption := 'Неверная дата!';
   end;
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+begin
+  Panel1.Visible := true;
+  DBLookupComboBox3.KeyValue := DBGrid1.Fields[0].AsString;
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);

@@ -42,6 +42,11 @@ type
     procedure doQueryDaysOfWeek();
     procedure updateArrayDaysOfWeek();
     procedure updateStringDaysOfWeek();
+    function getMarkId(markName: String): Integer;
+    function getStudentId(studentSurname: String): Integer;
+    procedure addRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
+    procedure updateRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
+    procedure journalActionController(action: String; studentComboBox, markComboBox: TDBLookupComboBox);
   private
     { Private declarations }
   public
@@ -127,16 +132,17 @@ end;
 
 procedure TForm1.updateArrayDaysOfWeek();
 var
-  len: Integer;
+  len, i: Integer;
 begin
   doQueryDaysOfWeek();
 
   len := DataModule1.DataSourceTimetableGet.DataSet.RecordCount;
+  SetLength(timetableDaysOfWeek, len);
 
   DataModule1.DataSourceTimetableGet.DataSet.First();
 
   while not DataModule1.DataSourceTimetableGet.DataSet.Eof do begin
-    for var i := 0 to len - 1 do
+    for i := 0 to len - 1 do
     begin
       timetableDaysOfWeek[i] := 
         DataModule1.DataSourceTimetableGet.DataSet.FieldByName('day_of_week').AsInteger;
@@ -147,7 +153,7 @@ end;
 
 procedure TForm1.updateStringDaysOfWeek();
 var
-  len: Integer;
+  len, i: Integer;
   result: String;
 begin
   updateArrayDaysOfWeek();
@@ -155,16 +161,16 @@ begin
   len := Length(timetableDaysOfWeek);
   result := '';
 
-//  for var i := 0 to len - 1 do
-//  begin
-//    case(DataModule1.DataSourceTimetableGet.DataSet.FieldByName('day_of_week').AsInteger) of
-//      1: result := result + ' Понедельник';
-//      2: result := result + ' Вторник';
-//      3: result := result + ' Среда';
-//      4: result := result + ' Четверг';
-//      5: result := result + ' Пятница';
-//    end;
-//  end;
+  for i := 0 to len - 1 do
+  begin
+    case(timetableDaysOfWeek[i]) of
+      1: result := result + ' Понедельник';
+      2: result := result + ' Вторник';
+      3: result := result + ' Среда';
+      4: result := result + ' Четверг';
+      5: result := result + ' Пятница';
+    end;
+  end;
 
   Label6.Caption := result;
 end;
@@ -190,158 +196,106 @@ begin
   DataModule1.ADOQueryStudentsFromGroup.Open;
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
-var
-  mark_id, student_id: Integer;
-  a: String;
+
+function TForm1.getMarkId(markName: String): Integer;
 begin
   DataModule1.ADOQueryAddMarks.Close;
   DataModule1.ADOQueryAddMarks.SQL.Text :=
   'SELECT * '    +
   'FROM Marks ' +
-  'WHERE mark LIKE "' + DBLookupComboBox4.KeyValue + '"';
+  'WHERE mark LIKE "' + markName + '"';
   DataModule1.ADOQueryAddMarks.Open;
 
-  mark_id := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
+  getMarkId := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
+end;
 
+function TForm1.getStudentId(studentSurname: String): Integer;
+begin
   DataModule1.ADOQueryAddMarks.Close;
   DataModule1.ADOQueryAddMarks.SQL.Text :=
   'SELECT id '    +
   'FROM Users ' +
-  'WHERE surname LIKE "' + DBLookupComboBox3.KeyValue + '"';
+  'WHERE surname LIKE "' + studentSurname + '"';
   DataModule1.ADOQueryAddMarks.Open;
 
-  student_id := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
+  getStudentId := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
+end;
 
-  // DataModule1.ADOQueryTimetableGet.Close;
-  // DataModule1.ADOQueryTimetableGet.SQL.Text :=
-  //   'SELECT  day_of_week '
-  // + 'FROM Timetable '
-  // + 'WHERE (group_id = ' + IntToStr(group_id) + ') AND '
-  // + '(subject_id = ' + IntToStr(subject_id) + ')';
-  // DataModule1.ADOQueryTimetableGet.Open;
+procedure TForm1.addRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
+begin
+  DataModule1.ADOQueryAddMarks.Close;
+  DataModule1.ADOQueryAddMarks.SQL.Text :=
+  'INSERT INTO Journal (user_id, subject_id, mark_id, [date]) '   +
+  'VALUES (' + IntToStr(studentID) + ', ' + IntToStr(subjectID) +
+  ', ' +  IntToStr(markID)
+  + ', DateValue("' + DateTimeToStr(date) + '"))';
 
-  // SetLength(timetableDaysOfWeek, DataModule1.ADOQueryTimetableGet.RecordCount);
-  // DataModule1.ADOQueryTimetableGet.First();
+  DataModule1.ADOQueryAddMarks.ExecSQL;
+end;
 
-  // while not DataModule1.ADOQueryTimetableGet.Eof do begin
-  //   for var i := 0 to DataModule1.ADOQueryTimetableGet.RecordCount - 1 do
-  //   begin
-  //     timetableDaysOfWeek[i] :=
-  //       DataModule1.ADOQueryTimetableGet.FieldByName('day_of_week').AsInteger;
-  //     DataModule1.ADOQueryTimetableGet.Next();
-  //   end;
-  // end;
+procedure TForm1.updateRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
+begin
+  DataModule1.ADOQueryAddMarks.Close;
+  DataModule1.ADOQueryAddMarks.SQL.Text :=
+  'UPDATE Journal ' +
+  'SET ' +
+    'mark_id = ' + IntToStr(markID) + ' ' +
+  'WHERE '+
+  ' user_id = ' + IntToStr(studentID) + ' AND ' +
+  ' subject_id = ' + IntToStr(subjectID) + ' AND ' +
+  'date = DateValue("' + DateTimeToStr(date) + '"); ';
+  DataModule1.ADOQueryAddMarks.ExecSQL;
+end;
 
-  // var len := Length(timetableDaysOfWeek);
-  // var insert_boolean := false;
+procedure TForm1.journalActionController(action: String; studentComboBox, markComboBox: TDBLookupComboBox);
+var
+  markId, studentID: Integer;
+begin
+  markId := getMarkId(markComboBox.KeyValue);
+  studentId := getStudentId(studentComboBox.KeyValue);
 
-  // for var i := 0 to len do begin
-  //   if (timetableDaysOfWeek[i] = dayofweek(DateTimePicker1.Date) - 1) then begin
-  //     DataModule1.ADOQueryAddMarks.Close;
-  //     DataModule1.ADOQueryAddMarks.SQL.Text :=
-  //     'INSERT INTO Journal (user_id, subject_id, mark_id, [date]) '   +
-  //     'VALUES (' + IntToStr(student_id) + ', ' + IntToStr(subject_id) +
-  //     ', ' +  IntToStr(mark_id)
-  //     + ', DateValue("' + DateTimeToStr(DateTimePicker1.Date) + '"))';
-  //     DataModule1.ADOQueryAddMarks.ExecSQL;
+  updateArrayDaysOfWeek(); // Пересмотреть надобность
 
-  //     showMainTable();
+  var len := Length(timetableDaysOfWeek);
+  var insert_boolean := false;
 
-  //     DBLookupComboBox3.KeyValue := '';
-  //     DBLookupComboBox4.KeyValue := '';
-  //     insert_boolean := True;
+  for var i := 0 to len do begin
+    if (timetableDaysOfWeek[i] = dayofweek(DateTimePicker1.Date) - 1) then begin
+      case action: String of
+        'add': addRecordInJournal(studentID, subject_id, markID, DateTimePicker1.Date);
+        'update': updateRecordInJournal(studentID, subject_id, markID, DateTimePicker1.Date);
+      end;
+      
+      showMainTable();
 
-  //     break;
-  //   end;
-  // end;
+      markComboBox.KeyValue := '';
+      studentComboBox.KeyValue := '';
+      insert_boolean := True;
 
-  // if (NOT insert_boolean) then begin
-  //   Label5.Visible := True;
-  //   Label5.Caption := '�������� ����!';
-  // end;
+      break;
+    end;
+  end;
 
+  if (NOT insert_boolean) then begin
+    Label5.Visible := True;
+    Label5.Caption := 'Неверная дата!';
+  end;
 end;
 
 procedure TForm1.Button3Click(Sender: TObject);
 begin
   Panel1.Visible := true;
-  writeln(DBGrid1.Fields[0].AsString);
   DBLookupComboBox3.KeyValue := DBGrid1.Fields[0].AsString;
 end;
 
-procedure TForm1.Button4Click(Sender: TObject);
-var
-  mark_id, student_id: Integer;
+procedure TForm1.Button2Click(Sender: TObject);
 begin
-  DataModule1.ADOQueryAddMarks.Close;
-  DataModule1.ADOQueryAddMarks.SQL.Text :=
-  'SELECT * '    +
-  'FROM Marks ' +
-  'WHERE mark LIKE "' + DBLookupComboBox4.KeyValue + '"';
-  DataModule1.ADOQueryAddMarks.Open;
+  journalActionController('add', DBLookupComboBox3, DBLookupComboBox4)
+end;
 
-  mark_id := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
-
-  DataModule1.ADOQueryAddMarks.Close;
-  DataModule1.ADOQueryAddMarks.SQL.Text :=
-  'SELECT id '    +
-  'FROM Users ' +
-  'WHERE surname LIKE "' + DBLookupComboBox3.KeyValue + '"';
-  DataModule1.ADOQueryAddMarks.Open;
-
-  student_id := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
-
-  // DataModule1.ADOQueryTimetableGet.Close;
-  // DataModule1.ADOQueryTimetableGet.SQL.Text :=
-  //   'SELECT  day_of_week '
-  // + 'FROM Timetable '
-  // + 'WHERE (group_id = ' + IntToStr(group_id) + ') AND '
-  // + '(subject_id = ' + IntToStr(subject_id) + ')';
-  // DataModule1.ADOQueryTimetableGet.Open;
-
-  // SetLength(timetableDaysOfWeek, DataModule1.ADOQueryTimetableGet.RecordCount);
-  // DataModule1.ADOQueryTimetableGet.First();
-
-  // while not DataModule1.ADOQueryTimetableGet.Eof do begin
-  //   for var i := 0 to DataModule1.ADOQueryTimetableGet.RecordCount - 1 do
-  //   begin
-  //     timetableDaysOfWeek[i] :=
-  //       DataModule1.ADOQueryTimetableGet.FieldByName('day_of_week').AsInteger;
-  //     DataModule1.ADOQueryTimetableGet.Next();
-  //   end;
-  // end;
-
-  // var len := Length(timetableDaysOfWeek);
-  // var insert_boolean := false;
-
-  // for var i := 0 to len do begin
-  //   if (timetableDaysOfWeek[i] = dayofweek(DateTimePicker1.Date) - 1) then begin
-  //     DataModule1.ADOQueryAddMarks.Close;
-  //     DataModule1.ADOQueryAddMarks.SQL.Text :=
-  //     'UPDATE Journal ' +
-  //     'SET ' +
-  //       'mark_id = ' + IntToStr(mark_id) + ' ' +
-  //     'WHERE '+
-  //     ' user_id = ' + IntToStr(student_id) + ' AND ' +
-  //     ' subject_id = ' + IntToStr(subject_id) + ' AND ' +
-  //     'date = DateValue("' + DateTimeToStr(DateTimePicker1.Date) + '"); ';
-  //     DataModule1.ADOQueryAddMarks.ExecSQL;
-
-  //     showMainTable();
-
-  //     DBLookupComboBox3.KeyValue := '';
-  //     DBLookupComboBox4.KeyValue := '';
-  //     insert_boolean := True;
-
-  //     break;
-  //   end;
-  // end;
-
-  // if (NOT insert_boolean) then begin
-  //   Label5.Visible := True;
-  //   Label5.Caption := '�������� ����!';
-  // end;
+procedure TForm1.Button4Click(Sender: TObject);
+begin
+  journalActionController('update', DBLookupComboBox3, DBLookupComboBox4)
 end;
 
 procedure TForm1.DateTimePicker1OnChange(Sender: TObject);
