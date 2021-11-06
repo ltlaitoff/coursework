@@ -56,30 +56,6 @@ implementation
 
 uses Unit2;
 
-{
-  TODO:
-  [x] Поддержка добавления оценок только в даты,
-      в которые возможно проведение пары у данной группы согласно рассписанию
-  [x] Добавить надпись которая будет показывать дни
-  [x] Скрыть пустой столбец
-  [x] Добавить возможность изменение оценок студента
-
-  [ ] Рефактор кода, вынос елементов в отдельные процедуры/функции
-  [ ] Нажать на ячейку - изменить и сразу отображается что нужно
-
-  [ ] Добавить возможность удаление оценок у студента
-  [ ] Переделать запросы на params
-  [ ] Возможность ввести уникальный пароль и получить доступ
-      к функциям учителя(или через пароли учителя) или администратора
-  [ ] Возможность добавления учеников и учителей
-  [ ] Возможность добавления предметов
-  [ ] Вывод полного ФИО учителей и студентов
-
-  UX: И камнем вниииз
-
-  БАГИ:
-  Если добавить несколько оценок на 1 дату покажется только одна
-}
 procedure TForm1.Button1Click(Sender: TObject);
 begin
   DataModule1.ADOQueryMain.Close;
@@ -171,27 +147,27 @@ begin
   for var i := 0 to len do begin
     case(timetableDaysOfWeek[i]) of
       1: begin
-        Label6.Caption := Label6.Caption + ' Понедельник';
+        Label6.Caption := Label6.Caption + ' пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
         continue;
       end;
 
       2: begin
-        Label6.Caption := Label6.Caption + ' Вторник';
+        Label6.Caption := Label6.Caption + ' пїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
         continue;
       end;
 
       3: begin
-        Label6.Caption := Label6.Caption + ' Среда';
+        Label6.Caption := Label6.Caption + ' пїЅпїЅпїЅпїЅпїЅ';
         continue;
       end;
 
       4: begin
-        Label6.Caption := Label6.Caption + ' Четверг';
+        Label6.Caption := Label6.Caption + ' пїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
         continue;
       end;
 
       5: begin
-        Label6.Caption := Label6.Caption + ' Пятница';
+        Label6.Caption := Label6.Caption + ' пїЅпїЅпїЅпїЅпїЅпїЅпїЅ';
         continue;
       end;
     end;
@@ -291,7 +267,7 @@ begin
 
   if (NOT insert_boolean) then begin
     Label5.Visible := True;
-    Label5.Caption := 'Неверная дата!';
+    Label5.Caption := 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ!';
   end;
 
 end;
@@ -396,7 +372,7 @@ begin
 
   if (NOT insert_boolean) then begin
     Label5.Visible := True;
-    Label5.Caption := 'Неверная дата!';
+    Label5.Caption := 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ!';
   end;
 end;
 
