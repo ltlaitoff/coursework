@@ -47,6 +47,9 @@ type
     procedure addRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
     procedure updateRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
     procedure journalActionController(action: String; studentComboBox, markComboBox: TDBLookupComboBox);
+    function journalActionControllerCheckOnError(student, mark: String; date: TDateTime; errorString: TLabel): Boolean;
+    function checkValueInArray(arr: array of Integer; value: Integer): Boolean;
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -128,6 +131,11 @@ begin
   + 'WHERE (group_id = ' + IntToStr(group_id) + ') AND '
   + '(subject_id = ' + IntToStr(subject_id) + ')';
   DataModule1.ADOQueryTimetableGet.Open;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  NullStrictConvert := False;
 end;
 
 procedure TForm1.updateArrayDaysOfWeek();
@@ -253,37 +261,78 @@ begin
   DataModule1.ADOQueryAddMarks.ExecSQL;
 end;
 
-procedure TForm1.journalActionController(action: String; studentComboBox, markComboBox: TDBLookupComboBox);
+function TForm1.checkValueInArray(arr: array of Integer; value: Integer): Boolean;
 var
-  markId, studentID: Integer;
+  len, i: Integer;
 begin
-  markId := getMarkId(markComboBox.KeyValue);
-  studentId := getStudentId(studentComboBox.KeyValue);
+  len := Length(arr);
 
-  var len := Length(timetableDaysOfWeek);
-  var insert_boolean := false;
-
-  for var i := 0 to len do begin
-    if (timetableDaysOfWeek[i] = dayofweek(DateTimePicker1.Date) - 1) then begin
-      case StrUtils.IndexStr(action, ['add', 'update', 'delete']) of
-        0: addRecordInJournal(studentID, subject_id, markID, DateTimePicker1.Date);
-        1: updateRecordInJournal(studentID, subject_id, markID, DateTimePicker1.Date);
-      end;
-      
-      showMainTable();
-
-      markComboBox.KeyValue := '';
-      studentComboBox.KeyValue := '';
-      insert_boolean := True;
-
-      break;
+  for i := 0 to len do begin
+    if (arr[i] = value) then begin
+      checkValueInArray := true;
     end;
   end;
 
-  if (NOT insert_boolean) then begin
-    Label5.Visible := True;
-    Label5.Caption := 'Неверная дата!';
+  checkValueInArray := false;
+end;
+
+function TForm1.journalActionControllerCheckOnError(student, mark: String; date: TDateTime; errorString: TLabel): Boolean;
+var
+  selectedDayNumber: Integer;
+begin
+  if (student = '') then begin
+    errorString.Visible := True;
+    errorString.Caption := 'Укажите ученика!';
+    journalActionControllerCheckOnError := True;
+    Exit;
   end;
+
+  if (mark = '') then begin
+    errorString.Visible := True;
+    errorString.Caption := 'Укажите оценку!';
+    journalActionControllerCheckOnError := True;
+    Exit;
+  end;
+
+  selectedDayNumber := dayofweek(date) - 1;
+
+  if (NOT checkValueInArray(timetableDaysOfWeek, selectedDayNumber)) then begin
+    errorString.Visible := True;
+    errorString.Caption := 'Неверная дата!';
+    journalActionControllerCheckOnError := True;
+    Exit;
+  end;
+
+  journalActionControllerCheckOnError := False;
+end;
+
+procedure TForm1.journalActionController(action: String; studentComboBox, markComboBox: TDBLookupComboBox);
+var
+  markId, studentID, len, selectedDayNumber, i: Integer;
+  dateIsCorrect: Boolean;
+  student, mark: String;
+  date: TDateTime;
+begin
+  date := DateTimePicker1.Date;
+  student := studentComboBox.KeyValue;
+  mark := markComboBox.KeyValue;
+
+  if (journalActionControllerCheckOnError(student, mark, date, Label5) = true) then begin
+    Exit;
+  end;
+
+  studentId := getStudentId(student);
+  markId := getMarkId(mark);
+
+  case StrUtils.IndexStr(action, ['add', 'update', 'delete']) of
+    0: addRecordInJournal(studentID, subject_id, markID, date);
+    1: updateRecordInJournal(studentID, subject_id, markID, date);
+  end;
+  
+  showMainTable();
+
+  studentComboBox.KeyValue := '';
+  markComboBox.KeyValue := '';
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);

@@ -22,7 +22,7 @@ object Form1: TForm1
     TabOrder = 0
     object TabSheet1: TTabSheet
       AlignWithMargins = True
-      Caption = 'TabSheet1'
+      Caption = '`'
       object Label1: TLabel
         Left = 3
         Top = 375
@@ -83,7 +83,7 @@ object Form1: TForm1
       end
       object Panel1: TPanel
         Left = 53
-        Top = 484
+        Top = 437
         Width = 572
         Height = 173
         TabOrder = 4
@@ -105,7 +105,7 @@ object Form1: TForm1
         object Label5: TLabel
           Left = 327
           Top = 57
-          Width = 41
+          Width = 3
           Height = 13
           Color = clWhite
           Font.Charset = DEFAULT_CHARSET
@@ -120,7 +120,7 @@ object Form1: TForm1
         object Label6: TLabel
           Left = 165
           Top = 108
-          Width = 44
+          Width = 3
           Height = 13
         end
         object Button2: TButton
@@ -175,6 +175,7 @@ object Form1: TForm1
           Height = 25
           Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1086#1094#1077#1085#1082#1091
           TabOrder = 4
+          OnClick = Button4Click
         end
       end
       object Button3: TButton

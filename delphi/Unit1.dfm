@@ -11,6 +11,7 @@ object Form1: TForm1
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object PageControl1: TPageControl
@@ -22,7 +23,7 @@ object Form1: TForm1
     TabOrder = 0
     object TabSheet1: TTabSheet
       AlignWithMargins = True
-      Caption = '`'
+      Caption = 'Main'
       object Label1: TLabel
         Left = 3
         Top = 375
