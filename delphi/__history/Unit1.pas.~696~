@@ -15,41 +15,42 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
+    errorLabel: TLabel;
+    daysOfWeekLabel: TLabel;
     DBGrid1: TDBGrid;
-    Button1: TButton;
-    DBLookupComboBox1: TDBLookupComboBox;
-    DBLookupComboBox2: TDBLookupComboBox;
-    DBLookupComboBox3: TDBLookupComboBox;
-    Button2: TButton;
-    DBLookupComboBox4: TDBLookupComboBox;
-    DateTimePicker1: TDateTimePicker;
+    updateGrid: TButton;
+    selectGroup: TDBLookupComboBox;
+    selectSubject: TDBLookupComboBox;
+    selectStudent: TDBLookupComboBox;
+    buttonAdd: TButton;
+    selectMark: TDBLookupComboBox;
+    selectDate: TDateTimePicker;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
     Panel1: TPanel;
-    Button3: TButton;
-    Button4: TButton;
-    procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
+    openPanel: TButton;
+    buttonChange: TButton;
+    procedure updateGridClick(Sender: TObject);
+    procedure buttonAddClick(Sender: TObject);
     procedure DateTimePicker1OnChange(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
-    procedure Button4Click(Sender: TObject);
+    procedure openPanelClick(Sender: TObject);
+    procedure buttonChangeClick(Sender: TObject);
 
-    procedure showMainTable();
-    procedure getGroupId();
-    procedure getSubjectId();
-    procedure doQueryDaysOfWeek();
-    procedure updateArrayDaysOfWeek();
-    procedure updateStringDaysOfWeek();
+    procedure showMainTable(groupId, subjectId: Integer);
+    function getGroupId(groupName: String): Integer;
+    function getSubjectId(subjectName: String): Integer;
+    procedure doQueryDaysOfWeek(groupId, subjectId: Integer);
+    procedure updateArrayDaysOfWeek(groupId, subjectId: Integer);
+    procedure updateStringDaysOfWeek(groupId, subjectId: Integer);
     function getMarkId(markName: String): Integer;
     function getStudentId(studentSurname: String): Integer;
     procedure addRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
     procedure updateRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
-    procedure journalActionController(action: String; studentComboBox, markComboBox: TDBLookupComboBox);
+    procedure journalActionController(action: String; subjectId, groupId: Integer; studentComboBox, markComboBox: TDBLookupComboBox);
     function journalActionControllerCheckOnError(student, mark: String; date: TDateTime; errorString: TLabel): Boolean;
     function checkValueInArray(arr: array of Integer; value: Integer): Boolean;
     procedure FormCreate(Sender: TObject);
+    procedure doQueryStudentsFromGroup(groupId: Integer);
   private
     { Private declarations }
   public
@@ -58,8 +59,8 @@ type
 
 var
   Form1: TForm1;
-  group_id, subject_id: Integer;
-  timetableDaysOfWeek: array of Integer;
+  groupId, subjectId: Integer;
+  arrayDaysOfWeek: array of Integer;
 
 implementation
 
@@ -68,8 +69,9 @@ implementation
 
 uses Unit2, StrUtils;
 
-procedure TForm1.showMainTable();
+procedure TForm1.showMainTable(groupId, subjectId: Integer);
 begin
+  writeln(subjectId, ' ', groupId);
   DataModule1.ADOQueryMain.Close;
   DataModule1.ADOQueryMain.SQL.Text :=
   'TRANSFORM Max(j.mark_id) AS [Max-mark_id] '
@@ -78,7 +80,7 @@ begin
   + '  ( '
   + '    SELECT * '
   + '    FROM Journal '
-  + '    WHERE Journal.subject_id = ' + IntToStr(subject_id) + ' '
+  + '    WHERE Journal.subject_id = ' + IntToStr(subjectId) + ' '
   + '  ) AS j '
   + '  RIGHT JOIN ( '
   + '    SELECT '
@@ -88,90 +90,86 @@ begin
   + '      Users.patronymic AS patronymic '
   + '    FROM Users '
   + '    INNER JOIN Groups ON Users.group_id = Groups.id '
-  + '    WHERE Groups.id = ' + IntToStr(group_id) + ' '
+  + '    WHERE Groups.id = ' + IntToStr(groupId) + ' '
   + '    ORDER BY Users.id '
   + '  ) AS u ON j.user_id = u.id '
   + 'GROUP BY u.surname  '
   + 'PIVOT j.date; ';
   DataModule1.ADOQueryMain.Open;
 
-  DBGrid1.Columns[1].Visible := false;
+//  DBGrid1.Columns[1].Visible := false;
 end;
 
-procedure TForm1.getGroupId();
+function TForm1.getGroupId(groupName: String): Integer;
 begin
   DataModule1.ADOQueryMain.Close;
   DataModule1.ADOQueryMain.SQL.Text :=
   'SELECT * ' +
   'FROM Groups ' +
-  'WHERE name LIKE "' + DBLookupComboBox1.KeyValue + '"';
+  'WHERE name LIKE "' + groupName + '"';
   DataModule1.ADOQueryMain.Open;
 
-  group_id := DataModule1.DataSourceMain.DataSet.Fields[0].AsInteger;
+  getGroupId := DataModule1.DataSourceMain.DataSet.Fields[0].AsInteger;
 end;
 
-procedure TForm1.getSubjectId();
+function TForm1.getSubjectId(subjectName: String): Integer;
 begin
   DataModule1.ADOQueryMain.Close;
   DataModule1.ADOQueryMain.SQL.Text :=
   'SELECT * ' +
   'FROM Subjects ' +
-  'WHERE name LIKE "' + DBLookupComboBox2.KeyValue + '"';
+  'WHERE name LIKE "' + subjectName + '"';
   DataModule1.ADOQueryMain.Open;
 
-  subject_id := DataModule1.DataSourceMain.DataSet.Fields[0].AsInteger;
+  getSubjectId := DataModule1.DataSourceMain.DataSet.Fields[0].AsInteger;
 end;
 
-procedure TForm1.doQueryDaysOfWeek();
+procedure TForm1.doQueryDaysOfWeek(groupId, subjectId: Integer);
 begin
   DataModule1.ADOQueryTimetableGet.Close;
   DataModule1.ADOQueryTimetableGet.SQL.Text :=
     'SELECT  day_of_week '
   + 'FROM Timetable '
-  + 'WHERE (group_id = ' + IntToStr(group_id) + ') AND '
-  + '(subject_id = ' + IntToStr(subject_id) + ')';
+  + 'WHERE (group_id = ' + IntToStr(groupId) + ') AND '
+  + '(subject_id = ' + IntToStr(subjectId) + ')';
   DataModule1.ADOQueryTimetableGet.Open;
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
-begin
-  NullStrictConvert := False;
-end;
-
-procedure TForm1.updateArrayDaysOfWeek();
+procedure TForm1.updateArrayDaysOfWeek(groupId, subjectId: Integer);
 var
   len, i: Integer;
 begin
-  doQueryDaysOfWeek();
+  doQueryDaysOfWeek(groupId, subjectId);
 
   len := DataModule1.DataSourceTimetableGet.DataSet.RecordCount;
-  SetLength(timetableDaysOfWeek, len);
+  SetLength(arrayDaysOfWeek, len);
 
   DataModule1.DataSourceTimetableGet.DataSet.First();
 
   while not DataModule1.DataSourceTimetableGet.DataSet.Eof do begin
-    for i := 0 to len - 1 do
+    for i := 0 to len do
     begin
-      timetableDaysOfWeek[i] := 
+      arrayDaysOfWeek[i] :=
         DataModule1.DataSourceTimetableGet.DataSet.FieldByName('day_of_week').AsInteger;
+
       DataModule1.DataSourceTimetableGet.DataSet.Next();
     end;
   end;
 end;
 
-procedure TForm1.updateStringDaysOfWeek();
+procedure TForm1.updateStringDaysOfWeek(groupId, subjectId: Integer);
 var
   len, i: Integer;
   result: String;
 begin
-  updateArrayDaysOfWeek();
+  updateArrayDaysOfWeek(groupId, subjectId);
   
-  len := Length(timetableDaysOfWeek);
+  len := Length(arrayDaysOfWeek);
   result := '';
 
   for i := 0 to len - 1 do
   begin
-    case(timetableDaysOfWeek[i]) of
+    case(arrayDaysOfWeek[i]) of
       1: result := result + ' Понедельник';
       2: result := result + ' Вторник';
       3: result := result + ' Среда';
@@ -180,16 +178,11 @@ begin
     end;
   end;
 
-  Label6.Caption := result;
+  daysOfWeekLabel.Caption := result;
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.doQueryStudentsFromGroup(groupId: Integer);
 begin
-  getGroupId();
-  getSubjectId();
-  showMainTable();
-  updateStringDaysOfWeek();
-
   DataModule1.ADOQueryStudentsFromGroup.Close;
   DataModule1.ADOQueryStudentsFromGroup.SQL.Text :=
   'SELECT '
@@ -199,17 +192,27 @@ begin
   + 'Users.patronymic AS patronymic '
   + 'FROM Users '
   + 'INNER JOIN Groups ON Users.group_id = Groups.id '
-  + 'WHERE Groups.id = ' + IntToStr(group_id) + ' '
+  + 'WHERE Groups.id = ' + IntToStr(groupId) + ' '
   + 'ORDER BY Users.id ';
   DataModule1.ADOQueryStudentsFromGroup.Open;
 end;
 
-procedure TForm1.Button3Click(Sender: TObject);
+procedure TForm1.updateGridClick(Sender: TObject);
 begin
-  Panel1.Visible := true;
-  DBLookupComboBox3.KeyValue := DBGrid1.Fields[0].AsString;
+  groupId := getGroupId(selectGroup.KeyValue);
+  subjectId := getSubjectId(selectSubject.KeyValue);
+
+  showMainTable(groupId, subjectId);
+
+  updateStringDaysOfWeek(groupId, subjectId);
+  doQueryStudentsFromGroup(groupId);
 end;
 
+procedure TForm1.openPanelClick(Sender: TObject);
+begin
+  Panel1.Visible := true;
+  selectStudent.KeyValue := DBGrid1.Fields[0].AsString;
+end;
 
 function TForm1.getMarkId(markName: String): Integer;
 begin
@@ -267,9 +270,10 @@ var
 begin
   len := Length(arr);
 
-  for i := 0 to len do begin
+  for i := 0 to len - 1 do begin
     if (arr[i] = value) then begin
       checkValueInArray := true;
+      Exit;
     end;
   end;
 
@@ -280,46 +284,44 @@ function TForm1.journalActionControllerCheckOnError(student, mark: String; date:
 var
   selectedDayNumber: Integer;
 begin
-  writeln('student: "' + student + '"');
-  writeln('mark: "' + mark + '"');
-  writeln('mark = "": ' + BoolToStr(mark = ''));
-  writeln(mark = '');
-
   if (student = '') then begin
     errorString.Visible := True;
     errorString.Caption := 'Укажите ученика!';
     journalActionControllerCheckOnError := True;
+    Exit;
   end;
 
   if (mark = '') then begin
     errorString.Visible := True;
     errorString.Caption := 'Укажите оценку!';
     journalActionControllerCheckOnError := True;
+    Exit;
   end;
 
   selectedDayNumber := dayofweek(date) - 1;
 
-  if (NOT checkValueInArray(timetableDaysOfWeek, selectedDayNumber)) then begin
+  if (NOT checkValueInArray(arrayDaysOfWeek, selectedDayNumber)) then begin
     errorString.Visible := True;
     errorString.Caption := 'Неверная дата!';
     journalActionControllerCheckOnError := True;
+    Exit;
   end;
 
   journalActionControllerCheckOnError := False;
 end;
 
-procedure TForm1.journalActionController(action: String; studentComboBox, markComboBox: TDBLookupComboBox);
+procedure TForm1.journalActionController(action: String; subjectId, groupId: Integer; studentComboBox, markComboBox: TDBLookupComboBox);
 var
   markId, studentID, len, selectedDayNumber, i: Integer;
   dateIsCorrect: Boolean;
   student, mark: String;
   date: TDateTime;
 begin
-  date := DateTimePicker1.Date;
+  date := selectDate.Date;
   student := studentComboBox.KeyValue;
   mark := markComboBox.KeyValue;
 
-  if (journalActionControllerCheckOnError(student, mark, date, Label5) = true) then begin
+  if (journalActionControllerCheckOnError(student, mark, date, errorLabel) = true) then begin
     Exit;
   end;
 
@@ -327,29 +329,34 @@ begin
   markId := getMarkId(mark);
 
   case StrUtils.IndexStr(action, ['add', 'update', 'delete']) of
-    0: addRecordInJournal(studentID, subject_id, markID, date);
-    1: updateRecordInJournal(studentID, subject_id, markID, date);
+    0: addRecordInJournal(studentID, subjectId, markID, date);
+    1: updateRecordInJournal(studentID, subjectId, markID, date);
   end;
-  
-  showMainTable();
+
+  showMainTable(groupId, subjectId);
 
   studentComboBox.KeyValue := '';
   markComboBox.KeyValue := '';
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
+procedure TForm1.buttonAddClick(Sender: TObject);
 begin
-  journalActionController('add', DBLookupComboBox3, DBLookupComboBox4)
+  journalActionController('add', subjectId, groupId, selectStudent, selectMark)
 end;
 
-procedure TForm1.Button4Click(Sender: TObject);
+procedure TForm1.buttonChangeClick(Sender: TObject);
 begin
-  journalActionController('update', DBLookupComboBox3, DBLookupComboBox4)
+  journalActionController('update', subjectId, groupId, selectStudent, selectMark)
 end;
 
 procedure TForm1.DateTimePicker1OnChange(Sender: TObject);
 begin
-  Label5.Visible := False;
+  errorLabel.Visible := False;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  NullStrictConvert := False;
 end;
 
 end.

@@ -21,10 +21,9 @@ object Form1: TForm1
     Height = 729
     ActivePage = TabSheet1
     TabOrder = 0
-    OnChange = PageControl1Change
     object TabSheet1: TTabSheet
       AlignWithMargins = True
-      Caption = '`'
+      Caption = 'Main'
       object Label1: TLabel
         Left = 3
         Top = 375
@@ -52,16 +51,16 @@ object Form1: TForm1
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
       end
-      object Button1: TButton
+      object updateGrid: TButton
         Left = 502
         Top = 375
         Width = 75
         Height = 25
         Caption = #1054#1090#1086#1073#1088#1072#1079#1080#1090#1100
         TabOrder = 1
-        OnClick = Button1Click
+        OnClick = updateGridClick
       end
-      object DBLookupComboBox1: TDBLookupComboBox
+      object selectGroup: TDBLookupComboBox
         Left = 53
         Top = 375
         Width = 145
@@ -72,7 +71,7 @@ object Form1: TForm1
         ListSource = DataModule1.DataSourceGroups
         TabOrder = 2
       end
-      object DBLookupComboBox2: TDBLookupComboBox
+      object selectSubject: TDBLookupComboBox
         Left = 53
         Top = 402
         Width = 145
@@ -104,7 +103,7 @@ object Form1: TForm1
           Height = 13
           Caption = #1054#1094#1077#1085#1082#1072':'
         end
-        object Label5: TLabel
+        object errorLabel: TLabel
           Left = 327
           Top = 57
           Width = 3
@@ -125,16 +124,16 @@ object Form1: TForm1
           Width = 3
           Height = 13
         end
-        object Button2: TButton
+        object add: TButton
           Left = 327
           Top = 26
           Width = 108
           Height = 25
           Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1086#1094#1077#1085#1082#1091
           TabOrder = 0
-          OnClick = Button2Click
+          OnClick = addClick
         end
-        object DateTimePicker1: TDateTimePicker
+        object selectDate: TDateTimePicker
           Left = 109
           Top = 81
           Width = 186
@@ -151,7 +150,7 @@ object Form1: TForm1
           TabOrder = 1
           OnChange = DateTimePicker1OnChange
         end
-        object DBLookupComboBox3: TDBLookupComboBox
+        object selectStudent: TDBLookupComboBox
           Left = 150
           Top = 27
           Width = 145
@@ -161,7 +160,7 @@ object Form1: TForm1
           ListSource = DataModule1.DataSourceStudentFromGroup
           TabOrder = 2
         end
-        object DBLookupComboBox4: TDBLookupComboBox
+        object selectMark: TDBLookupComboBox
           Left = 150
           Top = 54
           Width = 145
@@ -170,24 +169,24 @@ object Form1: TForm1
           ListSource = DataModule1.DataSourceTableMarks
           TabOrder = 3
         end
-        object Button4: TButton
+        object change: TButton
           Left = 327
           Top = 76
           Width = 108
           Height = 25
           Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1086#1094#1077#1085#1082#1091
           TabOrder = 4
-          OnClick = Button4Click
+          OnClick = changeClick
         end
       end
-      object Button3: TButton
+      object openPanel: TButton
         Left = 502
         Top = 406
         Width = 75
         Height = 25
         Caption = #1048#1079#1084#1077#1085#1080#1090#1100
         TabOrder = 5
-        OnClick = Button3Click
+        OnClick = openPanelClick
       end
     end
     object TabSheet2: TTabSheet
