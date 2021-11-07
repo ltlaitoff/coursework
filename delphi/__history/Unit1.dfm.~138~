@@ -2,8 +2,8 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'ltlaitoff coursework'
-  ClientHeight = 728
-  ClientWidth = 785
+  ClientHeight = 658
+  ClientWidth = 665
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,7 +17,7 @@ object Form1: TForm1
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 991
+    Width = 665
     Height = 729
     ActivePage = TabSheet1
     TabOrder = 0
@@ -50,15 +50,7 @@ object Form1: TForm1
         TitleFont.Height = -11
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
-      end
-      object updateGrid: TButton
-        Left = 502
-        Top = 375
-        Width = 75
-        Height = 25
-        Caption = #1054#1090#1086#1073#1088#1072#1079#1080#1090#1100
-        TabOrder = 1
-        OnClick = updateGridClick
+        OnCellClick = journalOnCellClick
       end
       object selectGroup: TDBLookupComboBox
         Left = 53
@@ -69,7 +61,8 @@ object Form1: TForm1
         ListField = 'name'
         ListFieldIndex = 2
         ListSource = DataModule1.DataSourceGroups
-        TabOrder = 2
+        TabOrder = 1
+        OnClick = selectGroupClick
       end
       object selectSubject: TDBLookupComboBox
         Left = 53
@@ -80,14 +73,15 @@ object Form1: TForm1
         ListField = 'name'
         ListFieldIndex = 2
         ListSource = DataModule1.DataSourceSubjects
-        TabOrder = 3
+        TabOrder = 2
+        OnClick = selectSubjectClick
       end
       object Panel1: TPanel
         Left = 53
         Top = 437
         Width = 572
         Height = 173
-        TabOrder = 4
+        TabOrder = 3
         Visible = False
         object Label3: TLabel
           Left = 85
@@ -178,6 +172,15 @@ object Form1: TForm1
           TabOrder = 4
           OnClick = buttonChangeClick
         end
+        object buttonDelete: TButton
+          Left = 327
+          Top = 107
+          Width = 108
+          Height = 25
+          Caption = #1059#1076#1072#1083#1080#1090#1100' '#1086#1094#1077#1085#1082#1091
+          TabOrder = 5
+          OnClick = buttonDeleteClick
+        end
       end
       object openPanel: TButton
         Left = 502
@@ -185,7 +188,7 @@ object Form1: TForm1
         Width = 75
         Height = 25
         Caption = #1048#1079#1084#1077#1085#1080#1090#1100
-        TabOrder = 5
+        TabOrder = 4
         OnClick = openPanelClick
       end
     end

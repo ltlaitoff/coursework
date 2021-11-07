@@ -5,8 +5,18 @@ object DataModule1: TDataModule1
   object ADOConnection: TADOConnection
     Connected = True
     ConnectionString = 
-      'Provider=Microsoft.ACE.OLEDB.15.0;Data Source=C:\My_projects\cou' +
-      'rsework\db.accdb;Persist Security Info=False'
+      'Provider=Microsoft.ACE.OLEDB.15.0;User ID=Admin;Data Source=C:\M' +
+      'y_projects\coursework\db.accdb;Mode=Share Deny None;Persist Secu' +
+      'rity Info=False;Jet OLEDB:System database="";Jet OLEDB:Registry ' +
+      'Path="";Jet OLEDB:Database Password="";Jet OLEDB:Engine Type=6;J' +
+      'et OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk O' +
+      'ps=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database' +
+      ' Password="";Jet OLEDB:Create System Database=False;Jet OLEDB:En' +
+      'crypt Database=False;Jet OLEDB:Don'#39't Copy Locale on Compact=Fals' +
+      'e;Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=F' +
+      'alse;Jet OLEDB:Support Complex Data=False;Jet OLEDB:Bypass UserI' +
+      'nfo Validation=False;Jet OLEDB:Limited DB Caching=False;Jet OLED' +
+      'B:Bypass ChoiceField Validation=False'
     LoginPrompt = False
     Mode = cmShareDenyNone
     Provider = 'Microsoft.ACE.OLEDB.15.0'
@@ -14,6 +24,7 @@ object DataModule1: TDataModule1
     Top = 48
   end
   object ADOQueryMain: TADOQuery
+    Active = True
     Connection = ADOConnection
     CursorType = ctStatic
     Parameters = <>

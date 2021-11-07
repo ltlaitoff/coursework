@@ -18,7 +18,6 @@ type
     errorLabel: TLabel;
     daysOfWeekLabel: TLabel;
     DBGrid1: TDBGrid;
-    updateGrid: TButton;
     selectGroup: TDBLookupComboBox;
     selectSubject: TDBLookupComboBox;
     selectStudent: TDBLookupComboBox;
@@ -31,7 +30,7 @@ type
     openPanel: TButton;
     buttonChange: TButton;
     buttonDelete: TButton;
-    procedure updateGridClick(Sender: TObject);
+    procedure updateGrid();
     procedure buttonAddClick(Sender: TObject);
     procedure DateTimePicker1OnChange(Sender: TObject);
     procedure openPanelClick(Sender: TObject);
@@ -47,12 +46,17 @@ type
     function getStudentId(studentSurname: String): Integer;
     procedure addRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
     procedure updateRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
+    procedure deleteRecordFromJournal(studentID, subjectID: Integer; date: TDateTime);
     procedure journalActionController(action: String; subjectId, groupId: Integer; studentComboBox, markComboBox: TDBLookupComboBox);
-    function journalActionControllerCheckOnError(student, mark: String; date: TDateTime; errorString: TLabel): Boolean;
+    function journalActionControllerCheckOnError(action, student, mark: String; date: TDateTime; errorString: TLabel): Boolean;
     function checkValueInArray(arr: array of Integer; value: Integer): Boolean;
     procedure FormCreate(Sender: TObject);
     procedure doQueryStudentsFromGroup(groupId: Integer);
     procedure buttonDeleteClick(Sender: TObject);
+    procedure journalOnCellClick(Column: TColumn);
+    procedure selectSubjectClick(Sender: TObject);
+    procedure selectGroupClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -70,6 +74,16 @@ implementation
 {$APPTYPE CONSOLE}
 
 uses Unit2, StrUtils;
+
+procedure TForm1.selectGroupClick(Sender: TObject);
+begin
+  updateGrid();
+end;
+
+procedure TForm1.selectSubjectClick(Sender: TObject);
+begin
+  updateGrid();
+end;
 
 procedure TForm1.showMainTable(groupId, subjectId: Integer);
 begin
@@ -198,15 +212,38 @@ begin
   DataModule1.ADOQueryStudentsFromGroup.Open;
 end;
 
-procedure TForm1.updateGridClick(Sender: TObject);
+procedure TForm1.updateGrid();
+var
+  group: String;
 begin
-  groupId := getGroupId(selectGroup.KeyValue);
-  subjectId := getSubjectId(selectSubject.KeyValue);
+  group := selectGroup.KeyValue;
 
-  showMainTable(groupId, subjectId);
+  writeln(groupId,'', subjectId);
 
-  updateStringDaysOfWeek(groupId, subjectId);
-  doQueryStudentsFromGroup(groupId);
+  writeln(selectGroup.KeyValue = '');
+  writeln(group = '');
+
+  if NOT (selectGroup.KeyValue = '') then begin
+    groupId := getGroupId(selectGroup.KeyValue)
+  end
+  else
+  begin
+    writeln('keyvalue selectGroup');
+    selectGroup.KeyValue := DataModule1.ADOTableGroups.FieldByName('name').AsString;
+  end;
+
+  if NOT (selectSubject.KeyValue = '') then begin
+    subjectId := getSubjectId(selectSubject.KeyValue)
+  end
+  else
+  begin
+    writeln('keyvalue selectSubject');
+     selectSubject.KeyValue := DataModule1.ADOTableSubjects.FieldByName('name').AsString;
+  end;
+//  showMainTable(groupId, subjectId);
+//
+//  updateStringDaysOfWeek(groupId, subjectId);
+//  doQueryStudentsFromGroup(groupId);
 end;
 
 procedure TForm1.openPanelClick(Sender: TObject);
@@ -265,14 +302,13 @@ begin
   DataModule1.ADOQueryAddMarks.ExecSQL;
 end;
 
-procedure TForm1.deleteRecordFromJournal(studentID, subjectID, markID: Integer; date: TDateTime);
+procedure TForm1.deleteRecordFromJournal(studentID, subjectID: Integer; date: TDateTime);
 begin
   DataModule1.ADOQueryAddMarks.Close;
   DataModule1.ADOQueryAddMarks.SQL.Text :=
   'DELETE ' +
   'FROM Journal ' +
   'WHERE ' +
-    'mark_id = ' + IntToStr(markID) + ' ' +
     'user_id = ' + IntToStr(studentID) + ' AND ' +
     'subject_id = ' + IntToStr(subjectID) + ' AND ' +
     'date = DateValue("' + DateTimeToStr(date) + '")';
@@ -295,7 +331,7 @@ begin
   checkValueInArray := false;
 end;
 
-function TForm1.journalActionControllerCheckOnError(student, mark: String; date: TDateTime; errorString: TLabel): Boolean;
+function TForm1.journalActionControllerCheckOnError(action, student, mark: String; date: TDateTime; errorString: TLabel): Boolean;
 var
   selectedDayNumber: Integer;
 begin
@@ -306,7 +342,7 @@ begin
     Exit;
   end;
 
-  if (mark = '') then begin
+  if ((mark = '') AND NOT (action = 'delete')) then begin
     errorString.Visible := True;
     errorString.Caption := 'Укажите оценку!';
     journalActionControllerCheckOnError := True;
@@ -325,6 +361,23 @@ begin
   journalActionControllerCheckOnError := False;
 end;
 
+procedure TForm1.journalOnCellClick(Column: TColumn);
+var
+  colName: String;
+  fmt: TFormatSettings;
+begin
+  selectStudent.KeyValue := DBGrid1.Fields[0].AsString;
+  selectMark.KeyValue := DBGrid1.Fields[Column.Index].AsString;
+
+  colName := Column.DisplayName;
+  fmt.ShortDateFormat  := 'dd_mm_yyyy';
+  fmt.DateSeparator   := '_';
+  if NOT (colName = 'fullname') then begin
+    selectDate.Date := StrToDate(colName, fmt);
+  end;
+
+end;
+
 procedure TForm1.journalActionController(action: String; subjectId, groupId: Integer; studentComboBox, markComboBox: TDBLookupComboBox);
 var
   markId, studentID, len, selectedDayNumber, i: Integer;
@@ -336,7 +389,7 @@ begin
   student := studentComboBox.KeyValue;
   mark := markComboBox.KeyValue;
 
-  if (journalActionControllerCheckOnError(student, mark, date, errorLabel) = true) then begin
+  if (journalActionControllerCheckOnError(action, student, mark, date, errorLabel) = true) then begin
     Exit;
   end;
 
@@ -346,7 +399,7 @@ begin
   case StrUtils.IndexStr(action, ['add', 'update', 'delete']) of
     0: addRecordInJournal(studentID, subjectId, markID, date);
     1: updateRecordInJournal(studentID, subjectId, markID, date);
-    2: deleteRecordFromJournal(studentID, subjectId, markID, date);
+    2: deleteRecordFromJournal(studentID, subjectId, date);
   end;
 
   showMainTable(groupId, subjectId);
@@ -375,9 +428,22 @@ begin
   errorLabel.Visible := False;
 end;
 
+procedure TForm1.FormActivate(Sender: TObject);
+begin
+  updateGrid();
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   NullStrictConvert := False;
+  groupId := 1;
+  subjectId := 1;
+//  writeln(DataModule1.DataSourceGroups.DataSet.FieldByName('name').Value);
+
+//  DataModule1.DataSourceGroups.DataSet.First();
+//  selectGroup.KeyValue := DataModule1.DataSourceGroups.DataSet.FieldByName('name').Value;
+
+//  selectSubject.KeyValue := DataModule1.DataSourceSubjects.DataSet.Fields[0].AsString;
 end;
 
 end.

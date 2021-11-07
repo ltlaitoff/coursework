@@ -24,7 +24,6 @@ object DataModule1: TDataModule1
     Top = 48
   end
   object ADOQueryMain: TADOQuery
-    Active = True
     Connection = ADOConnection
     CursorType = ctStatic
     Parameters = <>
@@ -35,7 +34,7 @@ object DataModule1: TDataModule1
       '  ('
       '    SELECT *'
       '    FROM Journal'
-      '    WHERE Journal.subject_id = 2'
+      '    WHERE Journal.subject_id = 1'
       '  ) AS j'
       '  RIGHT JOIN ('
       '    SELECT'
@@ -45,7 +44,7 @@ object DataModule1: TDataModule1
       '      Users.patronymic AS patronymic'
       '    FROM Users'
       '    INNER JOIN Groups ON Users.group_id = Groups.id'
-      '    WHERE Groups.id = 2'
+      '    WHERE Groups.id = 1'
       '    ORDER BY Users.id'
       '  ) AS u ON j.user_id = u.id'
       'GROUP BY u.surname '
