@@ -5,31 +5,29 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.Tabs, Data.DB,
-  Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.DBCtrls, Vcl.ExtCtrls;
+  Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.DBCtrls, Vcl.ExtCtrls, Vcl.Menus;
 
 type
   TForm1 = class(TForm)
-    PageControl1: TPageControl;
-    TabSheet1: TTabSheet;
     Label1: TLabel;
     Label2: TLabel;
+    DBGrid1: TDBGrid;
+    selectGroup: TDBLookupComboBox;
+    selectSubject: TDBLookupComboBox;
+    Panel1: TPanel;
     Label3: TLabel;
     Label4: TLabel;
     errorLabel: TLabel;
     daysOfWeekLabel: TLabel;
-    DBGrid1: TDBGrid;
-    selectGroup: TDBLookupComboBox;
-    selectSubject: TDBLookupComboBox;
-    selectStudent: TDBLookupComboBox;
     buttonAdd: TButton;
-    selectMark: TDBLookupComboBox;
     selectDate: TDateTimePicker;
-    TabSheet2: TTabSheet;
-    TabSheet3: TTabSheet;
-    Panel1: TPanel;
-    openPanel: TButton;
+    selectStudent: TDBLookupComboBox;
+    selectMark: TDBLookupComboBox;
     buttonChange: TButton;
     buttonDelete: TButton;
+    openPanel: TButton;
+    MainMenu1: TMainMenu;
+    Main2: TMenuItem;
     procedure updateGrid();
     procedure buttonAddClick(Sender: TObject);
     procedure DateTimePicker1OnChange(Sender: TObject);
@@ -57,6 +55,7 @@ type
     procedure selectSubjectClick(Sender: TObject);
     procedure selectGroupClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure Main2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -73,7 +72,7 @@ implementation
 {$R *.dfm}
 {$APPTYPE CONSOLE}
 
-uses Unit2, StrUtils;
+uses Unit2, StrUtils, Unit3;
 
 procedure TForm1.selectGroupClick(Sender: TObject);
 begin
@@ -232,7 +231,7 @@ begin
   end
   else
   begin
-     selectSubject.KeyValue := DataModule1.ADOTableSubjects.FieldByName('name').AsString;
+    selectSubject.KeyValue := DataModule1.ADOTableSubjects.FieldByName('name').AsString;
   end;
   showMainTable(groupId, subjectId);
 
@@ -372,6 +371,11 @@ begin
 
 end;
 
+procedure TForm1.Main2Click(Sender: TObject);
+begin
+  Form3.Show();
+end;
+
 procedure TForm1.journalActionController(action: String; subjectId, groupId: Integer; studentComboBox, markComboBox: TDBLookupComboBox);
 var
   markId, studentID, len, selectedDayNumber, i: Integer;
@@ -432,12 +436,6 @@ begin
   NullStrictConvert := False;
   groupId := 1;
   subjectId := 1;
-//  writeln(DataModule1.DataSourceGroups.DataSet.FieldByName('name').Value);
-
-//  DataModule1.DataSourceGroups.DataSet.First();
-//  selectGroup.KeyValue := DataModule1.DataSourceGroups.DataSet.FieldByName('name').Value;
-
-//  selectSubject.KeyValue := DataModule1.DataSourceSubjects.DataSet.Fields[0].AsString;
 end;
 
 end.
