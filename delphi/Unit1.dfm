@@ -178,6 +178,15 @@ object Form1: TForm1
           TabOrder = 4
           OnClick = buttonChangeClick
         end
+        object buttonDelete: TButton
+          Left = 327
+          Top = 107
+          Width = 108
+          Height = 25
+          Caption = #1059#1076#1072#1083#1080#1090#1100' '#1086#1094#1077#1085#1082#1091
+          TabOrder = 5
+          OnClick = buttonDeleteClick
+        end
       end
       object openPanel: TButton
         Left = 502

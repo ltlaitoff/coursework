@@ -30,7 +30,6 @@ type
     Panel1: TPanel;
     openPanel: TButton;
     buttonChange: TButton;
-    DBGrid2: TDBGrid;
     procedure updateGridClick(Sender: TObject);
     procedure buttonAddClick(Sender: TObject);
     procedure DateTimePicker1OnChange(Sender: TObject);
@@ -72,7 +71,6 @@ uses Unit2, StrUtils;
 
 procedure TForm1.showMainTable(groupId, subjectId: Integer);
 begin
-  writeln(subjectId, ' ', groupId);
   DataModule1.ADOQueryMain.Close;
   DataModule1.ADOQueryMain.SQL.Text :=
   'TRANSFORM Max(j.mark_id) AS [Max-mark_id] '
@@ -98,7 +96,7 @@ begin
   + 'PIVOT j.date; ';
   DataModule1.ADOQueryMain.Open;
 
-//  DBGrid1.Columns[1].Visible := false;
+  DBGrid1.Columns[1].Visible := false;
 end;
 
 function TForm1.getGroupId(groupName: String): Integer;
@@ -274,6 +272,7 @@ begin
   for i := 0 to len - 1 do begin
     if (arr[i] = value) then begin
       checkValueInArray := true;
+      Exit;
     end;
   end;
 
@@ -299,11 +298,6 @@ begin
   end;
 
   selectedDayNumber := dayofweek(date) - 1;
-
-  writeln(selectedDayNumber);
-  for var i = 0 to Length(arrayDaysOfWeek) - 1 do begin
-    write(arrayDaysOfWeek[i], ' ');
-  end;
 
   if (NOT checkValueInArray(arrayDaysOfWeek, selectedDayNumber)) then begin
     errorString.Visible := True;

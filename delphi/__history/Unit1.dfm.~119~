@@ -2,8 +2,8 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'ltlaitoff coursework'
-  ClientHeight = 728
-  ClientWidth = 785
+  ClientHeight = 658
+  ClientWidth = 645
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,7 +17,7 @@ object Form1: TForm1
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 991
+    Width = 665
     Height = 729
     ActivePage = TabSheet1
     TabOrder = 0
@@ -118,22 +118,22 @@ object Form1: TForm1
           ParentFont = False
           Transparent = True
         end
-        object Label6: TLabel
+        object daysOfWeekLabel: TLabel
           Left = 165
           Top = 108
           Width = 3
           Height = 13
         end
-        object add: TButton
+        object buttonAdd: TButton
           Left = 327
           Top = 26
           Width = 108
           Height = 25
           Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1086#1094#1077#1085#1082#1091
           TabOrder = 0
-          OnClick = addClick
+          OnClick = buttonAddClick
         end
-        object DateTimePicker1: TDateTimePicker
+        object selectDate: TDateTimePicker
           Left = 109
           Top = 81
           Width = 186
@@ -160,7 +160,7 @@ object Form1: TForm1
           ListSource = DataModule1.DataSourceStudentFromGroup
           TabOrder = 2
         end
-        object DBLookupComboBox4: TDBLookupComboBox
+        object selectMark: TDBLookupComboBox
           Left = 150
           Top = 54
           Width = 145
@@ -169,14 +169,23 @@ object Form1: TForm1
           ListSource = DataModule1.DataSourceTableMarks
           TabOrder = 3
         end
-        object change: TButton
+        object buttonChange: TButton
           Left = 327
           Top = 76
           Width = 108
           Height = 25
           Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1086#1094#1077#1085#1082#1091
           TabOrder = 4
-          OnClick = changeClick
+          OnClick = buttonChangeClick
+        end
+        object buttonDelete: TButton
+          Left = 327
+          Top = 107
+          Width = 108
+          Height = 25
+          Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1086#1094#1077#1085#1082#1091
+          TabOrder = 5
+          OnClick = buttonChangeClick
         end
       end
       object openPanel: TButton

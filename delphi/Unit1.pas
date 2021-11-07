@@ -30,6 +30,7 @@ type
     Panel1: TPanel;
     openPanel: TButton;
     buttonChange: TButton;
+    buttonDelete: TButton;
     procedure updateGridClick(Sender: TObject);
     procedure buttonAddClick(Sender: TObject);
     procedure DateTimePicker1OnChange(Sender: TObject);
@@ -46,11 +47,13 @@ type
     function getStudentId(studentSurname: String): Integer;
     procedure addRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
     procedure updateRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
+    procedure deleteRecordFromJournal(studentID, subjectID: Integer; date: TDateTime);
     procedure journalActionController(action: String; subjectId, groupId: Integer; studentComboBox, markComboBox: TDBLookupComboBox);
-    function journalActionControllerCheckOnError(student, mark: String; date: TDateTime; errorString: TLabel): Boolean;
+    function journalActionControllerCheckOnError(action, student, mark: String; date: TDateTime; errorString: TLabel): Boolean;
     function checkValueInArray(arr: array of Integer; value: Integer): Boolean;
     procedure FormCreate(Sender: TObject);
     procedure doQueryStudentsFromGroup(groupId: Integer);
+    procedure buttonDeleteClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -263,6 +266,19 @@ begin
   DataModule1.ADOQueryAddMarks.ExecSQL;
 end;
 
+procedure TForm1.deleteRecordFromJournal(studentID, subjectID: Integer; date: TDateTime);
+begin
+  DataModule1.ADOQueryAddMarks.Close;
+  DataModule1.ADOQueryAddMarks.SQL.Text :=
+  'DELETE ' +
+  'FROM Journal ' +
+  'WHERE ' +
+    'user_id = ' + IntToStr(studentID) + ' AND ' +
+    'subject_id = ' + IntToStr(subjectID) + ' AND ' +
+    'date = DateValue("' + DateTimeToStr(date) + '")';
+  DataModule1.ADOQueryAddMarks.ExecSQL;
+end;
+
 function TForm1.checkValueInArray(arr: array of Integer; value: Integer): Boolean;
 var
   len, i: Integer;
@@ -279,7 +295,7 @@ begin
   checkValueInArray := false;
 end;
 
-function TForm1.journalActionControllerCheckOnError(student, mark: String; date: TDateTime; errorString: TLabel): Boolean;
+function TForm1.journalActionControllerCheckOnError(action, student, mark: String; date: TDateTime; errorString: TLabel): Boolean;
 var
   selectedDayNumber: Integer;
 begin
@@ -290,7 +306,7 @@ begin
     Exit;
   end;
 
-  if (mark = '') then begin
+  if ((mark = '') AND NOT (action = 'delete')) then begin
     errorString.Visible := True;
     errorString.Caption := 'Укажите оценку!';
     journalActionControllerCheckOnError := True;
@@ -320,7 +336,7 @@ begin
   student := studentComboBox.KeyValue;
   mark := markComboBox.KeyValue;
 
-  if (journalActionControllerCheckOnError(student, mark, date, errorLabel) = true) then begin
+  if (journalActionControllerCheckOnError(action, student, mark, date, errorLabel) = true) then begin
     Exit;
   end;
 
@@ -330,6 +346,7 @@ begin
   case StrUtils.IndexStr(action, ['add', 'update', 'delete']) of
     0: addRecordInJournal(studentID, subjectId, markID, date);
     1: updateRecordInJournal(studentID, subjectId, markID, date);
+    2: deleteRecordFromJournal(studentID, subjectId, date);
   end;
 
   showMainTable(groupId, subjectId);
@@ -346,6 +363,11 @@ end;
 procedure TForm1.buttonChangeClick(Sender: TObject);
 begin
   journalActionController('update', subjectId, groupId, selectStudent, selectMark)
+end;
+
+procedure TForm1.buttonDeleteClick(Sender: TObject);
+begin
+  journalActionController('delete', subjectId, groupId, selectStudent, selectMark)
 end;
 
 procedure TForm1.DateTimePicker1OnChange(Sender: TObject);
