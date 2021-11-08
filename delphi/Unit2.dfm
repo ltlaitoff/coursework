@@ -199,4 +199,86 @@ object DataModule1: TDataModule1
     Left = 568
     Top = 144
   end
+  object ADOQueryTimetable: TADOQuery
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT'
+      '  WeekdayName(t.day_of_week) AS [day of week],'
+      '  t.pair,'
+      '  g.name,'
+      '  s.name'
+      'FROM'
+      '  Timetable AS t,'
+      '  Subjects AS s,'
+      '  Groups AS g'
+      'WHERE'
+      '  ('
+      '    (t.subject_id = s.id) AND'
+      '    (g.id = t.group_id)'
+      '  )'
+      'ORDER BY'
+      '  t.day_of_week,'
+      '  g.name,'
+      '  t.pair;'
+      '  ')
+    Left = 432
+    Top = 208
+  end
+  object DataSourceTimetable: TDataSource
+    DataSet = ADOQueryTimetable
+    Left = 568
+    Top = 208
+  end
+  object ADOQueryTimetableShow: TADOQuery
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT'
+      '  WeekdayName(t.day_of_week) AS [day of week],'
+      '  t.pair,'
+      '  g.name,'
+      '  s.name'
+      'FROM'
+      '  Timetable AS t,'
+      '  Subjects AS s,'
+      '  Groups AS g'
+      'WHERE'
+      '  ('
+      '    (t.subject_id = s.id) AND'
+      '    (g.id = t.group_id)'
+      '  )'
+      'ORDER BY'
+      '  t.day_of_week,'
+      '  g.name,'
+      '  t.pair;'
+      '  ')
+    Left = 432
+    Top = 272
+    object ADOQueryTimetableShowdayofweek: TWideMemoField
+      FieldName = 'day of week'
+      ReadOnly = True
+      OnGetText = ADOQueryTimetableShowdayofweekGetText
+      BlobType = ftWideMemo
+    end
+    object ADOQueryTimetableShowpair: TIntegerField
+      FieldName = 'pair'
+    end
+    object ADOQueryTimetableShowgname: TWideStringField
+      FieldName = 'g.name'
+    end
+    object ADOQueryTimetableShowsname: TWideStringField
+      FieldName = 's.name'
+      Size = 255
+    end
+  end
+  object DataSourceTimetableShow: TDataSource
+    DataSet = ADOQueryTimetableShow
+    Left = 568
+    Top = 272
+  end
 end

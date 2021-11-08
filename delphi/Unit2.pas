@@ -28,6 +28,16 @@ type
     DataSourceTableTeachers: TDataSource;
     ADOQuerySubjectsShow: TADOQuery;
     DataSourceSubjectsShow: TDataSource;
+    ADOQueryTimetable: TADOQuery;
+    DataSourceTimetable: TDataSource;
+    ADOQueryTimetableShow: TADOQuery;
+    DataSourceTimetableShow: TDataSource;
+    ADOQueryTimetableShowdayofweek: TWideMemoField;
+    ADOQueryTimetableShowpair: TIntegerField;
+    ADOQueryTimetableShowgname: TWideStringField;
+    ADOQueryTimetableShowsname: TWideStringField;
+    procedure ADOQueryTimetableShowdayofweekGetText(Sender: TField;
+      var Text: string; DisplayText: Boolean);
   private
     { Private declarations }
   public
@@ -43,5 +53,11 @@ implementation
 
 {$R *.dfm}
 
+
+procedure TDataModule1.ADOQueryTimetableShowdayofweekGetText(Sender: TField;
+  var Text: string; DisplayText: Boolean);
+begin
+  Text := Sender.AsString;
+end;
 
 end.

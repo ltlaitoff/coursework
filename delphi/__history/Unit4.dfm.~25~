@@ -1,0 +1,114 @@
+﻿object Timetable: TTimetable
+  Left = 0
+  Top = 0
+  Caption = 'Timetable'
+  ClientHeight = 768
+  ClientWidth = 870
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnActivate = FormActivate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 61
+    Top = 527
+    Width = 66
+    Height = 13
+    Caption = #1044#1077#1085#1100' '#1085#1077#1076#1077#1083#1080
+  end
+  object Группа: TLabel
+    Left = 61
+    Top = 554
+    Width = 36
+    Height = 13
+    Caption = #1043#1088#1091#1087#1087#1072
+  end
+  object Label2: TLabel
+    Left = 61
+    Top = 581
+    Width = 44
+    Height = 13
+    Caption = #1055#1088#1077#1076#1084#1077#1090
+  end
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 8
+    Width = 862
+    Height = 481
+    BiDiMode = bdLeftToRight
+    DataSource = DataModule1.DataSourceTimetable
+    ParentBiDiMode = False
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'day of week'
+        Width = 100
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'pair'
+        Width = 50
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'g.name'
+        Width = 50
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 's.name'
+        Width = 200
+        Visible = True
+      end>
+  end
+  object selectDay: TDBLookupComboBox
+    Left = 133
+    Top = 527
+    Width = 145
+    Height = 21
+    KeyField = 'day of week'
+    ListField = 'day of week'
+    ListFieldIndex = 2
+    ListSource = DataModule1.DataSourceTimetableDays
+    TabOrder = 1
+    OnClick = selectDayClick
+  end
+  object selectGroup: TDBLookupComboBox
+    Left = 133
+    Top = 554
+    Width = 145
+    Height = 21
+    KeyField = 'name'
+    ListField = 'name'
+    ListFieldIndex = 2
+    ListSource = DataModule1.DataSourceGroups
+    TabOrder = 2
+    OnClick = selectGroupClick
+  end
+  object selectSubject: TDBLookupComboBox
+    Left = 133
+    Top = 581
+    Width = 145
+    Height = 21
+    KeyField = 'name'
+    ListField = 'name'
+    ListFieldIndex = 2
+    ListSource = DataModule1.DataSourceSubjectsShow
+    TabOrder = 3
+    OnClick = selectSubjectClick
+  end
+end

@@ -190,5 +190,9 @@ object Main: TMain
       Caption = 'Subjects'
       OnClick = Main2Click
     end
+    object timetable1: TMenuItem
+      Caption = 'Timetable'
+      OnClick = timetable1Click
+    end
   end
 end
