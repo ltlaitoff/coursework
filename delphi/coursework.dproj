@@ -99,7 +99,7 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="Unit1.pas">
-            <Form>Form1</Form>
+            <Form>Main</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Unit2.pas">
@@ -108,7 +108,7 @@
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="Unit3.pas">
-            <Form>Form3</Form>
+            <Form>Subjects</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">

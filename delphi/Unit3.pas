@@ -8,26 +8,37 @@ uses
   Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.DBCtrls, Vcl.Grids, Vcl.DBGrids;
 
 type
-  TForm3 = class(TForm)
-    Label1: TLabel;
-    Label2: TLabel;
+  TSubjects = class(TForm)
     DBGrid1: TDBGrid;
-    selectGroup: TDBLookupComboBox;
-    selectSubject: TDBLookupComboBox;
     Panel1: TPanel;
     Label3: TLabel;
     Label4: TLabel;
     errorLabel: TLabel;
-    daysOfWeekLabel: TLabel;
     buttonAdd: TButton;
-    selectDate: TDateTimePicker;
-    selectStudent: TDBLookupComboBox;
-    selectMark: TDBLookupComboBox;
+    teacherComboBox: TDBLookupComboBox;
     buttonChange: TButton;
     buttonDelete: TButton;
     openPanel: TButton;
     MainMenu1: TMainMenu;
     Main2: TMenuItem;
+    nameEdit: TEdit;
+    audienceEdit: TEdit;
+    procedure subjectsActionController(action: String; nameEdit, audienceEdit: TEdit;
+    teacherComboBox: TDBLookupComboBox; errorString: TLabel; recordId: Integer);
+    function setRecordId(name: String; audienceNumber, teacherId: Integer): Integer;
+    procedure addRecordInSubjects(name, audience: String; teacherId: Integer);
+    procedure updateRecordInSubjects(name, audience: String; teacherId, recordId: Integer);
+    procedure deleteRecordFromSubjects(recordId: Integer);
+    function subjectsActionControllerCheckOnError(action, name, audience, teacher: String; errorString: TLabel): Boolean;
+    procedure buttonAddClick(Sender: TObject);
+    procedure buttonChangeClick(Sender: TObject);
+    procedure buttonDeleteClick(Sender: TObject);
+    function getTeacherId(surname: String): Integer;
+    procedure showSubjectsTable();
+    procedure openPanelClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure DBGrid1CellClick(Column: TColumn);
   private
     { Private declarations }
   public
@@ -35,102 +46,105 @@ type
   end;
 
 var
-  Form3: TForm3;
+  Subjects: TSubjects;
+  recordId: Integer;
 
 implementation
 
 {$R *.dfm}
+{$APPTYPE CONSOLE}
 
-uses Unit2;
+uses Unit2, StrUtils;
 
-procedure TForm3.showMainTable(groupId, subjectId: Integer);
+procedure TSubjects.showSubjectsTable();
 begin
-  DataModule1.ADOQueryMain.Close;
-  DataModule1.ADOQueryMain.SQL.Text :=
-  'TRANSFORM Max(j.mark_id) AS [Max-mark_id] '
-  + 'SELECT u.surname AS fullname '
-  + 'FROM '
-  + '  ( '
-  + '    SELECT * '
-  + '    FROM Journal '
-  + '    WHERE Journal.subject_id = ' + IntToStr(subjectId) + ' '
-  + '  ) AS j '
-  + '  RIGHT JOIN ( '
-  + '    SELECT '
-  + '      Users.id AS id, '
-  + '      Users.surname as surname, '
-  + '      Users.name AS name, '
-  + '      Users.patronymic AS patronymic '
-  + '    FROM Users '
-  + '    INNER JOIN Groups ON Users.group_id = Groups.id '
-  + '    WHERE Groups.id = ' + IntToStr(groupId) + ' '
-  + '    ORDER BY Users.id '
-  + '  ) AS u ON j.user_id = u.id '
-  + 'GROUP BY u.surname  '
-  + 'PIVOT j.date; ';
-  DataModule1.ADOQueryMain.Open;
-
-  DBGrid1.Columns[1].Visible := false;
+ DataModule1.ADOQuerySubjectsShow.Close;
+ DataModule1.ADOQuerySubjectsShow.SQL.Text :=
+  'SELECT s.id, s.name, s.audience, t.surname AS teacher ' +
+  'FROM Subjects AS s ' +
+  'INNER JOIN Teachers AS t ON (t.ID = s.teacher_id)';
+ DataModule1.ADOQuerySubjectsShow.Open;
 end;
 
-procedure TForm3.addRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
-begin
-  // DataModule1.ADOQueryAddMarks.Close;
-  // DataModule1.ADOQueryAddMarks.SQL.Text :=
-  // 'INSERT INTO Journal (user_id, subject_id, mark_id, [date]) '   +
-  // 'VALUES (' + IntToStr(studentID) + ', ' + IntToStr(subjectID) +
-  // ', ' +  IntToStr(markID)
-  // + ', DateValue("' + DateTimeToStr(date) + '"))';
+ procedure TSubjects.DBGrid1CellClick(Column: TColumn);
+ var
+  colName: String;
+  fmt: TFormatSettings;
+ begin
+    recordId := DBGrid1.Fields[0].AsInteger;
+    nameEdit.Text := DBGrid1.Fields[1].AsString;
+    audienceEdit.Text := DBGrid1.Fields[2].AsString;
+    teacherComboBox.KeyValue := DBGrid1.Fields[3].AsString;
+ end;
 
-  // DataModule1.ADOQueryAddMarks.ExecSQL;
+function TSubjects.getTeacherId(surname: String): Integer;
+begin
+  DataModule1.ADOQuerySubjects.Close;
+  DataModule1.ADOQuerySubjects.SQL.Text :=
+  'SELECT id ' +
+  'FROM Teachers ' +
+  'WHERE surname = "' + surname + '";';
+  DataModule1.ADOQuerySubjects.Open;
+
+  getTeacherId := DataModule1.DataSourceSubjects.DataSet.Fields[0].AsInteger;
 end;
 
-procedure TForm3.updateRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
+function TSubjects.setRecordId(name: String; audienceNumber, teacherId: Integer): Integer;
 begin
-  // DataModule1.ADOQueryAddMarks.Close;
-  // DataModule1.ADOQueryAddMarks.SQL.Text :=
-  // 'UPDATE Journal ' +
-  // 'SET ' +
-  //   'mark_id = ' + IntToStr(markID) + ' ' +
-  // 'WHERE '+
-  // ' user_id = ' + IntToStr(studentID) + ' AND ' +
-  // ' subject_id = ' + IntToStr(subjectID) + ' AND ' +
-  // 'date = DateValue("' + DateTimeToStr(date) + '"); ';
-  // DataModule1.ADOQueryAddMarks.ExecSQL;
+  DataModule1.ADOQuerySubjects.Close;
+  DataModule1.ADOQuerySubjects.SQL.Text :=
+  'SELECT id' +
+  'FROM Subjects' +
+  'WHERE (' +
+    'name = ' + name + ', ' +
+    'audience = ' + IntToStr(audienceNumber) + ', ' +
+    'teacher_id = ' + IntToStr(teacherId) + ')';
+  DataModule1.ADOQuerySubjects.Open;
+
+  setRecordId := DataModule1.DataSourceSubjects.DataSet.Fields[0].AsInteger;
 end;
 
-procedure TForm3.deleteRecordFromJournal(studentID, subjectID: Integer; date: TDateTime);
+procedure TSubjects.addRecordInSubjects(name, audience: String; teacherId: Integer);
 begin
-  // DataModule1.ADOQueryAddMarks.Close;
-  // DataModule1.ADOQueryAddMarks.SQL.Text :=
-  // 'DELETE ' +
-  // 'FROM Journal ' +
-  // 'WHERE ' +
-  //   'user_id = ' + IntToStr(studentID) + ' AND ' +
-  //   'subject_id = ' + IntToStr(subjectID) + ' AND ' +
-  //   'date = DateValue("' + DateTimeToStr(date) + '")';
-  // DataModule1.ADOQueryAddMarks.ExecSQL;
+  writeln(name, audience, teacherId);
+
+  DataModule1.ADOQuerySubjects.Close;
+  DataModule1.ADOQuerySubjects.SQL.Text :=
+  'INSERT INTO Subjects (name, audience, teacher_id) '   +
+  'VALUES ("' + name + '", ' +
+          '"' + audience + '", '
+            +  IntToStr(teacherId) +
+          ')';
+
+  DataModule1.ADOQuerySubjects.ExecSQL;
 end;
 
-
-procedure TForm3.subjectsOnCellClick(Column: TColumn);
-var
-//  colName: String;
-//  fmt: TFormatSettings;
+procedure TSubjects.updateRecordInSubjects(name, audience: String; teacherId, recordId: Integer);
 begin
-//  selectStudent.KeyValue := DBGrid1.Fields[0].AsString;
-//  selectMark.KeyValue := DBGrid1.Fields[Column.Index].AsString;
-//
-//  colName := Column.DisplayName;
-//  fmt.ShortDateFormat  := 'dd_mm_yyyy';
-//  fmt.DateSeparator   := '_';
-//  if NOT (colName = 'fullname') then begin
-//    selectDate.Date := StrToDate(colName, fmt);
-//  end;
-
+  DataModule1.ADOQuerySubjects.Close;
+  DataModule1.ADOQuerySubjects.SQL.Text :=
+  'UPDATE Subjects ' +
+  'SET ' +
+    'name = "' + name + '", ' +
+    'audience = ' + audience + ', ' +
+    'teacher_id = ' + IntToStr(teacherId) + ' ' +
+  'WHERE '+
+    'id = ' + IntToStr(recordId) + ';';
+  DataModule1.ADOQuerySubjects.ExecSQL;
 end;
 
-function TForm3.subjectsActionControllerCheckOnError(action, name, audience, teacher: String; errorString: TLabel): Boolean;
+procedure TSubjects.deleteRecordFromSubjects(recordId: Integer);
+begin
+  DataModule1.ADOQuerySubjects.Close;
+  DataModule1.ADOQuerySubjects.SQL.Text :=
+  'DELETE ' +
+  'FROM Subjects ' +
+  'WHERE ' +
+    'id = ' + IntToStr(recordId);
+  DataModule1.ADOQuerySubjects.ExecSQL;
+end;
+
+function TSubjects.subjectsActionControllerCheckOnError(action, name, audience, teacher: String; errorString: TLabel): Boolean;
 var
   selectedDayNumber: Integer;
 begin
@@ -158,57 +172,62 @@ begin
   subjectsActionControllerCheckOnError := False;
 end;
 
-procedure TForm3.subjectsActionController(action: String; name, audience: TEdit; teacherComboBox: TDBLookupComboBox; errorString: TLabel);
+procedure TSubjects.subjectsActionController(action: String; nameEdit, audienceEdit: TEdit;
+  teacherComboBox: TDBLookupComboBox; errorString: TLabel; recordId: Integer);
 var
   name, audience, teacher: String;
+  teacherId: Integer;
 begin
-  name := name.Text;
-  audience := audience.Text;
+  name := nameEdit.Text;
+  audience := audienceEdit.Text;
   teacher := teacherComboBox.KeyValue;
 
   if (subjectsActionControllerCheckOnError(action, name, audience, teacher, errorString) = true) then begin
     Exit;
   end;
 
-  teacherId := getTeacherId(teacher); // getTeacherId - заглушка
+  teacherId := getTeacherId(teacher);
 
   case StrUtils.IndexStr(action, ['add', 'update', 'delete']) of
-    0: addRecordInSubjects(name, audience, teacherId); // Заглушка
-    1: updateRecordInSubjects(name, audience, teacherId); // Заглушка
-    2: deleteRecordFromSubjects(name, audience, teacherId); // Заглушка
+    0: addRecordInSubjects(name, audience, teacherId);
+    1: updateRecordInSubjects(name, audience, teacherId, recordId);
+    2: deleteRecordFromSubjects(recordId);
   end;
 
-  showMainTable(groupId, subjectId);
+  showSubjectsTable();
 
   teacherComboBox.KeyValue := ''; // Заменить на 1 человека в датасете
 end;
 
-procedure TForm3.buttonAddClick(Sender: TObject);
+procedure TSubjects.buttonAddClick(Sender: TObject);
 begin
-  subjectsActionController('add', nameEdit, audienceEdit, teacherComboBox)
+   subjectsActionController('add', nameEdit, audienceEdit, teacherComboBox, errorLabel, recordId);
 end;
 
-procedure TForm3.buttonChangeClick(Sender: TObject);
+procedure TSubjects.buttonChangeClick(Sender: TObject);
 begin
-  subjectsActionController('update', nameEdit, audienceEdit, teacherComboBox)
+   subjectsActionController('update', nameEdit, audienceEdit, teacherComboBox, errorLabel, recordId);
 end;
 
-procedure TForm3.buttonDeleteClick(Sender: TObject);
+procedure TSubjects.buttonDeleteClick(Sender: TObject);
 begin
-  subjectsActionController('delete', nameEdit, audienceEdit, teacherComboBox)
+   subjectsActionController('delete', nameEdit, audienceEdit, teacherComboBox, errorLabel, recordId);
 end;
 
-procedure TForm3.openPanelClick(Sender: TObject);
+procedure TSubjects.openPanelClick(Sender: TObject);
 begin
   Panel1.Visible := true;
 end;
 
-procedure TForm3.FormActivate(Sender: TObject);
+procedure TSubjects.FormActivate(Sender: TObject);
 begin
-  //
+  recordId := DBGrid1.Fields[0].AsInteger;
+  nameEdit.Text := DBGrid1.Fields[1].AsString;
+  audienceEdit.Text := DBGrid1.Fields[2].AsString;
+  teacherComboBox.KeyValue := DBGrid1.Fields[3].AsString;
 end;
 
-procedure TForm3.FormCreate(Sender: TObject);
+procedure TSubjects.FormCreate(Sender: TObject);
 begin
   NullStrictConvert := False;
 end;

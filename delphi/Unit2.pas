@@ -13,7 +13,7 @@ type
     ADOTableGroups: TADOTable;
     ADOTableSubjects: TADOTable;
     DataSourceGroups: TDataSource;
-    DataSourceSubjects: TDataSource;
+    DataSourceTableSubjects: TDataSource;
     ADOQueryStudentsFromGroup: TADOQuery;
     DataSourceStudentFromGroup: TDataSource;
     ADOQueryAddMarks: TADOQuery;
@@ -22,6 +22,12 @@ type
     DataSourceTableMarks: TDataSource;
     ADOQueryTimetableGet: TADOQuery;
     DataSourceTimetableGet: TDataSource;
+    ADOQuerySubjects: TADOQuery;
+    DataSourceSubjects: TDataSource;
+    ADOTableTeachers: TADOTable;
+    DataSourceTableTeachers: TDataSource;
+    ADOQuerySubjectsShow: TADOQuery;
+    DataSourceSubjectsShow: TDataSource;
   private
     { Private declarations }
   public

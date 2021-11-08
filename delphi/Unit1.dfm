@@ -1,4 +1,4 @@
-object Form1: TForm1
+object Main: TMain
   Left = 0
   Top = 0
   Caption = 'ltlaitoff coursework'
@@ -64,7 +64,7 @@ object Form1: TForm1
     KeyField = 'name'
     ListField = 'name'
     ListFieldIndex = 2
-    ListSource = DataModule1.DataSourceSubjects
+    ListSource = DataModule1.DataSourceSubjectsShow
     TabOrder = 2
     OnClick = selectSubjectClick
   end

@@ -8,7 +8,7 @@ uses
   Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.DBCtrls, Vcl.ExtCtrls, Vcl.Menus;
 
 type
-  TForm1 = class(TForm)
+  TMain = class(TForm)
     Label1: TLabel;
     Label2: TLabel;
     DBGrid1: TDBGrid;
@@ -63,7 +63,7 @@ type
   end;
 
 var
-  Form1: TForm1;
+  Main: TMain;
   groupId, subjectId: Integer;
   arrayDaysOfWeek: array of Integer;
 
@@ -74,17 +74,17 @@ implementation
 
 uses Unit2, StrUtils, Unit3;
 
-procedure TForm1.selectGroupClick(Sender: TObject);
+procedure TMain.selectGroupClick(Sender: TObject);
 begin
   updateGrid();
 end;
 
-procedure TForm1.selectSubjectClick(Sender: TObject);
+procedure TMain.selectSubjectClick(Sender: TObject);
 begin
   updateGrid();
 end;
 
-procedure TForm1.showMainTable(groupId, subjectId: Integer);
+procedure TMain.showMainTable(groupId, subjectId: Integer);
 begin
   DataModule1.ADOQueryMain.Close;
   DataModule1.ADOQueryMain.SQL.Text :=
@@ -114,7 +114,7 @@ begin
   DBGrid1.Columns[1].Visible := false;
 end;
 
-function TForm1.getGroupId(groupName: String): Integer;
+function TMain.getGroupId(groupName: String): Integer;
 begin
   DataModule1.ADOQueryMain.Close;
   DataModule1.ADOQueryMain.SQL.Text :=
@@ -126,7 +126,7 @@ begin
   getGroupId := DataModule1.DataSourceMain.DataSet.Fields[0].AsInteger;
 end;
 
-function TForm1.getSubjectId(subjectName: String): Integer;
+function TMain.getSubjectId(subjectName: String): Integer;
 begin
   DataModule1.ADOQueryMain.Close;
   DataModule1.ADOQueryMain.SQL.Text :=
@@ -138,7 +138,7 @@ begin
   getSubjectId := DataModule1.DataSourceMain.DataSet.Fields[0].AsInteger;
 end;
 
-procedure TForm1.doQueryDaysOfWeek(groupId, subjectId: Integer);
+procedure TMain.doQueryDaysOfWeek(groupId, subjectId: Integer);
 begin
   DataModule1.ADOQueryTimetableGet.Close;
   DataModule1.ADOQueryTimetableGet.SQL.Text :=
@@ -149,7 +149,7 @@ begin
   DataModule1.ADOQueryTimetableGet.Open;
 end;
 
-procedure TForm1.updateArrayDaysOfWeek(groupId, subjectId: Integer);
+procedure TMain.updateArrayDaysOfWeek(groupId, subjectId: Integer);
 var
   len, i: Integer;
 begin
@@ -171,7 +171,7 @@ begin
   end;
 end;
 
-procedure TForm1.updateStringDaysOfWeek(groupId, subjectId: Integer);
+procedure TMain.updateStringDaysOfWeek(groupId, subjectId: Integer);
 var
   len, i: Integer;
   result: String;
@@ -195,7 +195,7 @@ begin
   daysOfWeekLabel.Caption := result;
 end;
 
-procedure TForm1.doQueryStudentsFromGroup(groupId: Integer);
+procedure TMain.doQueryStudentsFromGroup(groupId: Integer);
 begin
   DataModule1.ADOQueryStudentsFromGroup.Close;
   DataModule1.ADOQueryStudentsFromGroup.SQL.Text :=
@@ -211,7 +211,7 @@ begin
   DataModule1.ADOQueryStudentsFromGroup.Open;
 end;
 
-procedure TForm1.updateGrid();
+procedure TMain.updateGrid();
 var
   group, subject: String;
 begin
@@ -239,13 +239,13 @@ begin
   doQueryStudentsFromGroup(groupId);
 end;
 
-procedure TForm1.openPanelClick(Sender: TObject);
+procedure TMain.openPanelClick(Sender: TObject);
 begin
   Panel1.Visible := true;
   selectStudent.KeyValue := DBGrid1.Fields[0].AsString;
 end;
 
-function TForm1.getMarkId(markName: String): Integer;
+function TMain.getMarkId(markName: String): Integer;
 begin
   DataModule1.ADOQueryAddMarks.Close;
   DataModule1.ADOQueryAddMarks.SQL.Text :=
@@ -257,7 +257,7 @@ begin
   getMarkId := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
 end;
 
-function TForm1.getStudentId(studentSurname: String): Integer;
+function TMain.getStudentId(studentSurname: String): Integer;
 begin
   DataModule1.ADOQueryAddMarks.Close;
   DataModule1.ADOQueryAddMarks.SQL.Text :=
@@ -269,7 +269,7 @@ begin
   getStudentId := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
 end;
 
-procedure TForm1.addRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
+procedure TMain.addRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
 begin
   DataModule1.ADOQueryAddMarks.Close;
   DataModule1.ADOQueryAddMarks.SQL.Text :=
@@ -281,7 +281,7 @@ begin
   DataModule1.ADOQueryAddMarks.ExecSQL;
 end;
 
-procedure TForm1.updateRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
+procedure TMain.updateRecordInJournal(studentID, subjectID, markID: Integer; date: TDateTime);
 begin
   DataModule1.ADOQueryAddMarks.Close;
   DataModule1.ADOQueryAddMarks.SQL.Text :=
@@ -295,7 +295,7 @@ begin
   DataModule1.ADOQueryAddMarks.ExecSQL;
 end;
 
-procedure TForm1.deleteRecordFromJournal(studentID, subjectID: Integer; date: TDateTime);
+procedure TMain.deleteRecordFromJournal(studentID, subjectID: Integer; date: TDateTime);
 begin
   DataModule1.ADOQueryAddMarks.Close;
   DataModule1.ADOQueryAddMarks.SQL.Text :=
@@ -308,7 +308,7 @@ begin
   DataModule1.ADOQueryAddMarks.ExecSQL;
 end;
 
-function TForm1.checkValueInArray(arr: array of Integer; value: Integer): Boolean;
+function TMain.checkValueInArray(arr: array of Integer; value: Integer): Boolean;
 var
   len, i: Integer;
 begin
@@ -324,7 +324,7 @@ begin
   checkValueInArray := false;
 end;
 
-function TForm1.journalActionControllerCheckOnError(action, student, mark: String; date: TDateTime; errorString: TLabel): Boolean;
+function TMain.journalActionControllerCheckOnError(action, student, mark: String; date: TDateTime; errorString: TLabel): Boolean;
 var
   selectedDayNumber: Integer;
 begin
@@ -354,7 +354,7 @@ begin
   journalActionControllerCheckOnError := False;
 end;
 
-procedure TForm1.journalOnCellClick(Column: TColumn);
+procedure TMain.journalOnCellClick(Column: TColumn);
 var
   colName: String;
   fmt: TFormatSettings;
@@ -371,12 +371,12 @@ begin
 
 end;
 
-procedure TForm1.Main2Click(Sender: TObject);
+procedure TMain.Main2Click(Sender: TObject);
 begin
-  Form3.Show();
+  Subjects.Show();
 end;
 
-procedure TForm1.journalActionController(action: String; subjectId, groupId: Integer; studentComboBox, markComboBox: TDBLookupComboBox);
+procedure TMain.journalActionController(action: String; subjectId, groupId: Integer; studentComboBox, markComboBox: TDBLookupComboBox);
 var
   markId, studentID, len, selectedDayNumber, i: Integer;
   dateIsCorrect: Boolean;
@@ -406,32 +406,32 @@ begin
   markComboBox.KeyValue := '';
 end;
 
-procedure TForm1.buttonAddClick(Sender: TObject);
+procedure TMain.buttonAddClick(Sender: TObject);
 begin
   journalActionController('add', subjectId, groupId, selectStudent, selectMark)
 end;
 
-procedure TForm1.buttonChangeClick(Sender: TObject);
+procedure TMain.buttonChangeClick(Sender: TObject);
 begin
   journalActionController('update', subjectId, groupId, selectStudent, selectMark)
 end;
 
-procedure TForm1.buttonDeleteClick(Sender: TObject);
+procedure TMain.buttonDeleteClick(Sender: TObject);
 begin
   journalActionController('delete', subjectId, groupId, selectStudent, selectMark)
 end;
 
-procedure TForm1.DateTimePicker1OnChange(Sender: TObject);
+procedure TMain.DateTimePicker1OnChange(Sender: TObject);
 begin
   errorLabel.Visible := False;
 end;
 
-procedure TForm1.FormActivate(Sender: TObject);
+procedure TMain.FormActivate(Sender: TObject);
 begin
   updateGrid();
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TMain.FormCreate(Sender: TObject);
 begin
   NullStrictConvert := False;
   groupId := 1;

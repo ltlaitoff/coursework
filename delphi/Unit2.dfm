@@ -1,7 +1,7 @@
 object DataModule1: TDataModule1
   OldCreateOrder = False
   Height = 487
-  Width = 486
+  Width = 707
   object ADOConnection: TADOConnection
     Connected = True
     ConnectionString = 
@@ -78,7 +78,7 @@ object DataModule1: TDataModule1
     Left = 288
     Top = 72
   end
-  object DataSourceSubjects: TDataSource
+  object DataSourceTableSubjects: TDataSource
     DataSet = ADOTableSubjects
     Left = 288
     Top = 136
@@ -150,5 +150,52 @@ object DataModule1: TDataModule1
     DataSet = ADOQueryTimetableGet
     Left = 288
     Top = 408
+  end
+  object ADOQuerySubjects: TADOQuery
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT s.id, s.name, s.audience, t.surname AS teacher'
+      'FROM Subjects AS s'
+      'INNER JOIN Teachers AS t ON (t.ID = s.teacher_id);')
+    Left = 440
+    Top = 24
+  end
+  object DataSourceSubjects: TDataSource
+    DataSet = ADOQuerySubjects
+    Left = 568
+    Top = 24
+  end
+  object ADOTableTeachers: TADOTable
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    TableName = 'Teachers'
+    Left = 432
+    Top = 80
+  end
+  object DataSourceTableTeachers: TDataSource
+    DataSet = ADOTableTeachers
+    Left = 568
+    Top = 80
+  end
+  object ADOQuerySubjectsShow: TADOQuery
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT s.id, s.name, s.audience, t.surname AS teacher'
+      'FROM Subjects AS s'
+      'INNER JOIN Teachers AS t ON (t.ID = s.teacher_id);')
+    Left = 432
+    Top = 144
+  end
+  object DataSourceSubjectsShow: TDataSource
+    DataSet = ADOQuerySubjectsShow
+    Left = 568
+    Top = 144
   end
 end
