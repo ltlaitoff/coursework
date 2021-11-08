@@ -152,17 +152,50 @@ object DataModule1: TDataModule1
     Top = 408
   end
   object ADOQuerySubjects: TADOQuery
+    Active = True
     Connection = ADOConnection
     CursorType = ctStatic
     Parameters = <>
     SQL.Strings = (
-      'SELECT *'
-      'FROM Subjects;')
+      'SELECT s.id, s.name, s.audience, t.surname AS teacher'
+      'FROM Subjects AS s'
+      'INNER JOIN Teachers AS t ON (t.ID = s.teacher_id);')
     Left = 440
     Top = 24
   end
   object DataSourceSubjects: TDataSource
+    DataSet = ADOQuerySubjects
     Left = 568
     Top = 24
+  end
+  object ADOTableTeachers: TADOTable
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    TableName = 'Teachers'
+    Left = 432
+    Top = 80
+  end
+  object DataSourceTableTeachers: TDataSource
+    DataSet = ADOTableTeachers
+    Left = 568
+    Top = 80
+  end
+  object ADOQuerySubjectsShow: TADOQuery
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT s.id, s.name, s.audience, t.surname AS teacher'
+      'FROM Subjects AS s'
+      'INNER JOIN Teachers AS t ON (t.ID = s.teacher_id);')
+    Left = 432
+    Top = 144
+  end
+  object DataSourceSubjectsShow: TDataSource
+    DataSet = ADOQuerySubjectsShow
+    Left = 568
+    Top = 144
   end
 end

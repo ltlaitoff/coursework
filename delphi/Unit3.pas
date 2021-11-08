@@ -62,7 +62,8 @@ begin
  DataModule1.ADOQuerySubjectsShow.SQL.Text :=
   'SELECT s.id, s.name, s.audience, t.surname AS teacher ' +
   'FROM Subjects AS s ' +
-  'INNER JOIN Teachers AS t ON (t.ID = s.teacher_id)';
+  'INNER JOIN Teachers AS t ON (t.ID = s.teacher_id)' +
+  'ORDER BY s.id';
  DataModule1.ADOQuerySubjectsShow.Open;
 end;
 

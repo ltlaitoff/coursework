@@ -2,7 +2,7 @@ object Subjects: TSubjects
   Left = 0
   Top = 0
   Caption = 'Subjects'
-  ClientHeight = 631
+  ClientHeight = 587
   ClientWidth = 644
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -71,13 +71,13 @@ object Subjects: TSubjects
       Left = 64
       Top = 41
       Width = 63
-      Height = 15
+      Height = 13
       Caption = #1040#1091#1076#1080#1090#1086#1088#1080#1103': '
     end
     object errorLabel: TLabel
       Left = 141
       Top = 97
-      Width = 145
+      Width = 3
       Height = 13
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET

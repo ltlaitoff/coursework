@@ -21,7 +21,7 @@ object Subjects: TSubjects
     Top = 8
     Width = 574
     Height = 369
-    DataSource = DataModule1.DataSourceSubjects
+    DataSource = DataModule1.DataSourceSubjectsShow
     TabOrder = 0
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
@@ -33,6 +33,7 @@ object Subjects: TSubjects
       item
         Expanded = False
         FieldName = 'id'
+        Width = 50
         Visible = True
       end
       item
@@ -54,29 +55,29 @@ object Subjects: TSubjects
   end
   object Panel1: TPanel
     Left = 27
-    Top = 453
-    Width = 574
-    Height = 148
+    Top = 429
+    Width = 558
+    Height = 132
     TabOrder = 1
     Visible = False
     object Label3: TLabel
-      Left = 101
+      Left = 69
       Top = 22
       Width = 52
       Height = 13
       Caption = #1053#1072#1079#1074#1072#1085#1080#1077':'
     end
     object Label4: TLabel
-      Left = 96
+      Left = 64
       Top = 41
       Width = 63
       Height = 15
       Caption = #1040#1091#1076#1080#1090#1086#1088#1080#1103': '
     end
     object errorLabel: TLabel
-      Left = 327
-      Top = 57
-      Width = 3
+      Left = 141
+      Top = 97
+      Width = 145
       Height = 13
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
@@ -88,18 +89,12 @@ object Subjects: TSubjects
       ParentFont = False
       Transparent = True
     end
-    object daysOfWeekLabel: TLabel
-      Left = 165
-      Top = 108
-      Width = 3
-      Height = 13
-    end
     object buttonAdd: TButton
       Left = 327
       Top = 26
       Width = 108
       Height = 25
-      Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1086#1094#1077#1085#1082#1091
+      Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1087#1088#1077#1076#1084#1077#1090
       TabOrder = 0
       OnClick = buttonAddClick
     end
@@ -110,39 +105,39 @@ object Subjects: TSubjects
       Height = 21
       KeyField = 'surname'
       ListFieldIndex = 5
-      ListSource = DataModule1.DataSourceStudentFromGroup
+      ListSource = DataModule1.DataSourceTableTeachers
       TabOrder = 1
     end
     object buttonChange: TButton
       Left = 327
-      Top = 76
+      Top = 57
       Width = 108
       Height = 25
-      Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1086#1094#1077#1085#1082#1091
+      Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1087#1088#1077#1076#1084#1077#1090
       TabOrder = 2
       OnClick = buttonChangeClick
     end
     object buttonDelete: TButton
       Left = 327
-      Top = 107
+      Top = 88
       Width = 108
       Height = 25
-      Caption = #1059#1076#1072#1083#1080#1090#1100' '#1086#1094#1077#1085#1082#1091
+      Caption = #1059#1076#1072#1083#1080#1090#1100' '#1087#1088#1077#1076#1084#1077#1090
       TabOrder = 3
       OnClick = buttonDeleteClick
     end
     object nameEdit: TEdit
-      Left = 165
+      Left = 141
       Top = 16
-      Width = 121
+      Width = 145
       Height = 21
       TabOrder = 4
       Text = 'nameEdit'
     end
     object audienceEdit: TEdit
-      Left = 165
+      Left = 141
       Top = 43
-      Width = 121
+      Width = 145
       Height = 21
       TabOrder = 5
       Text = 'audienceEdit'

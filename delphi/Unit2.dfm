@@ -187,9 +187,10 @@ object DataModule1: TDataModule1
     CursorType = ctStatic
     Parameters = <>
     SQL.Strings = (
-      'SELECT s.id, s.name, s.audience, t.surname AS teacher'
-      'FROM Subjects AS s'
-      'INNER JOIN Teachers AS t ON (t.ID = s.teacher_id);')
+      'SELECT s.id, s.name, s.audience, t.surname AS teacher '
+      'FROM Subjects AS s '
+      'INNER JOIN Teachers AS t ON (t.ID = s.teacher_id) '
+      'ORDER BY s.id;')
     Left = 432
     Top = 144
   end

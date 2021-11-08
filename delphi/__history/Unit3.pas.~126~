@@ -14,7 +14,6 @@ type
     Label3: TLabel;
     Label4: TLabel;
     errorLabel: TLabel;
-    daysOfWeekLabel: TLabel;
     buttonAdd: TButton;
     teacherComboBox: TDBLookupComboBox;
     buttonChange: TButton;
@@ -126,9 +125,9 @@ begin
   DataModule1.ADOQuerySubjects.SQL.Text :=
   'UPDATE Subjects ' +
   'SET ' +
-    'name = ' + name + ', ' +
-    'audience = ' + audience + ' AND ' +
-    'teacher_id = ' + IntToStr(teacherId) + ' AND ' +
+    'name = "' + name + '", ' +
+    'audience = ' + audience + ', ' +
+    'teacher_id = ' + IntToStr(teacherId) + ' ' +
   'WHERE '+
     'id = ' + IntToStr(recordId) + ';';
   DataModule1.ADOQuerySubjects.ExecSQL;
@@ -187,8 +186,7 @@ begin
     Exit;
   end;
 
-  teacherId := getTeacherId(teacher); // getTeacherId - заглушка
-  // recordId := setRecordId(name, audience, teacherId);
+  teacherId := getTeacherId(teacher);
 
   case StrUtils.IndexStr(action, ['add', 'update', 'delete']) of
     0: addRecordInSubjects(name, audience, teacherId);
@@ -223,7 +221,10 @@ end;
 
 procedure TSubjects.FormActivate(Sender: TObject);
 begin
-  //
+  recordId := DBGrid1.Fields[0].AsInteger;
+  nameEdit.Text := DBGrid1.Fields[1].AsString;
+  audienceEdit.Text := DBGrid1.Fields[2].AsString;
+  teacherComboBox.KeyValue := DBGrid1.Fields[3].AsString;
 end;
 
 procedure TSubjects.FormCreate(Sender: TObject);
