@@ -36,6 +36,12 @@ type
     ADOQueryTimetableShowpair: TIntegerField;
     ADOQueryTimetableShowgname: TWideStringField;
     ADOQueryTimetableShowsname: TWideStringField;
+    ADOTableGroupsID: TAutoIncField;
+    ADOTableGroupsname: TWideStringField;
+    ADOQueryGroupsShow: TADOQuery;
+    DataSourceGroupsShow: TDataSource;
+    ADOQueryGroups: TADOQuery;
+    DataSourceQueryGroups: TDataSource;
     procedure ADOQueryTimetableShowdayofweekGetText(Sender: TField;
       var Text: string; DisplayText: Boolean);
   private

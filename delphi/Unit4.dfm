@@ -76,7 +76,7 @@
     KeyField = 'name'
     ListField = 'name'
     ListFieldIndex = 2
-    ListSource = DataModule1.DataSourceGroups
+    ListSource = DataModule1.DataSourceGroupsShow
     TabOrder = 1
     OnClick = selectGroupClick
   end

@@ -52,7 +52,7 @@ object Main: TMain
     KeyField = 'name'
     ListField = 'name'
     ListFieldIndex = 2
-    ListSource = DataModule1.DataSourceGroups
+    ListSource = DataModule1.DataSourceGroupsShow
     TabOrder = 1
     OnClick = selectGroupClick
   end
@@ -193,6 +193,10 @@ object Main: TMain
     object timetable1: TMenuItem
       Caption = 'Timetable'
       OnClick = timetable1Click
+    end
+    object Groups1: TMenuItem
+      Caption = 'Groups'
+      OnClick = Groups1Click
     end
   end
 end

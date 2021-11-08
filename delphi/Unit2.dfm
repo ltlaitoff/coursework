@@ -1,6 +1,6 @@
 object DataModule1: TDataModule1
   OldCreateOrder = False
-  Height = 487
+  Height = 486
   Width = 707
   object ADOConnection: TADOConnection
     Connected = True
@@ -54,7 +54,7 @@ object DataModule1: TDataModule1
   end
   object DataSourceMain: TDataSource
     DataSet = ADOQueryMain
-    Left = 288
+    Left = 264
     Top = 16
   end
   object ADOTableGroups: TADOTable
@@ -64,6 +64,13 @@ object DataModule1: TDataModule1
     TableName = 'Groups'
     Left = 112
     Top = 80
+    object ADOTableGroupsID: TAutoIncField
+      FieldName = 'ID'
+      ReadOnly = True
+    end
+    object ADOTableGroupsname: TWideStringField
+      FieldName = 'name'
+    end
   end
   object ADOTableSubjects: TADOTable
     Active = True
@@ -75,12 +82,12 @@ object DataModule1: TDataModule1
   end
   object DataSourceGroups: TDataSource
     DataSet = ADOTableGroups
-    Left = 288
+    Left = 264
     Top = 72
   end
   object DataSourceTableSubjects: TDataSource
     DataSet = ADOTableSubjects
-    Left = 288
+    Left = 264
     Top = 136
   end
   object ADOQueryStudentsFromGroup: TADOQuery
@@ -103,7 +110,7 @@ object DataModule1: TDataModule1
   end
   object DataSourceStudentFromGroup: TDataSource
     DataSet = ADOQueryStudentsFromGroup
-    Left = 288
+    Left = 264
     Top = 208
   end
   object ADOQueryAddMarks: TADOQuery
@@ -118,7 +125,7 @@ object DataModule1: TDataModule1
   end
   object DataSourceAddMarks: TDataSource
     DataSet = ADOQueryAddMarks
-    Left = 288
+    Left = 264
     Top = 280
   end
   object ADOTableMarks: TADOTable
@@ -131,7 +138,7 @@ object DataModule1: TDataModule1
   end
   object DataSourceTableMarks: TDataSource
     DataSet = ADOTableMarks
-    Left = 288
+    Left = 264
     Top = 344
   end
   object ADOQueryTimetableGet: TADOQuery
@@ -148,7 +155,7 @@ object DataModule1: TDataModule1
   end
   object DataSourceTimetableGet: TDataSource
     DataSet = ADOQueryTimetableGet
-    Left = 288
+    Left = 264
     Top = 408
   end
   object ADOQuerySubjects: TADOQuery
@@ -280,5 +287,37 @@ object DataModule1: TDataModule1
     DataSet = ADOQueryTimetableShow
     Left = 568
     Top = 272
+  end
+  object ADOQueryGroupsShow: TADOQuery
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT *'
+      'FROM Groups;')
+    Left = 432
+    Top = 328
+  end
+  object DataSourceGroupsShow: TDataSource
+    DataSet = ADOQueryGroupsShow
+    Left = 568
+    Top = 328
+  end
+  object ADOQueryGroups: TADOQuery
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT *'
+      'FROM Groups;')
+    Left = 432
+    Top = 384
+  end
+  object DataSourceQueryGroups: TDataSource
+    DataSet = ADOQueryGroups
+    Left = 568
+    Top = 384
   end
 end

@@ -29,6 +29,7 @@ type
     MainMenu1: TMainMenu;
     Main2: TMenuItem;
     timetable1: TMenuItem;
+    Groups1: TMenuItem;
     procedure updateGrid();
     procedure buttonAddClick(Sender: TObject);
     procedure DateTimePicker1OnChange(Sender: TObject);
@@ -58,6 +59,7 @@ type
     procedure FormActivate(Sender: TObject);
     procedure Main2Click(Sender: TObject);
     procedure timetable1Click(Sender: TObject);
+    procedure Groups1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -74,7 +76,7 @@ implementation
 {$R *.dfm}
 {$APPTYPE CONSOLE}
 
-uses Unit2, StrUtils, Unit3, Unit4;
+uses Unit2, StrUtils, Unit3, Unit4, Unit5;
 
 procedure TMain.selectGroupClick(Sender: TObject);
 begin
@@ -138,6 +140,11 @@ begin
   DataModule1.ADOQueryMain.Open;
 
   getSubjectId := DataModule1.DataSourceMain.DataSet.Fields[0].AsInteger;
+end;
+
+procedure TMain.Groups1Click(Sender: TObject);
+begin
+  Groups.Show();
 end;
 
 procedure TMain.timetable1Click(Sender: TObject);
