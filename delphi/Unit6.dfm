@@ -92,7 +92,7 @@ object Users: TUsers
   object Panel1: TPanel
     Left = 48
     Top = 446
-    Width = 495
+    Width = 577
     Height = 275
     TabOrder = 2
     Visible = False

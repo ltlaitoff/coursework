@@ -56,6 +56,7 @@ type
     procedure buttonAddClick(Sender: TObject);
     procedure buttonChangeClick(Sender: TObject);
     procedure buttonDeleteClick(Sender: TObject);
+    function getGroupNameFromStudentId(studentId: Integer): String;
   private
     { Private declarations }
   public
@@ -72,7 +73,7 @@ implementation
 {$R *.dfm}
 {$APPTYPE CONSOLE}
 
-Uses Unit2, StrUtils;
+Uses Unit2, StrUtils, Unit9;
 
 procedure TUsers.Button1Click(Sender: TObject);
 begin
@@ -95,8 +96,38 @@ begin
   updatePanelFields();
 end;
 
+function TUsers.getGroupNameFromStudentId(studentId: Integer): String;
+begin
+  DataModule1.ADOQueryMain.Close;
+  DataModule1.ADOQueryMain.SQL.Text :=
+  'SELECT g.name ' +
+  'FROM Users AS u ' +
+  'INNER JOIN Groups AS g ON g.id = u.group_id ' +
+  'WHERE u.id = ' + IntToStr(studentId) + ';';
+  DataModule1.ADOQueryMain.Open;
+
+  getGroupNameFromStudentId := DataModule1.DataSourceMain.DataSet.Fields[0].AsString;
+end;
+
+
 procedure TUsers.FormActivate(Sender: TObject);
 begin
+  CheckBox1.Visible := True;
+  openPanel.Visible := True;
+  selectGroup.Enabled := True;
+
+  if (Authorization.userType = 'student') then begin
+    CheckBox1.Visible := False;
+    openPanel.Visible := False;
+    selectGroup.KeyValue := getGroupNameFromStudentId(Authorization.userID);
+    selectGroup.Enabled := False;
+  end;
+
+  if (Authorization.userType = 'teacher') then begin
+    CheckBox1.Visible := False;
+    openPanel.Visible := False;
+  end;
+
   updateGrid();
   CheckBox1Click(CheckBox1);
 end;

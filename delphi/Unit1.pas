@@ -32,6 +32,7 @@ type
     Groups1: TMenuItem;
     Users1: TMenuItem;
     TeachersTab: TMenuItem;
+    ExitTab: TMenuItem;
     procedure updateGrid();
     procedure buttonAddClick(Sender: TObject);
     procedure DateTimePicker1OnChange(Sender: TObject);
@@ -64,6 +65,10 @@ type
     procedure Groups1Click(Sender: TObject);
     procedure Users1Click(Sender: TObject);
     procedure TeachersTabClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ExitTabClick(Sender: TObject);
+    function getSubjectNameFromTeacherId(teacherId: Integer): String;
+    function getGroupNameFromStudentId(studentId: Integer): String;
   private
     { Private declarations }
   public
@@ -80,7 +85,7 @@ implementation
 {$R *.dfm}
 {$APPTYPE CONSOLE}
 
-uses Unit2, StrUtils, Unit3, Unit4, Unit5, Unit6, Unit7;
+uses Unit2, StrUtils, Unit3, Unit4, Unit5, Unit6, Unit7, Unit9;
 
 procedure TMain.selectGroupClick(Sender: TObject);
 begin
@@ -150,6 +155,32 @@ begin
 
   getSubjectId := DataModule1.DataSourceMain.DataSet.Fields[0].AsInteger;
 end;
+
+function TMain.getSubjectNameFromTeacherId(teacherId: Integer): String;
+begin
+  DataModule1.ADOQueryMain.Close;
+  DataModule1.ADOQueryMain.SQL.Text :=
+  'SELECT name ' +
+  'FROM Subjects ' +
+  'WHERE teacher_id = ' + IntToStr(teacherId) + ';';
+  DataModule1.ADOQueryMain.Open;
+
+  getSubjectNameFromTeacherId := DataModule1.DataSourceMain.DataSet.Fields[0].AsString;
+end;
+
+function TMain.getGroupNameFromStudentId(studentId: Integer): String;
+begin
+  DataModule1.ADOQueryMain.Close;
+  DataModule1.ADOQueryMain.SQL.Text :=
+  'SELECT g.name ' +
+  'FROM Users AS u ' +
+  'INNER JOIN Groups AS g ON g.id = u.group_id ' +
+  'WHERE u.id = ' + IntToStr(studentId) + ';';
+  DataModule1.ADOQueryMain.Open;
+
+  getGroupNameFromStudentId := DataModule1.DataSourceMain.DataSet.Fields[0].AsString;
+end;
+
 
 procedure TMain.Groups1Click(Sender: TObject);
 begin
@@ -237,6 +268,12 @@ begin
   + 'WHERE Groups.id = ' + IntToStr(groupId) + ' '
   + 'ORDER BY Users.id ';
   DataModule1.ADOQueryStudentsFromGroup.Open;
+end;
+
+procedure TMain.ExitTabClick(Sender: TObject);
+begin
+  Authorization.Show();
+  Authorization.Close();
 end;
 
 procedure TMain.updateGrid();
@@ -456,7 +493,30 @@ end;
 
 procedure TMain.FormActivate(Sender: TObject);
 begin
+  Groups1.Visible := True;;
+
+  if (Authorization.userType = 'teacher') then begin
+    selectSubject.KeyValue := getSubjectNameFromTeacherId(Authorization.userID);
+    selectSubject.Enabled := False;
+    Groups1.Visible := False;
+  end;
+
+  if (Authorization.userType = 'student') then begin
+    selectGroup.KeyValue := getGroupNameFromStudentId(Authorization.userID);
+    selectGroup.Enabled := False;
+    openPanel.Enabled := False;
+    Groups1.Visible := False;
+  end;
+
   updateGrid();
+end;
+
+procedure TMain.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Authorization.Show();
+  selectSubject.Enabled := True;
+  selectGroup.Enabled := True;
+  openPanel.Enabled := True;
 end;
 
 procedure TMain.FormCreate(Sender: TObject);

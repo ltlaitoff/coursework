@@ -13,6 +13,7 @@ object Main: TMain
   Menu = MainMenu1
   OldCreateOrder = False
   OnActivate = FormActivate
+  OnClose = FormClose
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -205,6 +206,10 @@ object Main: TMain
     object TeachersTab: TMenuItem
       Caption = 'Teachers'
       OnClick = TeachersTabClick
+    end
+    object ExitTab: TMenuItem
+      Caption = 'Exit'
+      OnClick = ExitTabClick
     end
   end
 end

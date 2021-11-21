@@ -58,6 +58,8 @@ type
     DataSourceTeachersShow: TDataSource;
     ADOQueryTeachers: TADOQuery;
     DataSourceTeachers: TDataSource;
+    ADOQueryAuthorization: TADOQuery;
+    DataSourceAuthorization: TDataSource;
     procedure ADOQueryTimetableShowdayofweekGetText(Sender: TField;
       var Text: string; DisplayText: Boolean);
   private

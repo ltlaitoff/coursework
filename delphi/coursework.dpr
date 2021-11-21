@@ -9,13 +9,14 @@ uses
   Unit4 in 'Unit4.pas' {Timetable},
   Unit5 in 'Unit5.pas' {Groups},
   Unit7 in 'Unit7.pas' {Teachers},
-  Unit8 in 'Unit8.pas' {TimeTableReport};
+  Unit8 in 'Unit8.pas' {TimeTableReport},
+  Unit9 in 'Unit9.pas' {Authorization};
 
 {$R *.res}
 
 begin
   Application.Initialize;
-  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TAuthorization, Authorization);
   Application.CreateForm(TMain, Main);
   Application.CreateForm(TDataModule1, DataModule1);
   Application.CreateForm(TSubjects, Subjects);

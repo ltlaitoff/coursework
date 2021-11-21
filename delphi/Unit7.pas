@@ -65,7 +65,7 @@ implementation
 
 {$R *.dfm}
 
-uses Unit2, StrUtils;
+uses Unit2, StrUtils, Unit9;
 
 procedure TTeachers.CheckBox1Click(Sender: TObject);
 begin
@@ -80,6 +80,19 @@ end;
 
 procedure TTeachers.FormActivate(Sender: TObject);
 begin
+  CheckBox1.Visible := True;
+  openPanel.Visible := True;
+
+  if (Authorization.userType = 'student') then begin
+    CheckBox1.Visible := False;
+    openPanel.Visible := False;
+  end;
+
+  if (Authorization.userType = 'teacher') then begin
+    CheckBox1.Visible := False;
+    openPanel.Visible := False;
+  end;
+
   CheckBox1Click(CheckBox1);
 end;
 
@@ -206,9 +219,9 @@ begin
   'VALUES (' +
     '"' + surname + '", ' +
     '"' + name + '", ' +
-    '"' + patronymic + '" ' +
-    '"' + email + '" ' +
-    '"' + username + '" ' +
+    '"' + patronymic + '", ' +
+    '"' + email + '", ' +
+    '"' + username + '", ' +
     '"' + password + '" ' +
   ');';
   DataModule1.ADOQueryTeachers.ExecSQL;

@@ -28,6 +28,8 @@ type
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
+    function getGroupNameFromStudentId(studentId: Integer): String;
+    function getSubjectNameFromTeacherId(teacherId: Integer): String;
   private
     { Private declarations }
   public
@@ -42,7 +44,7 @@ implementation
 
 {$R *.dfm}
 
-USES Unit2, StrUtils, Unit8;
+USES Unit2, StrUtils, Unit8, Unit9;
 
 function TTimetable.getGroupId(groupName: String): Integer;
 begin
@@ -128,15 +130,65 @@ begin
   TimeTableReport.QuickRep1.PreviewModal();
 end;
 
+function TTimetable.getSubjectNameFromTeacherId(teacherId: Integer): String;
+begin
+  DataModule1.ADOQueryMain.Close;
+  DataModule1.ADOQueryMain.SQL.Text :=
+  'SELECT name ' +
+  'FROM Subjects ' +
+  'WHERE teacher_id = ' + IntToStr(teacherId) + ';';
+  DataModule1.ADOQueryMain.Open;
+
+  getSubjectNameFromTeacherId := DataModule1.DataSourceMain.DataSet.Fields[0].AsString;
+end;
+
+function TTimetable.getGroupNameFromStudentId(studentId: Integer): String;
+begin
+  DataModule1.ADOQueryMain.Close;
+  DataModule1.ADOQueryMain.SQL.Text :=
+  'SELECT g.name ' +
+  'FROM Users AS u ' +
+  'INNER JOIN Groups AS g ON g.id = u.group_id ' +
+  'WHERE u.id = ' + IntToStr(studentId) + ';';
+  DataModule1.ADOQueryMain.Open;
+
+  getGroupNameFromStudentId := DataModule1.DataSourceMain.DataSet.Fields[0].AsString;
+end;
+
 procedure TTimetable.FormActivate(Sender: TObject);
 begin
+   Button1.Visible := True;
+   Button2.Visible := True;
+   Button3.Visible := True;
+  currentType := 'all';
+
   selectGroup.KeyValue := DataModule1.ADOTableGroups.FieldByName('name').AsString;
   selectSubject.KeyValue := DataModule1.ADOQuerySubjectsShow.FieldByName('name').AsString;
 
   groupName := selectGroup.KeyValue;
   subjectName := selectSubject.KeyValue;
 
-  currentType := 'all';
+  if (Authorization.userType = 'teacher') then begin
+    selectSubject.KeyValue := getSubjectNameFromTeacherId(Authorization.userID);
+    subjectName := selectSubject.KeyValue;
+    selectSubject.Enabled := False;
+    Button1.Visible := False;
+    Button2.Visible := False;
+    Button3.Visible := False;
+    currentType := 'subject';
+    showTable('subject');
+  end;
+
+  if (Authorization.userType = 'student') then begin
+    selectGroup.KeyValue := getGroupNameFromStudentId(Authorization.userID);
+    groupName := selectGroup.KeyValue;
+    selectGroup.Enabled := False;
+    Button1.Visible := False;
+    Button2.Visible := False;
+    Button3.Visible := False;
+    currentType := 'group';
+    showTable('group');
+  end;
 end;
 
 procedure TTimetable.selectGroupClick(Sender: TObject);

@@ -19,8 +19,6 @@ type
     buttonChange: TButton;
     buttonDelete: TButton;
     openPanel: TButton;
-    MainMenu1: TMainMenu;
-    Main2: TMenuItem;
     nameEdit: TEdit;
     audienceEdit: TEdit;
     procedure subjectsActionController(action: String; nameEdit, audienceEdit: TEdit;
@@ -54,7 +52,7 @@ implementation
 {$R *.dfm}
 {$APPTYPE CONSOLE}
 
-uses Unit2, StrUtils;
+uses Unit2, StrUtils, Unit9;
 
 procedure TSubjects.showSubjectsTable();
 begin
@@ -222,6 +220,12 @@ end;
 
 procedure TSubjects.FormActivate(Sender: TObject);
 begin
+  openPanel.Enabled := True;
+
+  if ((Authorization.userType = 'student') OR (Authorization.userType = 'teacher')) then begin
+    openPanel.Enabled := false;
+  end;
+
   recordId := DBGrid1.Fields[0].AsInteger;
   nameEdit.Text := DBGrid1.Fields[1].AsString;
   audienceEdit.Text := DBGrid1.Fields[2].AsString;

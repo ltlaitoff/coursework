@@ -46,7 +46,7 @@ implementation
 {$R *.dfm}
 {$APPTYPE CONSOLE}
 
-uses Unit2, StrUtils;
+uses Unit2, StrUtils, Unit9;
 
 procedure TGroups.showGroupsTable();
 begin
