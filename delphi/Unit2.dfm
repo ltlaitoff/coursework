@@ -1,7 +1,7 @@
 object DataModule1: TDataModule1
   OldCreateOrder = False
-  Height = 486
-  Width = 707
+  Height = 551
+  Width = 990
   object ADOConnection: TADOConnection
     Connected = True
     ConnectionString = 
@@ -24,6 +24,7 @@ object DataModule1: TDataModule1
     Top = 48
   end
   object ADOQueryMain: TADOQuery
+    Active = True
     Connection = ADOConnection
     CursorType = ctStatic
     Parameters = <>
@@ -80,7 +81,7 @@ object DataModule1: TDataModule1
     Left = 112
     Top = 144
   end
-  object DataSourceGroups: TDataSource
+  object DataSourceTableGroups: TDataSource
     DataSet = ADOTableGroups
     Left = 264
     Top = 72
@@ -300,6 +301,7 @@ object DataModule1: TDataModule1
     Top = 328
   end
   object DataSourceGroupsShow: TDataSource
+    AutoEdit = False
     DataSet = ADOQueryGroupsShow
     Left = 568
     Top = 328
@@ -319,5 +321,75 @@ object DataModule1: TDataModule1
     DataSet = ADOQueryGroups
     Left = 568
     Top = 384
+  end
+  object ADOQueryUsersShow: TADOQuery
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      
+        'SELECT u.id, g.name AS GN, surname, u.name, patronymic, email, u' +
+        'sername, password'
+      'FROM Users AS u '
+      'INNER JOIN Groups AS g ON ((g.id = u.group_id) AND (g.id = 1))'
+      'ORDER BY u.id')
+    Left = 680
+    Top = 24
+    object ADOQueryUsersShowid: TAutoIncField
+      FieldName = 'id'
+      ReadOnly = True
+    end
+    object ADOQueryUsersShowGN: TWideStringField
+      FieldName = 'GN'
+      Size = 3
+    end
+    object ADOQueryUsersShowsurname: TWideStringField
+      FieldName = 'surname'
+      Size = 15
+    end
+    object ADOQueryUsersShowname: TWideStringField
+      FieldName = 'name'
+      Size = 10
+    end
+    object ADOQueryUsersShowemail: TWideStringField
+      FieldName = 'email'
+      Size = 30
+    end
+    object ADOQueryUsersShowpatronymic: TWideStringField
+      FieldName = 'patronymic'
+      Size = 15
+    end
+    object ADOQueryUsersShowusername: TWideStringField
+      FieldName = 'username'
+    end
+    object ADOQueryUsersShowpassword: TWideStringField
+      FieldName = 'password'
+    end
+  end
+  object DataSourceUsersShow: TDataSource
+    DataSet = ADOQueryUsersShow
+    Left = 800
+    Top = 24
+  end
+  object ADOQueryUsers: TADOQuery
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      
+        'SELECT u.id, surname, u.name, patronymic, email, username, passw' +
+        'ord, g.name AS group_name'
+      'FROM Users AS u'
+      'INNER JOIN Groups AS g ON g.id = u.group_id'
+      'ORDER BY u.id')
+    Left = 680
+    Top = 88
+  end
+  object DataSourceUsers: TDataSource
+    DataSet = ADOQueryUsers
+    Left = 800
+    Top = 88
   end
 end

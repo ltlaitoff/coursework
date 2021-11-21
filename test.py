@@ -1,25 +1,53 @@
-a = '''
-+38 (965) 807-15-25
-+38 (940) 209-62-58
-+38 (901) 004-14-16
-+38 (917) 085-66-36
-+38 (931) 929-66-22
-+38 (911) 530-69-53
-+38 (941) 088-73-89
-+38 (929) 448-85-88
-+38 (909) 425-06-72
-+38 (923) 647-38-67
-+38 (959) 637-66-18
-+38 (900) 962-64-26
-+38 (995) 696-54-67
-+38 (967) 781-24-74
-+38 (938) 187-23-18
-+38 (928) 498-73-23
-+38 (946) 910-75-58
-+38 (996) 084-39-62
-+38 (993) 645-01-88
-+38 (994) 668-88-91
-'''
+let surname = 'test'
+let name = 'test'
+let patronymic = 'test'
+let email = 'test'
+let username = 'test'
+let password = 'test'
+let groupId = 0
+
+a = 'INSERT INTO Users (surname, name, patronymic, email, username, password, group_id) ' +
+  'VALUES ( ' +
+    '"' + surname + '", ' + 
+    '"' + name + '", ' + 
+    '"' + patronymic + '", ' +
+    '"' + email + '", ' + 
+    '"' + username + '", ' + 
+    '"' + password + '", ' + 
+    String(groupId) + ' ' +
+  ' )'
+
+console.log(a)
+
+INSERT INTO Users (surname, name, patronymic, email, username, password, group_id) 
+VALUES ( "test", "test", "test", "test", "test", "test", 0  )
+
+INSERT INTO Users ( surname, name, patronymic, email, username, [password], group_id )
+VALUES ("surname", "name", "patronymic", "email", "username", "password", 1);
+
+
+# a = '''
+# +38 (965) 807-15-25
+# +38 (940) 209-62-58
+# +38 (901) 004-14-16
+# +38 (917) 085-66-36
+# +38 (931) 929-66-22
+# +38 (911) 530-69-53
+# +38 (941) 088-73-89
+# +38 (929) 448-85-88
+# +38 (909) 425-06-72
+# +38 (923) 647-38-67
+# +38 (959) 637-66-18
+# +38 (900) 962-64-26
+# +38 (995) 696-54-67
+# +38 (967) 781-24-74
+# +38 (938) 187-23-18
+# +38 (928) 498-73-23
+# +38 (946) 910-75-58
+# +38 (996) 084-39-62
+# +38 (993) 645-01-88
+# +38 (994) 668-88-91
+# '''
 
 # # for i in a.split('\n'):
 # # 	print('+380' + i.replace('+7 ', '').replace('(', '').replace(') ', '').replace('-', ''));

@@ -26,3 +26,8 @@ VALUES (value1, value2, value3, ...);
 --   FROM User_Type
 --   WHERE type = 'Teacher'
 --   )
+
+INSERT INTO Users (surname, name, patronymic, email, username, password, group_id) 
+VALUES ()
+
+-- INSERT INTO Journal (user_id, subject_id, mark_id, [date]) ' + 'VALUES (' + IntToStr(studentID) + ', ' + IntToStr(subjectID) + ', ' + IntToStr(markID) + ', DateValue("' + DateTimeToStr(date) + '"))

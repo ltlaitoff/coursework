@@ -12,7 +12,7 @@ type
     DataSourceMain: TDataSource;
     ADOTableGroups: TADOTable;
     ADOTableSubjects: TADOTable;
-    DataSourceGroups: TDataSource;
+    DataSourceTableGroups: TDataSource;
     DataSourceTableSubjects: TDataSource;
     ADOQueryStudentsFromGroup: TADOQuery;
     DataSourceStudentFromGroup: TDataSource;
@@ -42,6 +42,18 @@ type
     DataSourceGroupsShow: TDataSource;
     ADOQueryGroups: TADOQuery;
     DataSourceQueryGroups: TDataSource;
+    ADOQueryUsersShow: TADOQuery;
+    DataSourceUsersShow: TDataSource;
+    ADOQueryUsers: TADOQuery;
+    DataSourceUsers: TDataSource;
+    ADOQueryUsersShowid: TAutoIncField;
+    ADOQueryUsersShowGN: TWideStringField;
+    ADOQueryUsersShowsurname: TWideStringField;
+    ADOQueryUsersShowname: TWideStringField;
+    ADOQueryUsersShowpatronymic: TWideStringField;
+    ADOQueryUsersShowemail: TWideStringField;
+    ADOQueryUsersShowusername: TWideStringField;
+    ADOQueryUsersShowpassword: TWideStringField;
     procedure ADOQueryTimetableShowdayofweekGetText(Sender: TField;
       var Text: string; DisplayText: Boolean);
   private
