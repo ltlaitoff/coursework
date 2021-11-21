@@ -2,8 +2,8 @@ object Teachers: TTeachers
   Left = 0
   Top = 0
   Caption = 'Teachers'
-  ClientHeight = 601
-  ClientWidth = 556
+  ClientHeight = 565
+  ClientWidth = 963
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,9 +15,9 @@ object Teachers: TTeachers
   PixelsPerInch = 96
   TextHeight = 13
   object DBGrid1: TDBGrid
-    Left = 23
+    Left = 22
     Top = 8
-    Width = 506
+    Width = 923
     Height = 225
     DataSource = DataModule1.DataSourceTeachersShow
     TabOrder = 0
@@ -29,28 +29,27 @@ object Teachers: TTeachers
     OnCellClick = DBGrid1CellClick
   end
   object openPanel: TButton
-    Left = 396
-    Top = 243
-    Width = 75
-    Height = 25
+    Left = 748
+    Top = 239
+    Width = 197
+    Height = 34
     Caption = #1048#1079#1084#1077#1085#1080#1090#1100
     TabOrder = 1
     OnClick = openPanelClick
   end
   object CheckBox1: TCheckBox
-    Left = 169
-    Top = 251
+    Left = 22
+    Top = 239
     Width = 97
     Height = 17
     Caption = 'CheckBox1'
     TabOrder = 2
-    Visible = False
     OnClick = CheckBox1Click
   end
   object Panel1: TPanel
     Left = 22
-    Top = 295
-    Width = 490
+    Top = 279
+    Width = 923
     Height = 275
     TabOrder = 3
     Visible = False

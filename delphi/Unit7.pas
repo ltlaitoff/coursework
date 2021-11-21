@@ -37,8 +37,8 @@ type
     procedure resetPanelFields();
     procedure CheckBox1Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
-    procedure addRecordInTeachers(surname, name, patronymic: String);
-    procedure updateRecordInTeachers(id: Integer; surname, name, patronymic: String);
+    procedure addRecordInTeachers(surname, name, patronymic, email, username, password: String);
+    procedure updateRecordInTeachers(id: Integer; surname, name, patronymic, email, username, password: String);
     procedure deleteRecordFromTeachers(id: Integer);
     function teachersActionControllerCheckOnError(action: String; id: Integer; surname, name, patronymic, email, username, password: String): Boolean;
     procedure teachersActionController(action: String; id: Integer; surname, name, patronymic, email, username, password: String);
@@ -70,8 +70,8 @@ uses Unit2, StrUtils;
 procedure TTeachers.CheckBox1Click(Sender: TObject);
 begin
   loginAndPassword := CheckBox1.Checked;
-  // DBGrid1.Columns[5].Visible := loginAndPassword;
-  // DBGrid1.Columns[6].Visible := loginAndPassword;
+  DBGrid1.Columns[5].Visible := loginAndPassword;
+  DBGrid1.Columns[6].Visible := loginAndPassword;
   usernameEdit.Visible := loginAndPassword;
   passwordEdit.Visible := loginAndPassword;
   Label7.Visible := loginAndPassword;
@@ -97,9 +97,9 @@ begin
   surnameEdit.Text := DBGrid1.Fields[1].AsString;
   nameEdit.Text := DBGrid1.Fields[2].AsString;
   patronymicEdit.Text := DBGrid1.Fields[3].AsString;
-//  emailEdit.Text := DBGrid1.Fields[4].AsString;
-//  usernameEdit.Text := DBGrid1.Fields[5].AsString;
-//  passwordEdit.Text := DBGrid1.Fields[6].AsString;
+  emailEdit.Text := DBGrid1.Fields[4].AsString;
+  usernameEdit.Text := DBGrid1.Fields[5].AsString;
+  passwordEdit.Text := DBGrid1.Fields[6].AsString;
 end;
 
 procedure TTeachers.resetPanelFields();
@@ -110,9 +110,9 @@ begin
   surnameEdit.Text := '';
   nameEdit.Text := '';
   patronymicEdit.Text := '';
-//  emailEdit.Text := '';
-//  usernameEdit.Text := '';
-//  passwordEdit.Text := '';
+  emailEdit.Text := '';
+  usernameEdit.Text := '';
+  passwordEdit.Text := '';
 end;
 
 procedure TTeachers.showMainTable();
@@ -177,11 +177,11 @@ begin
     Exit;
   end;
 
-  // if email = '' then begin
-  //   showErrorLabel('Ошибка email');
-  //   teachersActionControllerCheckOnError := True;
-  //   Exit;
-  // end;
+  if email = '' then begin
+    showErrorLabel('Ошибка email');
+    teachersActionControllerCheckOnError := True;
+    Exit;
+  end;
 
   if (username = '') AND (loginAndPassword = true)  then begin
     showErrorLabel('Ошибка username');
@@ -198,32 +198,34 @@ begin
   teachersActionControllerCheckOnError := False;
 end;
 
-procedure TTeachers.addRecordInTeachers(surname, name, patronymic: String);
+procedure TTeachers.addRecordInTeachers(surname, name, patronymic, email, username, password: String);
 begin
   DataModule1.ADOQueryTeachers.Close;
   DataModule1.ADOQueryTeachers.SQL.Text :=
-  'INSERT INTO Teachers (surname, name, patronymic) ' +
+  'INSERT INTO Teachers (surname, name, patronymic, email, username, [password]) ' +
   'VALUES (' +
     '"' + surname + '", ' +
     '"' + name + '", ' +
     '"' + patronymic + '" ' +
+    '"' + email + '" ' +
+    '"' + username + '" ' +
+    '"' + password + '" ' +
   ');';
   DataModule1.ADOQueryTeachers.ExecSQL;
 end;
 
-procedure TTeachers.updateRecordInTeachers(id: Integer; surname, name, patronymic: String);
+procedure TTeachers.updateRecordInTeachers(id: Integer; surname, name, patronymic, email, username, password: String);
 begin
-  // 'email = "' + email + '", ' +
-  // 'username = "' + username + '", ' +
-  // '[password] = "' + password + '", ' +
-
   DataModule1.ADOQueryTeachers.Close;
   DataModule1.ADOQueryTeachers.SQL.Text :=
   'UPDATE Teachers ' +
-  'SET '+
+  'SET ' +
     'surname = "' + surname + '", ' +
     'name = "' + name + '", ' +
-    'patronymic = "' + patronymic + '" ' +
+    'patronymic = "' + patronymic + '", ' +
+    'email = "' + email + '", ' +
+    'username = "' + username + '", ' +
+    '[password] = "' + password + '" ' +
   'WHERE ' +
     'id = ' + IntToStr(id) + ';';
   DataModule1.ADOQueryTeachers.ExecSQL;
@@ -247,8 +249,8 @@ begin
   end;
 
   case StrUtils.IndexStr(action, ['add', 'update', 'delete']) of
-    0: addRecordInTeachers(surname, name, patronymic);
-    1: updateRecordInTeachers(id, surname, name, patronymic);
+    0: addRecordInTeachers(surname, name, patronymic, email, username, password);
+    1: updateRecordInTeachers(id, surname, name, patronymic, email, username, password);
     2: deleteRecordFromTeachers(id);
   end;
 
