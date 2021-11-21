@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.007,C:\Users\eeone\OneDrive\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\My_projects\coursework\delphi\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.007,C:\My_projects\coursework\delphi\Unit1.dfm=C:\Users\eeone\OneDrive\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
     <Transaction>1899.12.30 00:00:00.000.659,=C:\Users\eeone\OneDrive\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.352,C:\Users\eeone\OneDrive\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\My_projects\coursework\delphi\coursework.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.439,=C:\My_projects\coursework\delphi\Unit8.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.272,=C:\My_projects\coursework\delphi\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.352,C:\My_projects\coursework\delphi\coursework.dproj=C:\Users\eeone\OneDrive\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.007,C:\My_projects\coursework\delphi\Unit1.pas=C:\Users\eeone\OneDrive\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.318,=C:\My_projects\coursework\delphi\Unit5.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.315,=C:\My_projects\coursework\delphi\Unit4.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.598,=C:\My_projects\coursework\delphi\Unit3.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.255,=C:\My_projects\coursework\delphi\Unit6.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.404,=C:\My_projects\coursework\delphi\Unit6.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.007,C:\Users\eeone\OneDrive\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\My_projects\coursework\delphi\Unit1.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.272,=C:\My_projects\coursework\delphi\Unit3.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.432,=C:\My_projects\coursework\delphi\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.726,=C:\My_projects\coursework\delphi\Unit8.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.745,C:\My_projects\coursework\delphi\Unit8.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.439,=C:\My_projects\coursework\delphi\Unit8.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.315,=C:\My_projects\coursework\delphi\Unit7.pas</Transaction>
-    <Transaction>2021.11.21 16:11:15.745,C:\My_projects\coursework\delphi\Unit8.pas=</Transaction>
-    <Transaction>2021.11.21 16:12:59.726,=C:\My_projects\coursework\delphi\Unit8.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.432,=C:\My_projects\coursework\delphi\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.404,=C:\My_projects\coursework\delphi\Unit6.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.255,=C:\My_projects\coursework\delphi\Unit6.pas</Transaction>
   </Transactions>
 </BorlandProject>
