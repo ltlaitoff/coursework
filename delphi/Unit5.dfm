@@ -46,8 +46,8 @@ object Groups: TGroups
     object errorLabel: TLabel
       Left = 141
       Top = 43
-      Width = 145
-      Height = 16
+      Width = 3
+      Height = 13
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clRed
