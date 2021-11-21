@@ -12,11 +12,12 @@ type
     DBGrid1: TDBGrid;
     selectGroup: TDBLookupComboBox;
     selectSubject: TDBLookupComboBox;
-    Группа: TLabel;
+    Group: TLabel;
     Label2: TLabel;
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
+    Button4: TButton;
     procedure selectGroupClick(Sender: TObject);
     procedure selectSubjectClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -26,6 +27,7 @@ type
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -40,7 +42,7 @@ implementation
 
 {$R *.dfm}
 
-USES Unit2, StrUtils;
+USES Unit2, StrUtils, Unit8;
 
 function TTimetable.getGroupId(groupName: String): Integer;
 begin
@@ -119,6 +121,11 @@ procedure TTimetable.Button3Click(Sender: TObject);
 begin
   showTable('subject');
   currentType := 'subject';
+end;
+
+procedure TTimetable.Button4Click(Sender: TObject);
+begin
+  TimeTableReport.QuickRep1.PreviewModal();
 end;
 
 procedure TTimetable.FormActivate(Sender: TObject);

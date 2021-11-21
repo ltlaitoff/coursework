@@ -1,4 +1,4 @@
-﻿object Timetable: TTimetable
+object Timetable: TTimetable
   Left = 0
   Top = 0
   Caption = 'Timetable'
@@ -11,15 +11,16 @@
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Scaled = False
   OnActivate = FormActivate
   PixelsPerInch = 96
   TextHeight = 13
-  object Группа: TLabel
+  object Group: TLabel
     Left = 29
     Top = 522
-    Width = 36
+    Width = 29
     Height = 13
-    Caption = #1043#1088#1091#1087#1087#1072
+    Caption = 'Group'
   end
   object Label2: TLabel
     Left = 29
@@ -118,5 +119,14 @@
     Caption = #1055#1086' '#1087#1088#1077#1076#1084#1077#1090#1091
     TabOrder = 5
     OnClick = Button3Click
+  end
+  object Button4: TButton
+    Left = 312
+    Top = 579
+    Width = 89
+    Height = 25
+    Caption = #1054#1090#1095#1105#1090
+    TabOrder = 6
+    OnClick = Button4Click
   end
 end

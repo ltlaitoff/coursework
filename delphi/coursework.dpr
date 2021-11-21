@@ -8,7 +8,8 @@ uses
   Unit6 in 'Unit6.pas' {Users},
   Unit4 in 'Unit4.pas' {Timetable},
   Unit5 in 'Unit5.pas' {Groups},
-  Unit7 in 'Unit7.pas' {Teachers};
+  Unit7 in 'Unit7.pas' {Teachers},
+  Unit8 in 'Unit8.pas' {TimeTableReport};
 
 {$R *.res}
 
@@ -22,5 +23,6 @@ begin
   Application.CreateForm(TTimetable, Timetable);
   Application.CreateForm(TGroups, Groups);
   Application.CreateForm(TTeachers, Teachers);
+  Application.CreateForm(TTimeTableReport, TimeTableReport);
   Application.Run;
 end.
