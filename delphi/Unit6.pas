@@ -323,21 +323,21 @@ end;
 procedure TUsers.buttonAddClick(Sender: TObject);
 begin
   usersActionController('add', recordId, selectGroupPanel.KeyValue, 
-  surnameEdit.Text, surnameEdit.Text, patronymicEdit.Text, 
+  surnameEdit.Text, nameEdit.Text, patronymicEdit.Text,
   emailEdit.Text, usernameEdit.Text, passwordEdit.Text);
 end;
 
 procedure TUsers.buttonChangeClick(Sender: TObject);
 begin
   usersActionController('update', recordId, selectGroupPanel.KeyValue,
-  surnameEdit.Text, surnameEdit.Text, patronymicEdit.Text,
+  surnameEdit.Text, nameEdit.Text, patronymicEdit.Text,
   emailEdit.Text, usernameEdit.Text, passwordEdit.Text);
 end;
 
 procedure TUsers.buttonDeleteClick(Sender: TObject);
 begin
   usersActionController('delete', recordId, selectGroupPanel.KeyValue,
-  surnameEdit.Text, surnameEdit.Text, patronymicEdit.Text,
+  surnameEdit.Text, nameEdit.Text, patronymicEdit.Text,
   emailEdit.Text, usernameEdit.Text, passwordEdit.Text);
 end;
 

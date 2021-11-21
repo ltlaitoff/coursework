@@ -334,7 +334,7 @@ object DataModule1: TDataModule1
       'FROM Users AS u '
       'INNER JOIN Groups AS g ON ((g.id = u.group_id) AND (g.id = 1))'
       'ORDER BY u.id')
-    Left = 680
+    Left = 688
     Top = 24
     object ADOQueryUsersShowid: TAutoIncField
       FieldName = 'id'
@@ -369,7 +369,7 @@ object DataModule1: TDataModule1
   end
   object DataSourceUsersShow: TDataSource
     DataSet = ADOQueryUsersShow
-    Left = 800
+    Left = 808
     Top = 24
   end
   object ADOQueryUsers: TADOQuery
@@ -384,12 +384,45 @@ object DataModule1: TDataModule1
       'FROM Users AS u'
       'INNER JOIN Groups AS g ON g.id = u.group_id'
       'ORDER BY u.id')
-    Left = 680
+    Left = 688
     Top = 88
   end
   object DataSourceUsers: TDataSource
     DataSet = ADOQueryUsers
-    Left = 800
+    Left = 808
     Top = 88
+  end
+  object ADOQueryTeachersShow: TADOQuery
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT *'
+      'FROM Teachers'
+      'ORDER BY ID')
+    Left = 704
+    Top = 160
+  end
+  object DataSourceTeachersShow: TDataSource
+    DataSet = ADOQueryTeachersShow
+    Left = 840
+    Top = 152
+  end
+  object ADOQueryTeachers: TADOQuery
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT *'
+      'FROM Teachers')
+    Left = 704
+    Top = 232
+  end
+  object DataSourceTeachers: TDataSource
+    DataSet = ADOQueryTeachers
+    Left = 840
+    Top = 232
   end
 end

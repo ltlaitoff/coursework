@@ -54,6 +54,10 @@ type
     ADOQueryUsersShowemail: TWideStringField;
     ADOQueryUsersShowusername: TWideStringField;
     ADOQueryUsersShowpassword: TWideStringField;
+    ADOQueryTeachersShow: TADOQuery;
+    DataSourceTeachersShow: TDataSource;
+    ADOQueryTeachers: TADOQuery;
+    DataSourceTeachers: TDataSource;
     procedure ADOQueryTimetableShowdayofweekGetText(Sender: TField;
       var Text: string; DisplayText: Boolean);
   private
