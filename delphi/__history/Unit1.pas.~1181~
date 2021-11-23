@@ -33,6 +33,7 @@ type
     Users1: TMenuItem;
     TeachersTab: TMenuItem;
     ExitTab: TMenuItem;
+    ComboBox1: TComboBox;
     procedure updateGrid();
     procedure buttonAddClick(Sender: TObject);
     procedure DateTimePicker1OnChange(Sender: TObject);
@@ -69,23 +70,37 @@ type
     procedure ExitTabClick(Sender: TObject);
     function getSubjectNameFromTeacherId(teacherId: Integer): String;
     function getGroupNameFromStudentId(studentId: Integer): String;
+    procedure fillDatesComboBox();
+    function getMounthNameFromId(id: Integer): String;
+    function getMounthIdFromName(name: String): Integer;
+    procedure updateDatesComboBox();
+    procedure ComboBox1Click(Sender: TObject);
+    function createDataSelectRequest(): String;
+    function getPathSQLMainRequest(action, selectDates: String; groupId, subjectId: Integer; firstDate, endDate: String): String;
   private
     { Private declarations }
   public
     { Public declarations }
   end;
 
+const
+  CURRENT_SEMESTER = 1;
+  CURRENT_YEAR = 2021;
+  MOUNTH_COUNT = 5;
 var
   Main: TMain;
   groupId, subjectId: Integer;
   arrayDaysOfWeek: array of Integer;
+  currentMounth: Integer;
+  mounthArr: array[1..MOUNTH_COUNT] of String;
+  selectDates: String;
 
 implementation
 
 {$R *.dfm}
 {$APPTYPE CONSOLE}
 
-uses Unit2, StrUtils, Unit3, Unit4, Unit5, Unit6, Unit7, Unit9;
+uses Unit2, StrUtils, DateUtils, Unit3, Unit4, Unit5, Unit6, Unit7, Unit9;
 
 procedure TMain.selectGroupClick(Sender: TObject);
 begin
@@ -98,33 +113,37 @@ begin
 end;
 
 procedure TMain.showMainTable(groupId, subjectId: Integer);
+var
+  right, left, firstDate, endDate, text: String;
+  i: Integer;
 begin
+  firstDate := '1.' + IntToStr(currentMounth) + '.' + IntToStr(CURRENT_YEAR);
+  endDate := IntToStr(DaysInAMonth(CURRENT_YEAR, currentMounth)) + '.' + IntToStr(currentMounth) + '.' + IntToStr(CURRENT_YEAR);
+
+  right := getPathSQLMainRequest('right', selectDates, groupId, subjectId, firstDate, endDate);
+  left := getPathSQLMainRequest('left', selectDates, groupId, subjectId, firstDate, endDate);
+
+  text :=
+  'TRANSFORM Max(m.mark) AS [Max-mark] ' +
+  'SELECT t.fullname ' +
+  'FROM ( ' +
+    right +
+    ' UNION ' +
+    left +
+  ') AS t ' +
+  'LEFT JOIN Marks AS m ON t.mark_id = m.id ' +
+  'GROUP BY t.fullname ' +
+  'PIVOT t.firs ';
+
+  writeln(text);
+
   DataModule1.ADOQueryMain.Close;
-  DataModule1.ADOQueryMain.SQL.Text :=
-  'TRANSFORM Max(j.mark_id) AS [Max-mark_id] '
-  + 'SELECT u.surname AS fullname '
-  + 'FROM '
-  + '  ( '
-  + '    SELECT * '
-  + '    FROM Journal '
-  + '    WHERE Journal.subject_id = ' + IntToStr(subjectId) + ' '
-  + '  ) AS j '
-  + '  RIGHT JOIN ( '
-  + '    SELECT '
-  + '      Users.id AS id, '
-  + '      Users.surname as surname, '
-  + '      Users.name AS name, '
-  + '      Users.patronymic AS patronymic '
-  + '    FROM Users '
-  + '    INNER JOIN Groups ON Users.group_id = Groups.id '
-  + '    WHERE Groups.id = ' + IntToStr(groupId) + ' '
-  + '    ORDER BY Users.id '
-  + '  ) AS u ON j.user_id = u.id '
-  + 'GROUP BY u.surname  '
-  + 'PIVOT j.date; ';
+  DataModule1.ADOQueryMain.SQL.Text := text;
   DataModule1.ADOQueryMain.Open;
 
   DBGrid1.Columns[1].Visible := false;
+  for i :=0 to DbGrid1.Columns.Count - 1 do
+    DBGrid1.Columns[i].width := 5 + DBGrid1.Canvas.TextWidth(DbGrid1.Columns[i].Title.Caption);
 end;
 
 procedure TMain.TeachersTabClick(Sender: TObject);
@@ -175,12 +194,11 @@ begin
   'SELECT g.name ' +
   'FROM Users AS u ' +
   'INNER JOIN Groups AS g ON g.id = u.group_id ' +
-  'WHERE u.id = 1;';
+  'WHERE u.id = ' + IntToStr(studentId) + ';';
   DataModule1.ADOQueryMain.Open;
 
   getGroupNameFromStudentId := DataModule1.DataSourceMain.DataSet.Fields[0].AsString;
 end;
-
 
 procedure TMain.Groups1Click(Sender: TObject);
 begin
@@ -493,23 +511,33 @@ end;
 
 procedure TMain.FormActivate(Sender: TObject);
 begin
+  ComboBox1.Clear;
+  currentMounth := -1;
+  Groups1.Visible := True;
 
   if (Authorization.userType = 'teacher') then begin
     selectSubject.KeyValue := getSubjectNameFromTeacherId(Authorization.userID);
     selectSubject.Enabled := False;
+    Groups1.Visible := False;
   end;
 
   if (Authorization.userType = 'student') then begin
     selectGroup.KeyValue := getGroupNameFromStudentId(Authorization.userID);
     selectGroup.Enabled := False;
+    openPanel.Enabled := False;
+    Groups1.Visible := False;
   end;
 
+  fillDatesComboBox();
   updateGrid();
 end;
 
 procedure TMain.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Authorization.Show();
+  selectSubject.Enabled := True;
+  selectGroup.Enabled := True;
+  openPanel.Enabled := True;
 end;
 
 procedure TMain.FormCreate(Sender: TObject);
@@ -518,5 +546,139 @@ begin
   groupId := 1;
   subjectId := 1;
 end;
+
+function TMain.getMounthNameFromId(id: Integer): String;
+const months: Array [1..12] of String = ('Январь', 'Февраль', 'Март', 'Апрель',
+  'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь');
+begin
+  if ((id < 1) OR (id > 12)) then begin
+    ShowMessage('getMounthNameFromId ID error');
+    Exit;
+  end;
+  getMounthNameFromId := months[id];
+end;
+
+function TMain.getMounthIdFromName(name: String): Integer;
+const months: Array [1..12] of String = ('Январь', 'Февраль', 'Март', 'Апрель',
+  'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь');
+begin
+  getMounthIdFromName := StrUtils.IndexStr(name, months) + 1;
+end;
+
+procedure TMain.createDataSelectRequest();
+var
+  len, i: Integer;
+  resultStr: String;
+begin
+  len := DaysInAMonth(CURRENT_YEAR, currentMounth);
+  resultStr := '';
+
+  for i := 1 to len do begin
+    resultStr := resultStr + 'SELECT DateValue("'+ IntToStr(i) + '.' + IntToStr(currentMounth) + '.' + IntToStr(CURRENT_YEAR) + '") AS firs FROM Teachers';
+    if (i <> len) then begin
+      resultStr := resultStr + ' UNION ';
+    end;
+  end;
+
+  selectDates := resultStr;
+end;
+
+procedure TMain.fillDatesComboBox();
+var
+  i: Integer;
+begin
+  if (CURRENT_SEMESTER = 1) then begin
+    currentMounth := 9;
+    ComboBox1.Items.Add(getMounthNameFromId(currentMounth));
+    ComboBox1.Items.Add(getMounthNameFromId(10));
+    ComboBox1.Items.Add(getMounthNameFromId(11));
+    ComboBox1.Items.Add(getMounthNameFromId(12));
+    ComboBox1.Items.Add(getMounthNameFromId(1));
+  end
+  else
+  if (CURRENT_SEMESTER = 2) then begin
+    currentMounth := 2;
+    ComboBox1.Items.Add(getMounthNameFromId(currentMounth));
+    ComboBox1.Items.Add(getMounthNameFromId(3));
+    ComboBox1.Items.Add(getMounthNameFromId(4));
+    ComboBox1.Items.Add(getMounthNameFromId(5));
+    ComboBox1.Items.Add(getMounthNameFromId(6));
+  end;
+
+  updateDatesComboBox();
+end;
+
+procedure TMain.updateDatesComboBox();
+begin
+  ComboBox1.Text := getMounthNameFromId(currentMounth);
+end;
+
+procedure TMain.ComboBox1Click(Sender: TObject);
+begin
+  currentMounth := getMounthIdFromName(ComboBox1.Text);
+  createDataSelectRequest();
+  showMainTable(groupId, subjectId);
+end;
+
+function TMain.getPathSQLMainRequest(action, selectDates: String; groupId, subjectId: Integer; firstDate, endDate: String): String;
+var
+  firstPath, secondPath: String;
+begin
+  firstPath := 'SELECT testing1.*, testing3.firs ' +
+    'FROM ( ' +
+    'SELECT u.surname AS fullname, j.mark_id, j.date ' +
+    'FROM ' +
+      '( ' +
+        'SELECT * ' +
+        'FROM Journal ' +
+        'WHERE ( ' +
+          'Journal.subject_id = ' + IntToStr(subjectId) + ' AND ' +
+          'Journal.date BETWEEN DateValue("' +  firstDate + '") AND DateValue("' + endDate + '") ' +
+        ') ' +
+      ') AS j ' +
+    'RIGHT JOIN ( ' +
+      'SELECT ' +
+        'Users.id AS id, ' +
+        'Users.surname as surname, ' +
+        'Users.name AS name, ' +
+        'Users.patronymic AS patronymic ' +
+      'FROM Users ' +
+      'INNER JOIN Groups ON Users.group_id = Groups.id ' +
+      'WHERE Groups.id = ' + IntToStr(groupId) + ' ' +
+      'ORDER BY Users.id ' +
+    ') AS u ON j.user_id = u.id) AS testing1';
+
+  secondPath := ' JOIN ( ' +
+    'SELECT dates.firs ' +
+  'FROM ' +
+    '(  ' +
+      'SELECT Timetable.day_of_week  ' +
+      'FROM Timetable, Subjects, Groups  ' +
+      'WHERE ( '  +
+        'Subjects.id = Timetable.subject_id AND '  +
+        'Groups.id = Timetable.group_id AND ' +
+        'Subjects.id = ' + IntToStr(subjectId) + ' AND '  +
+        'Groups.id = ' + IntToStr(groupId) + ' '  +
+    ')) AS Timetable_get_group_subject, '  +
+    '( ' + selectDates + ' ) AS dates  '  +
+  'WHERE ' +
+    'Timetable_get_group_subject.day_of_week = ( Weekday(dates.firs) - 1 ) '  +
+  'ORDER BY    '  +
+    'dates.firs '  +
+  ') AS testing3 ON testing1.date = testing3.firs';
+
+  if (action = 'right') then
+  begin
+    getPathSQLMainRequest := firstPath + ' RIGHT ' + secondPath;
+    Exit;
+  end;
+
+  if (action = 'left') then
+  begin
+    getPathSQLMainRequest := firstPath + ' LEFT ' + secondPath;
+    Exit;
+  end;
+end;
+
 
 end.

@@ -2,8 +2,8 @@ object Main: TMain
   Left = 0
   Top = 0
   Caption = 'ltlaitoff coursework'
-  ClientHeight = 633
-  ClientWidth = 629
+  ClientHeight = 719
+  ClientWidth = 788
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,23 +19,24 @@ object Main: TMain
   TextHeight = 13
   object Label1: TLabel
     Left = 27
-    Top = 399
+    Top = 479
     Width = 36
     Height = 13
     Caption = #1043#1088#1091#1087#1087#1072
   end
   object Label2: TLabel
     Left = 27
-    Top = 426
+    Top = 506
     Width = 44
     Height = 13
     Caption = #1055#1088#1077#1076#1084#1077#1090
   end
   object DBGrid1: TDBGrid
-    Left = 27
-    Top = 8
-    Width = 574
-    Height = 369
+    Left = 0
+    Top = 0
+    Width = 788
+    Height = 401
+    Align = alTop
     DataSource = DataModule1.DataSourceMain
     TabOrder = 0
     TitleFont.Charset = DEFAULT_CHARSET
@@ -47,7 +48,7 @@ object Main: TMain
   end
   object selectGroup: TDBLookupComboBox
     Left = 77
-    Top = 399
+    Top = 479
     Width = 145
     Height = 21
     KeyField = 'name'
@@ -59,7 +60,7 @@ object Main: TMain
   end
   object selectSubject: TDBLookupComboBox
     Left = 77
-    Top = 426
+    Top = 506
     Width = 145
     Height = 21
     KeyField = 'name'
@@ -71,7 +72,7 @@ object Main: TMain
   end
   object Panel1: TPanel
     Left = 27
-    Top = 453
+    Top = 533
     Width = 574
     Height = 148
     TabOrder = 3
@@ -177,16 +178,25 @@ object Main: TMain
   end
   object openPanel: TButton
     Left = 526
-    Top = 414
+    Top = 494
     Width = 75
     Height = 25
     Caption = #1048#1079#1084#1077#1085#1080#1090#1100
     TabOrder = 4
     OnClick = openPanelClick
   end
+  object ComboBox1: TComboBox
+    Left = 256
+    Top = 479
+    Width = 145
+    Height = 21
+    TabOrder = 5
+    Text = 'ComboBox1'
+    OnClick = ComboBox1Click
+  end
   object MainMenu1: TMainMenu
-    Left = 392
-    Top = 392
+    Left = 536
+    Top = 616
     object Main2: TMenuItem
       Caption = 'Subjects'
       OnClick = Main2Click
