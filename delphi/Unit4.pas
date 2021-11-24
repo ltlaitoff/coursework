@@ -86,9 +86,10 @@ begin
   DataModule1.ADOQueryTimetableShow.SQL.Text :=
   'SELECT ' +
     'WeekdayName(t.day_of_week) AS [day of week], ' +
-    't.pair, ' +
-    'g.name, ' +
-    's.name ' +
+    't.pair AS [pair], ' +
+    'g.name AS [group], ' +
+    's.audience AS [audience], ' +
+    's.name AS [subject]' +
   'FROM ' +
     'Timetable AS t, ' +
     'Subjects AS s, ' +
@@ -157,9 +158,9 @@ end;
 
 procedure TTimetable.FormActivate(Sender: TObject);
 begin
-   Button1.Visible := True;
-   Button2.Visible := True;
-   Button3.Visible := True;
+  Button1.Visible := True;
+  Button2.Visible := True;
+  Button3.Visible := True;
   currentType := 'all';
 
   selectGroup.KeyValue := DataModule1.ADOTableGroups.FieldByName('name').AsString;

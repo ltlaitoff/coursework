@@ -419,6 +419,7 @@ FROM (
     dates.firs
   ) AS testing3 ON testing1.date = testing3.firs
 ) AS t
-LEFT JOIN Marks AS m ON t.mark_id = m.id
+LEFT JOIN Marks AS m ON t.mark_id = m.id 
+WHERE t.fullname = '' 
 GROUP BY t.fullname 
 PIVOT t.firs;

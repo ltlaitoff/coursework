@@ -82,6 +82,7 @@ procedure TTeachers.FormActivate(Sender: TObject);
 begin
   CheckBox1.Visible := True;
   openPanel.Visible := True;
+  Panel1.Visible := False;
 
   if (Authorization.userType = 'student') then begin
     CheckBox1.Visible := False;

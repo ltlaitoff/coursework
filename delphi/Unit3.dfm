@@ -16,7 +16,7 @@ object Subjects: TSubjects
   PixelsPerInch = 96
   TextHeight = 13
   object DBGrid1: TDBGrid
-    Left = 27
+    Left = 35
     Top = 8
     Width = 574
     Height = 369
@@ -49,6 +49,7 @@ object Subjects: TSubjects
       item
         Expanded = False
         FieldName = 'teacher'
+        Width = 200
         Visible = True
       end>
   end
@@ -56,19 +57,19 @@ object Subjects: TSubjects
     Left = 27
     Top = 429
     Width = 558
-    Height = 132
+    Height = 170
     TabOrder = 1
     Visible = False
     object Label3: TLabel
-      Left = 69
-      Top = 22
+      Left = 83
+      Top = 16
       Width = 52
       Height = 13
       Caption = #1053#1072#1079#1074#1072#1085#1080#1077':'
     end
     object Label4: TLabel
-      Left = 64
-      Top = 41
+      Left = 72
+      Top = 43
       Width = 63
       Height = 13
       Caption = #1040#1091#1076#1080#1090#1086#1088#1080#1103': '
@@ -87,6 +88,13 @@ object Subjects: TSubjects
       ParentColor = False
       ParentFont = False
       Transparent = True
+    end
+    object Label1: TLabel
+      Left = 88
+      Top = 70
+      Width = 47
+      Height = 13
+      Caption = #1059#1095#1080#1090#1077#1083#1100':'
     end
     object buttonAdd: TButton
       Left = 327
@@ -140,6 +148,15 @@ object Subjects: TSubjects
       Height = 21
       TabOrder = 5
       Text = 'audienceEdit'
+    end
+    object clear: TButton
+      Left = 327
+      Top = 119
+      Width = 108
+      Height = 25
+      Caption = #1054#1095#1080#1089#1090#1080#1090#1100' '#1087#1086#1083#1103
+      TabOrder = 6
+      OnClick = clearClick
     end
   end
   object openPanel: TButton

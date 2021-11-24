@@ -44,7 +44,6 @@ var
 implementation
 
 {$R *.dfm}
-{$APPTYPE CONSOLE}
 
 uses Unit2, StrUtils, Unit9;
 
@@ -152,6 +151,13 @@ end;
 
 procedure TGroups.FormActivate(Sender: TObject);
 begin
+  Panel1.Visible := False;
+  openPanel.Enabled := True;
+
+  if ((Authorization.userType = 'teacher') OR (Authorization.userType = 'student')) then begin
+    openPanel.Enabled := False;
+  end;
+
   groupId := DBGrid1.Fields[0].AsInteger;
   nameEdit.Text := DBGrid1.Fields[1].AsString;
 end;

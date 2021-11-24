@@ -29,27 +29,174 @@ object DataModule1: TDataModule1
     CursorType = ctStatic
     Parameters = <>
     SQL.Strings = (
-      'TRANSFORM Max(j.mark_id) AS [Max-mark_id]'
-      'SELECT u.surname AS fullname'
-      'FROM'
-      '  ('
-      '    SELECT *'
-      '    FROM Journal'
-      '    WHERE Journal.subject_id = 1'
-      '  ) AS j'
+      'TRANSFORM Max(m.mark) AS [Max-mark]'
+      'SELECT t.fullname'
+      'FROM ('
+      '  SELECT testing1.*, testing3.firs'
+      '  FROM ('
+      '    SELECT u.surname AS fullname, j.mark_id, j.date'
+      '    FROM '
+      '      ('
+      '        SELECT *'
+      '        FROM Journal'
+      '        WHERE ('
+      '          Journal.subject_id = 3 AND '
+      
+        '          Journal.date BETWEEN DateValue("01.10.2021") AND DateV' +
+        'alue("31.10.2021")'
+      '        )'
+      '      ) AS j '
+      '    RIGHT JOIN ('
+      '      SELECT'
+      '        Users.id AS id,'
+      '        Users.surname as surname,'
+      '        Users.name AS name,'
+      '        Users.patronymic AS patronymic'
+      '      FROM Users'
+      '      INNER JOIN Groups ON Users.group_id = Groups.id'
+      '      WHERE Groups.id = 3'
+      '      ORDER BY Users.id'
+      '    ) AS u ON j.user_id = u.id) AS testing1'
       '  RIGHT JOIN ('
-      '    SELECT'
-      '      Users.id AS id,'
-      '      Users.surname as surname,'
-      '      Users.name AS name,'
-      '      Users.patronymic AS patronymic'
-      '    FROM Users'
-      '    INNER JOIN Groups ON Users.group_id = Groups.id'
-      '    WHERE Groups.id = 1'
-      '    ORDER BY Users.id'
-      '  ) AS u ON j.user_id = u.id'
-      'GROUP BY u.surname '
-      'PIVOT j.date;')
+      '    SELECT dates.firs'
+      '  FROM'
+      '    ('
+      '      SELECT Timetable.day_of_week'
+      '      FROM Timetable, Subjects, Groups'
+      '      WHERE ('
+      '        Subjects.id = Timetable.subject_id AND'
+      '        Groups.id = Timetable.group_id AND '
+      '        Subjects.id = 3 AND'
+      '        Groups.id = 3'
+      '    )) AS Timetable_get_group_subject,'
+      '    ('
+      '      SELECT DateValue("1.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("2.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("3.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("4.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("5.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("6.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("7.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("8.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("9.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("10.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("11.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("12.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("13.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("14.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("15.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("16.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("17.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("18.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("19.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("20.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("21.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("22.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("23.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("24.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("25.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("26.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("27.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("28.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("29.10.2021") AS firs FROM Teachers UNION'
+      
+        '      SELECT DateValue("30.10.2021") AS firs FROM Teachers UNION' +
+        ' '
+      '      SELECT DateValue("31.10.2021") AS firs FROM Teachers'
+      '    ) AS dates'
+      '  WHERE'
+      
+        '    Timetable_get_group_subject.day_of_week = ( Weekday(dates.fi' +
+        'rs) - 1 )'
+      '  ORDER BY'
+      '    dates.firs'
+      '  ) AS testing3 ON testing1.date = testing3.firs'
+      ''
+      '  UNION'
+      ''
+      '  SELECT testing1.*, testing3.firs'
+      '  FROM ('
+      '    SELECT u.surname AS fullname, j.mark_id, j.date'
+      '    FROM '
+      '      ('
+      '        SELECT *'
+      '        FROM Journal'
+      '        WHERE ('
+      '          Journal.subject_id = 3 AND '
+      
+        '          Journal.date BETWEEN DateValue("01.10.2021") AND DateV' +
+        'alue("31.10.2021")'
+      '        )'
+      '      ) AS j '
+      '    RIGHT JOIN ('
+      '      SELECT'
+      '        Users.id AS id,'
+      '        Users.surname as surname,'
+      '        Users.name AS name,'
+      '        Users.patronymic AS patronymic'
+      '      FROM Users'
+      '      INNER JOIN Groups ON Users.group_id = Groups.id'
+      '      WHERE Groups.id = 3'
+      '      ORDER BY Users.id'
+      '    ) AS u ON j.user_id = u.id) AS testing1'
+      '  LEFT JOIN ('
+      '    SELECT dates.firs'
+      '  FROM'
+      '    ('
+      '      SELECT Timetable.day_of_week'
+      '      FROM Timetable, Subjects, Groups'
+      '      WHERE ('
+      '        Subjects.id = Timetable.subject_id AND'
+      '        Groups.id = Timetable.group_id AND '
+      '        Subjects.id = 3 AND'
+      '        Groups.id = 3'
+      '    )) AS Timetable_get_group_subject,'
+      '    ('
+      '      SELECT DateValue("1.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("2.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("3.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("4.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("5.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("6.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("7.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("8.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("9.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("10.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("11.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("12.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("13.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("14.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("15.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("16.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("17.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("18.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("19.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("20.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("21.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("22.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("23.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("24.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("25.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("26.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("27.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("28.10.2021") AS firs FROM Teachers UNION'
+      '      SELECT DateValue("29.10.2021") AS firs FROM Teachers UNION'
+      
+        '      SELECT DateValue("30.10.2021") AS firs FROM Teachers UNION' +
+        ' '
+      '      SELECT DateValue("31.10.2021") AS firs FROM Teachers'
+      '    ) AS dates'
+      '  WHERE'
+      
+        '    Timetable_get_group_subject.day_of_week = ( Weekday(dates.fi' +
+        'rs) - 1 )'
+      '  ORDER BY'
+      '    dates.firs'
+      '  ) AS testing3 ON testing1.date = testing3.firs'
+      ') AS t'
+      'LEFT JOIN Marks AS m ON t.mark_id = m.id '
+      'GROUP BY t.fullname '
+      'PIVOT t.firs;')
     Left = 112
     Top = 24
   end
@@ -195,12 +342,31 @@ object DataModule1: TDataModule1
     CursorType = ctStatic
     Parameters = <>
     SQL.Strings = (
-      'SELECT s.id, s.name, s.audience, t.surname AS teacher '
-      'FROM Subjects AS s '
-      'INNER JOIN Teachers AS t ON (t.ID = s.teacher_id) '
-      'ORDER BY s.id;')
+      
+        'SELECT s.id, s.name, s.audience, (t.surname & " " & t.name) AS t' +
+        'eacher'
+      'FROM Subjects AS s'
+      'INNER JOIN Teachers AS t ON (t.ID = s.teacher_id)'
+      'ORDER BY s.id')
     Left = 432
     Top = 144
+    object ADOQuerySubjectsShowid: TAutoIncField
+      FieldName = 'id'
+      ReadOnly = True
+    end
+    object ADOQuerySubjectsShowname: TWideStringField
+      FieldName = 'name'
+      Size = 30
+    end
+    object ADOQuerySubjectsShowaudience: TIntegerField
+      FieldName = 'audience'
+    end
+    object ADOQuerySubjectsShowteacher: TWideMemoField
+      FieldName = 'teacher'
+      ReadOnly = True
+      OnGetText = getText
+      BlobType = ftWideMemo
+    end
   end
   object DataSourceSubjectsShow: TDataSource
     DataSet = ADOQuerySubjectsShow
@@ -248,9 +414,10 @@ object DataModule1: TDataModule1
     SQL.Strings = (
       'SELECT'
       '  WeekdayName(t.day_of_week) AS [day of week],'
-      '  t.pair,'
-      '  g.name,'
-      '  s.name'
+      '  t.pair AS [pair],'
+      '  g.name AS [group],'
+      '  s.audience AS [audience],'
+      '  s.name AS [subject]'
       'FROM'
       '  Timetable AS t,'
       '  Subjects AS s,'
@@ -270,18 +437,21 @@ object DataModule1: TDataModule1
     object ADOQueryTimetableShowdayofweek: TWideMemoField
       FieldName = 'day of week'
       ReadOnly = True
-      OnGetText = ADOQueryTimetableShowdayofweekGetText
+      OnGetText = getText
       BlobType = ftWideMemo
     end
     object ADOQueryTimetableShowpair: TIntegerField
       FieldName = 'pair'
     end
-    object ADOQueryTimetableShowgname: TWideStringField
-      FieldName = 'g.name'
+    object ADOQueryTimetableShowgroup: TWideStringField
+      FieldName = 'group'
     end
-    object ADOQueryTimetableShowsname: TWideStringField
-      FieldName = 's.name'
-      Size = 255
+    object ADOQueryTimetableShowaudience: TIntegerField
+      FieldName = 'audience'
+    end
+    object ADOQueryTimetableShowsubject: TWideStringField
+      FieldName = 'subject'
+      Size = 30
     end
   end
   object DataSourceTimetableShow: TDataSource

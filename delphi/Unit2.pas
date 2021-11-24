@@ -34,8 +34,6 @@ type
     DataSourceTimetableShow: TDataSource;
     ADOQueryTimetableShowdayofweek: TWideMemoField;
     ADOQueryTimetableShowpair: TIntegerField;
-    ADOQueryTimetableShowgname: TWideStringField;
-    ADOQueryTimetableShowsname: TWideStringField;
     ADOTableGroupsID: TAutoIncField;
     ADOTableGroupsname: TWideStringField;
     ADOQueryGroupsShow: TADOQuery;
@@ -60,8 +58,14 @@ type
     DataSourceTeachers: TDataSource;
     ADOQueryAuthorization: TADOQuery;
     DataSourceAuthorization: TDataSource;
-    procedure ADOQueryTimetableShowdayofweekGetText(Sender: TField;
-      var Text: string; DisplayText: Boolean);
+    ADOQuerySubjectsShowid: TAutoIncField;
+    ADOQuerySubjectsShowname: TWideStringField;
+    ADOQuerySubjectsShowaudience: TIntegerField;
+    ADOQuerySubjectsShowteacher: TWideMemoField;
+    ADOQueryTimetableShowgroup: TWideStringField;
+    ADOQueryTimetableShowsubject: TWideStringField;
+    ADOQueryTimetableShowaudience: TIntegerField;
+    procedure getText(Sender: TField; var Text: string; DisplayText: Boolean);
   private
     { Private declarations }
   public
@@ -77,9 +81,7 @@ implementation
 
 {$R *.dfm}
 
-
-procedure TDataModule1.ADOQueryTimetableShowdayofweekGetText(Sender: TField;
-  var Text: string; DisplayText: Boolean);
+procedure TDataModule1.getText(Sender: TField; var Text: string; DisplayText: Boolean);
 begin
   Text := Sender.AsString;
 end;

@@ -19,8 +19,10 @@ type
     Рассписание: TQRLabel;
     QRDBText1: TQRDBText;
     QRDBText2: TQRDBText;
-    QRDBText3: TQRDBText;
     QRDBText4: TQRDBText;
+    QRLabel5: TQRLabel;
+    QRDBText3: TQRDBText;
+    QRDBText5: TQRDBText;
   private
     { Private declarations }
   public

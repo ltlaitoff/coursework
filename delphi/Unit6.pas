@@ -71,7 +71,6 @@ var
 implementation
 
 {$R *.dfm}
-{$APPTYPE CONSOLE}
 
 Uses Unit2, StrUtils, Unit9;
 
@@ -115,6 +114,7 @@ begin
   CheckBox1.Visible := True;
   openPanel.Visible := True;
   selectGroup.Enabled := True;
+  Panel1.Visible := False;
 
   if (Authorization.userType = 'student') then begin
     CheckBox1.Visible := False;
@@ -202,7 +202,6 @@ var
 begin
   group := selectGroup.KeyValue;
 
-  writeln(group);
   if NOT (group = '') then begin
     groupId := getGroupId(group)
   end
@@ -211,8 +210,6 @@ begin
     selectGroup.KeyValue := DataModule1.ADOQueryGroupsShow.FieldByName('name').AsString;
     groupId := getGroupId(selectGroup.KeyValue)
   end;
-
-  writeln(groupId);
 
   showMainTable(groupId);
 end;
@@ -225,8 +222,6 @@ end;
 
 function TUsers.usersActionControllerCheckOnError(action: String; id, groupId: Integer; surname, name, patronymic, email, username, password: String): Boolean;
 begin
-  writeln(groupId);
-
   if ((String(id) = '') AND (action <> 'add')) then begin
     showErrorLabel('Ошибка ИД');
     usersActionControllerCheckOnError := True;
@@ -332,15 +327,11 @@ procedure TUsers.usersActionController(action: String; id: Integer; group, surna
 var
   groupId: Integer;
 begin
-  writeln(group);
   groupId := getGroupId(group);
 
   if (usersActionControllerCheckOnError(action, id, groupId, surname, name, patronymic, email, username, password) = true) then begin
-    writeln('error');
     Exit;
   end;
-
-  writeln('not error');
 
   case StrUtils.IndexStr(action, ['add', 'update', 'delete']) of
     0: addRecordInUsers(groupId, surname, name, patronymic, email, username, password);

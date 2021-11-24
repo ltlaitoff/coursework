@@ -47,25 +47,27 @@ object Timetable: TTimetable
       item
         Expanded = False
         FieldName = 'day of week'
-        Width = 100
+        Width = 75
         Visible = True
       end
       item
         Expanded = False
         FieldName = 'pair'
-        Width = 50
         Visible = True
       end
       item
         Expanded = False
-        FieldName = 'g.name'
-        Width = 50
+        FieldName = 'group'
         Visible = True
       end
       item
         Expanded = False
-        FieldName = 's.name'
-        Width = 200
+        FieldName = 'audience'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'subject'
         Visible = True
       end>
   end

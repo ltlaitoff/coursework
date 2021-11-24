@@ -21,6 +21,8 @@ type
     openPanel: TButton;
     nameEdit: TEdit;
     audienceEdit: TEdit;
+    clear: TButton;
+    Label1: TLabel;
     procedure subjectsActionController(action: String; nameEdit, audienceEdit: TEdit;
     teacherComboBox: TDBLookupComboBox; errorString: TLabel; recordId: Integer);
     function setRecordId(name: String; audienceNumber, teacherId: Integer): Integer;
@@ -37,6 +39,8 @@ type
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure DBGrid1CellClick(Column: TColumn);
+    function getSurname(fullName: String): String;
+    procedure clearClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -50,17 +54,24 @@ var
 implementation
 
 {$R *.dfm}
-{$APPTYPE CONSOLE}
 
 uses Unit2, StrUtils, Unit9;
+
+function TSubjects.getSurname(fullName: String): String;
+var
+  position: Integer;
+begin
+  position := Pos(' ', fullName);
+  getSurname := Copy(fullName, 0, position);
+end;
 
 procedure TSubjects.showSubjectsTable();
 begin
  DataModule1.ADOQuerySubjectsShow.Close;
  DataModule1.ADOQuerySubjectsShow.SQL.Text :=
-  'SELECT s.id, s.name, s.audience, t.surname AS teacher ' +
+  'SELECT s.id, s.name, s.audience, (t.surname & " " & t.name) AS teacher ' +
   'FROM Subjects AS s ' +
-  'INNER JOIN Teachers AS t ON (t.ID = s.teacher_id)' +
+  'INNER JOIN Teachers AS t ON (t.ID = s.teacher_id) ' +
   'ORDER BY s.id';
  DataModule1.ADOQuerySubjectsShow.Open;
 end;
@@ -73,7 +84,7 @@ end;
     recordId := DBGrid1.Fields[0].AsInteger;
     nameEdit.Text := DBGrid1.Fields[1].AsString;
     audienceEdit.Text := DBGrid1.Fields[2].AsString;
-    teacherComboBox.KeyValue := DBGrid1.Fields[3].AsString;
+    teacherComboBox.KeyValue := getSurname(DBGrid1.Fields[3].AsString);
  end;
 
 function TSubjects.getTeacherId(surname: String): Integer;
@@ -105,8 +116,6 @@ end;
 
 procedure TSubjects.addRecordInSubjects(name, audience: String; teacherId: Integer);
 begin
-  writeln(name, audience, teacherId);
-
   DataModule1.ADOQuerySubjects.Close;
   DataModule1.ADOQuerySubjects.SQL.Text :=
   'INSERT INTO Subjects (name, audience, teacher_id) '   +
@@ -195,7 +204,15 @@ begin
 
   showSubjectsTable();
 
-  teacherComboBox.KeyValue := ''; // Заменить на 1 человека в датасете
+  clearClick(clear);
+end;
+
+procedure TSubjects.clearClick(Sender: TObject);
+begin
+  recordId := -1;
+  nameEdit.Text := '';
+  audienceEdit.Text := '';
+  teacherComboBox.KeyValue := '';
 end;
 
 procedure TSubjects.buttonAddClick(Sender: TObject);
@@ -221,6 +238,7 @@ end;
 procedure TSubjects.FormActivate(Sender: TObject);
 begin
   openPanel.Enabled := True;
+  Panel1.Visible := False;
 
   if ((Authorization.userType = 'student') OR (Authorization.userType = 'teacher')) then begin
     openPanel.Enabled := false;
@@ -229,7 +247,9 @@ begin
   recordId := DBGrid1.Fields[0].AsInteger;
   nameEdit.Text := DBGrid1.Fields[1].AsString;
   audienceEdit.Text := DBGrid1.Fields[2].AsString;
-  teacherComboBox.KeyValue := DBGrid1.Fields[3].AsString;
+  teacherComboBox.KeyValue := getSurname(DBGrid1.Fields[3].AsString);
+
+  showSubjectsTable();
 end;
 
 procedure TSubjects.FormCreate(Sender: TObject);

@@ -136,13 +136,13 @@
       KeepOnOnePage = False
       BandType = rbColumnHeader
       object QRLabel1: TQRLabel
-        Left = 56
+        Left = 16
         Top = 17
         Width = 78
         Height = 17
         Size.Values = (
           44.979166666666670000
-          148.166666666666700000
+          42.333333333333330000
           44.979166666666670000
           206.375000000000000000)
         XLColumn = 0
@@ -159,13 +159,13 @@
         FontSize = 10
       end
       object QRLabel2: TQRLabel
-        Left = 176
+        Left = 124
         Top = 17
         Width = 74
         Height = 17
         Size.Values = (
           44.979166666666670000
-          465.666666666666700000
+          328.083333333333300000
           44.979166666666670000
           195.791666666666700000)
         XLColumn = 0
@@ -182,13 +182,13 @@
         FontSize = 10
       end
       object QRLabel3: TQRLabel
-        Left = 288
+        Left = 245
         Top = 17
         Width = 108
         Height = 17
         Size.Values = (
           44.979166666666670000
-          762.000000000000000000
+          648.229166666666700000
           44.979166666666670000
           285.750000000000000000)
         XLColumn = 0
@@ -205,13 +205,13 @@
         FontSize = 10
       end
       object QRLabel4: TQRLabel
-        Left = 450
+        Left = 514
         Top = 17
         Width = 119
         Height = 17
         Size.Values = (
           44.979166666666670000
-          1190.625000000000000000
+          1359.958333333333000000
           44.979166666666670000
           314.854166666666700000)
         XLColumn = 0
@@ -220,6 +220,29 @@
         Alignment = taLeftJustify
         AlignToBand = False
         Caption = #1053#1072#1079#1074#1072#1085#1080#1077' '#1087#1088#1077#1076#1084#1077#1090#1072
+        Color = clWhite
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        VerticalAlignment = tlTop
+        FontSize = 10
+      end
+      object QRLabel5: TQRLabel
+        Left = 389
+        Top = 17
+        Width = 65
+        Height = 17
+        Size.Values = (
+          44.979166666666670000
+          1029.229166666667000000
+          44.979166666666670000
+          171.979166666666700000)
+        XLColumn = 0
+        XLNumFormat = nfGeneral
+        ActiveInPreview = False
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = #1040#1091#1076#1080#1090#1086#1088#1080#1103
         Color = clWhite
         Transparent = False
         ExportAs = exptText
@@ -244,13 +267,13 @@
       KeepOnOnePage = False
       BandType = rbDetail
       object QRDBText1: TQRDBText
-        Left = 56
+        Left = 16
         Top = 6
         Width = 70
         Height = 17
         Size.Values = (
           44.979166666666670000
-          148.166666666666700000
+          42.333333333333330000
           15.875000000000000000
           185.208333333333300000)
         XLColumn = 0
@@ -270,13 +293,13 @@
         FontSize = 10
       end
       object QRDBText2: TQRDBText
-        Left = 176
+        Left = 124
         Top = 6
         Width = 22
         Height = 17
         Size.Values = (
           44.979166666666670000
-          465.666666666666700000
+          328.083333333333300000
           15.875000000000000000
           58.208333333333330000)
         XLColumn = 0
@@ -295,16 +318,16 @@
         VerticalAlignment = tlTop
         FontSize = 10
       end
-      object QRDBText3: TQRDBText
-        Left = 288
+      object QRDBText4: TQRDBText
+        Left = 514
         Top = 6
-        Width = 44
+        Width = 43
         Height = 17
         Size.Values = (
           44.979166666666670000
-          762.000000000000000000
+          1359.958333333333000000
           15.875000000000000000
-          116.416666666666700000)
+          113.770833333333300000)
         XLColumn = 0
         XLNumFormat = nfGeneral
         ActiveInPreview = False
@@ -312,7 +335,7 @@
         AlignToBand = False
         Color = clWhite
         DataSet = DataModule1.ADOQueryTimetableShow
-        DataField = 'g.name'
+        DataField = 'subject'
         Transparent = False
         ExportAs = exptText
         WrapStyle = BreakOnSpaces
@@ -321,16 +344,16 @@
         VerticalAlignment = tlTop
         FontSize = 10
       end
-      object QRDBText4: TQRDBText
-        Left = 450
+      object QRDBText3: TQRDBText
+        Left = 245
         Top = 6
-        Width = 44
+        Width = 33
         Height = 17
         Size.Values = (
           44.979166666666670000
-          1190.625000000000000000
+          648.229166666666700000
           15.875000000000000000
-          116.416666666666700000)
+          87.312500000000000000)
         XLColumn = 0
         XLNumFormat = nfGeneral
         ActiveInPreview = False
@@ -338,7 +361,33 @@
         AlignToBand = False
         Color = clWhite
         DataSet = DataModule1.ADOQueryTimetableShow
-        DataField = 's.name'
+        DataField = 'group'
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        VerticalAlignment = tlTop
+        FontSize = 10
+      end
+      object QRDBText5: TQRDBText
+        Left = 389
+        Top = 6
+        Width = 53
+        Height = 17
+        Size.Values = (
+          44.979166666666670000
+          1029.229166666667000000
+          15.875000000000000000
+          140.229166666666700000)
+        XLColumn = 0
+        XLNumFormat = nfGeneral
+        ActiveInPreview = False
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = DataModule1.ADOQueryTimetableShow
+        DataField = 'audience'
         Transparent = False
         ExportAs = exptText
         WrapStyle = BreakOnSpaces

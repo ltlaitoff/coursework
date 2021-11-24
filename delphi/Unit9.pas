@@ -23,6 +23,7 @@ type
     function teacherAuthentication(login, password: String): Integer;
     procedure showMainForm();
     function studentAuthentication(login, password: String): Integer;
+    procedure hideErrorLabel();
   private
     { Private declarations }
   public
@@ -39,7 +40,6 @@ var
 implementation
 
 {$R *.dfm}
-{$APPTYPE CONSOLE}
 
 uses Unit1, Unit2, StrUtils;
 
@@ -47,6 +47,12 @@ procedure TAuthorization.showErrorLabel(text: String);
 begin
   errorLabel.Visible := True;
   errorLabel.Caption := text;
+end;
+
+procedure TAuthorization.hideErrorLabel();
+begin
+  errorLabel.Visible := False;
+  errorLabel.Caption := '';
 end;
 
 function TAuthorization.authorizationControllerCheckOnError(action, login, password: String): Boolean;
@@ -121,8 +127,9 @@ var
   currentLogin, currentPassword: String;
   value: Integer;
 begin
-  InputQuery('������� �����', '�����: ', currentLogin);
-  InputQuery('������� ������', '������: ', currentPassword);
+  hideErrorLabel();
+  InputQuery('Input login', 'Login: ', currentLogin);
+  InputQuery('Input password', 'Password: ', currentPassword);
 
   if (authorizationControllerCheckOnError(action, currentLogin, currentPassword) = true) then begin
     Exit;
@@ -133,7 +140,11 @@ begin
       if (currentLogin = ADMIN_LOGIN) AND (currentPassword = ADMIN_PASSWORD) then begin
         userType := 'admin';
         showMainForm();
+        Exit;
       end;
+
+      showErrorLabel('Вы ввели неверный логин или пароль');
+      Exit;
     end;
 
     1: begin

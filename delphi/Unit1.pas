@@ -77,6 +77,7 @@ type
     procedure ComboBox1Click(Sender: TObject);
     procedure createDataSelectRequest();
     function getPathSQLMainRequest(action, selectDates: String; groupId, subjectId: Integer; firstDate, endDate: String): String;
+    function getSurname(fullName: String): String;
   private
     { Private declarations }
   public
@@ -98,7 +99,6 @@ var
 implementation
 
 {$R *.dfm}
-{$APPTYPE CONSOLE}
 
 uses Unit2, StrUtils, DateUtils, Unit3, Unit4, Unit5, Unit6, Unit7, Unit9;
 
@@ -133,15 +133,16 @@ begin
   ') AS t ' +
   'LEFT JOIN Marks AS m ON t.mark_id = m.id ' +
   'GROUP BY t.fullname ' +
-  'PIVOT t.firs ';
+  'PIVOT DAY(t.firs) ';
 
   DataModule1.ADOQueryMain.Close;
   DataModule1.ADOQueryMain.SQL.Text := text;
   DataModule1.ADOQueryMain.Open;
 
   DBGrid1.Columns[1].Visible := false;
-  for i := 0 to DbGrid1.Columns.Count - 1 do
-    DBGrid1.Columns[i].Width := 5 + DBGrid1.Canvas.TextWidth(DbGrid1.Columns[i].Title.Caption);
+  for i := 0 to DbGrid1.Columns.Count - 1 do begin
+    DBGrid1.Columns[i].Width := 25;
+  end;
 
   DBGrid1.Columns[0].Width := 200;
 end;
@@ -346,7 +347,7 @@ begin
   DataModule1.ADOQueryAddMarks.SQL.Text :=
   'SELECT id '    +
   'FROM Users ' +
-  'WHERE surname LIKE "' + studentSurname + '"';
+  'WHERE surname = "' + studentSurname + '"';
   DataModule1.ADOQueryAddMarks.Open;
 
   getStudentId := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
@@ -437,19 +438,28 @@ begin
   journalActionControllerCheckOnError := False;
 end;
 
+function TMain.getSurname(fullName: String): String;
+var
+  position: Integer;
+begin
+  position := Pos(' ', fullName);
+  getSurname := Copy(fullName, 0, position);
+end;
+
 procedure TMain.journalOnCellClick(Column: TColumn);
 var
-  colName: String;
-  fmt: TFormatSettings;
+  colName, selectedDateText, str, surname: String;
+  position: Integer;
 begin
-  selectStudent.KeyValue := DBGrid1.Fields[0].AsString;
+  selectStudent.KeyValue := getSurname(DBGrid1.Fields[0].AsString);
+
   selectMark.KeyValue := DBGrid1.Fields[Column.Index].AsString;
 
   colName := Column.DisplayName;
-  fmt.ShortDateFormat  := 'dd_mm_yyyy';
-  fmt.DateSeparator   := '_';
+  selectedDateText := colName + '.' + IntToStr(currentMounth) + '.' + IntToStr(CURRENT_YEAR);
+
   if NOT (colName = 'fullname') then begin
-    selectDate.Date := StrToDate(colName, fmt);
+    selectDate.Date := StrToDate(selectedDateText);
   end;
 
 end;
@@ -514,6 +524,7 @@ begin
   ComboBox1.Clear;
   currentMounth := -1;
   Groups1.Visible := True;
+  Panel1.Visible := False;
 
   if (Authorization.userType = 'teacher') then begin
     selectSubject.KeyValue := getSubjectNameFromTeacherId(Authorization.userID);
@@ -629,7 +640,7 @@ var
 begin
   firstPath := 'SELECT testing1.*, testing3.firs ' +
     'FROM ( ' +
-    'SELECT u.surname AS fullname, j.mark_id, j.date ' +
+    'SELECT (u.surname & " " & u.name) AS fullname, j.mark_id, j.date ' +
     'FROM ' +
       '( ' +
         'SELECT * ' +
