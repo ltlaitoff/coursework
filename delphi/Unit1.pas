@@ -34,6 +34,7 @@ type
     TeachersTab: TMenuItem;
     ExitTab: TMenuItem;
     ComboBox1: TComboBox;
+    Panel2: TPanel;
     procedure updateGrid();
     procedure buttonAddClick(Sender: TObject);
     procedure DateTimePicker1OnChange(Sender: TObject);
@@ -76,8 +77,10 @@ type
     procedure updateDatesComboBox();
     procedure ComboBox1Click(Sender: TObject);
     procedure createDataSelectRequest();
-    function getPathSQLMainRequest(action, selectDates: String; groupId, subjectId: Integer; firstDate, endDate: String): String;
     function getSurname(fullName: String): String;
+    procedure FormMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+    function checkRecordInDataBase(studentID, subjectID: Integer; date: TDateTime): Integer;
   private
     { Private declarations }
   public
@@ -114,32 +117,65 @@ end;
 
 procedure TMain.showMainTable(groupId, subjectId: Integer);
 var
-  right, left, firstDate, endDate, text: String;
+  firstDate, endDate, text: String;
   i: Integer;
 begin
   firstDate := '1.' + IntToStr(currentMounth) + '.' + IntToStr(CURRENT_YEAR);
   endDate := IntToStr(DaysInAMonth(CURRENT_YEAR, currentMounth)) + '.' + IntToStr(currentMounth) + '.' + IntToStr(CURRENT_YEAR);
 
-  right := getPathSQLMainRequest('right', selectDates, groupId, subjectId, firstDate, endDate);
-  left := getPathSQLMainRequest('left', selectDates, groupId, subjectId, firstDate, endDate);
-
   text :=
-  'TRANSFORM Max(m.mark) AS [Max-mark] ' +
-  'SELECT t.fullname ' +
-  'FROM ( ' +
-    right +
-    ' UNION ' +
-    left +
-  ') AS t ' +
-  'LEFT JOIN Marks AS m ON t.mark_id = m.id ' +
-  'GROUP BY t.fullname ' +
-  'PIVOT DAY(t.firs) ';
+  'TRANSFORM Max(m.mark) AS [Max-mark_id] '
+  + 'SELECT t.fullname '
+  + 'FROM (SELECT testing1.fullname, IIf(testing1.date = testing3.firs, testing1.mark_id, Null) AS mark_id, testing3.firs '
+  + '  FROM ( '
+  + '    SELECT (u.surname & " " & u.name) AS fullname, j.mark_id, j.date '
+  + '    FROM  '
+  + '      ( '
+  + '        SELECT * '
+  + '        FROM Journal '
+  + '        WHERE ( '
+  + '          Journal.subject_id = ' + IntToStr(subjectId) + ' AND  '
+  + '          Journal.date BETWEEN DateValue("' + firstDate + '") AND DateValue("' + endDate + '") '
+  + '        ) '
+  + '      ) AS j  '
+  + '    RIGHT JOIN ( '
+  + '      SELECT '
+  + '        Users.id AS id, '
+  + '        Users.surname as surname, '
+  + '        Users.name AS name, '
+  + '        Users.patronymic AS patronymic '
+  + '      FROM Users '
+  + '      INNER JOIN Groups ON Users.group_id = Groups.id '
+  + '      WHERE Groups.id = ' + IntToStr(groupId) + ' '
+  + '      ORDER BY Users.id '
+  + '    ) AS u ON j.user_id = u.id) AS testing1,  '
+  + '    ( '
+  + '      SELECT dates.firs '
+  + '      FROM '
+  + '        ( '
+  + '          SELECT Timetable.day_of_week '
+  + '          FROM Timetable, Subjects, Groups '
+  + '          WHERE ( '
+  + '            Subjects.id = Timetable.subject_id AND '
+  + '            Groups.id = Timetable.group_id AND  '
+  + '            Subjects.id = ' + IntToStr(subjectId) + ' AND '
+  + '            Groups.id = ' + IntToStr(groupId) + ' '
+  + '        )) AS Timetable_get_group_subject, '
+  + '        (' + selectDates + ') AS dates '
+  + '  WHERE '
+  + '    Timetable_get_group_subject.day_of_week = ( Weekday(dates.firs) - 1 ) '
+  + '  ORDER BY '
+  + '    dates.firs '
+  + '  ) AS testing3 '
+  + ') AS t '
+  + 'LEFT JOIN Marks AS m ON t.mark_id = m.id '
+  + 'GROUP BY t.fullname '
+  + 'PIVOT DAY(t.firs)';
 
   DataModule1.ADOQueryMain.Close;
   DataModule1.ADOQueryMain.SQL.Text := text;
   DataModule1.ADOQueryMain.Open;
 
-  DBGrid1.Columns[1].Visible := false;
   for i := 0 to DbGrid1.Columns.Count - 1 do begin
     DBGrid1.Columns[i].Width := 25;
   end;
@@ -325,8 +361,8 @@ end;
 
 procedure TMain.openPanelClick(Sender: TObject);
 begin
-  Panel1.Visible := true;
-  selectStudent.KeyValue := DBGrid1.Fields[0].AsString;
+  Panel1.Visible := NOT Panel1.Visible;
+  selectStudent.KeyValue := '';
 end;
 
 function TMain.getMarkId(markName: String): Integer;
@@ -469,6 +505,21 @@ begin
   Subjects.Show();
 end;
 
+function TMain.checkRecordInDataBase(studentID, subjectID: Integer; date: TDateTime): Integer;
+begin
+  DataModule1.ADOQueryAddMarks.Close;
+  DataModule1.ADOQueryAddMarks.SQL.Text :=
+  'SELECT * ' +
+  'FROM Journal ' +
+  'WHERE ' +
+  ' user_id = ' + IntToStr(studentID) + ' AND ' +
+  ' subject_id = ' + IntToStr(subjectID) + ' AND ' +
+  'date = DateValue("' + DateTimeToStr(date) + '"); ';
+  DataModule1.ADOQueryAddMarks.Open;
+
+  checkRecordInDataBase := DataModule1.DataSourceAddMarks.DataSet.Fields[0].AsInteger;
+end;
+
 procedure TMain.journalActionController(action: String; subjectId, groupId: Integer; studentComboBox, markComboBox: TDBLookupComboBox);
 var
   markId, studentID, len, selectedDayNumber, i: Integer;
@@ -486,6 +537,10 @@ begin
 
   studentId := getStudentId(student);
   markId := getMarkId(mark);
+
+  if ((action = 'add') AND (checkRecordInDataBase(studentID, subjectId, date) <> 0)) then begin
+    action := 'update';
+  end;
 
   case StrUtils.IndexStr(action, ['add', 'update', 'delete']) of
     0: addRecordInJournal(studentID, subjectId, markID, date);
@@ -556,6 +611,48 @@ begin
   NullStrictConvert := False;
   groupId := 1;
   subjectId := 1;
+end;
+
+procedure TMain.FormMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+  If selectGroup.Focused then begin
+     If (WheelDelta < 0) then begin
+        selectGroup.Perform(WM_KEYDOWN, VK_DOWN, 0)
+     end
+     else begin
+        selectGroup.Perform(WM_KEYDOWN, VK_UP, 0);
+     end;
+  end;
+
+  If selectSubject.Focused then begin
+     If (WheelDelta < 0) then begin
+        selectSubject.Perform(WM_KEYDOWN, VK_DOWN, 0)
+     end
+     else begin
+        selectSubject.Perform(WM_KEYDOWN, VK_UP, 0);
+     end;
+  end;
+
+  If selectStudent.Focused then begin
+     If (WheelDelta < 0) then begin
+        selectStudent.Perform(WM_KEYDOWN, VK_DOWN, 0)
+     end
+     else begin
+        selectStudent.Perform(WM_KEYDOWN, VK_UP, 0);
+     end;
+  end;
+
+  If selectMark.Focused then begin
+     If (WheelDelta < 0) then begin
+        selectMark.Perform(WM_KEYDOWN, VK_DOWN, 0)
+     end
+     else begin
+        selectMark.Perform(WM_KEYDOWN, VK_UP, 0);
+     end;
+  end;
+
+  Handled := True;
 end;
 
 function TMain.getMounthNameFromId(id: Integer): String;
@@ -633,66 +730,5 @@ begin
 
   showMainTable(groupId, subjectId);
 end;
-
-function TMain.getPathSQLMainRequest(action, selectDates: String; groupId, subjectId: Integer; firstDate, endDate: String): String;
-var
-  firstPath, secondPath: String;
-begin
-  firstPath := 'SELECT testing1.*, testing3.firs ' +
-    'FROM ( ' +
-    'SELECT (u.surname & " " & u.name) AS fullname, j.mark_id, j.date ' +
-    'FROM ' +
-      '( ' +
-        'SELECT * ' +
-        'FROM Journal ' +
-        'WHERE ( ' +
-          'Journal.subject_id = ' + IntToStr(subjectId) + ' AND ' +
-          'Journal.date BETWEEN DateValue("' +  firstDate + '") AND DateValue("' + endDate + '") ' +
-        ') ' +
-      ') AS j ' +
-    'RIGHT JOIN ( ' +
-      'SELECT ' +
-        'Users.id AS id, ' +
-        'Users.surname as surname, ' +
-        'Users.name AS name, ' +
-        'Users.patronymic AS patronymic ' +
-      'FROM Users ' +
-      'INNER JOIN Groups ON Users.group_id = Groups.id ' +
-      'WHERE Groups.id = ' + IntToStr(groupId) + ' ' +
-      'ORDER BY Users.id ' +
-    ') AS u ON j.user_id = u.id) AS testing1';
-
-  secondPath := ' JOIN ( ' +
-    'SELECT dates.firs ' +
-  'FROM ' +
-    '(  ' +
-      'SELECT Timetable.day_of_week  ' +
-      'FROM Timetable, Subjects, Groups  ' +
-      'WHERE ( '  +
-        'Subjects.id = Timetable.subject_id AND '  +
-        'Groups.id = Timetable.group_id AND ' +
-        'Subjects.id = ' + IntToStr(subjectId) + ' AND '  +
-        'Groups.id = ' + IntToStr(groupId) + ' '  +
-    ')) AS Timetable_get_group_subject, '  +
-    '( ' + selectDates + ' ) AS dates  '  +
-  'WHERE ' +
-    'Timetable_get_group_subject.day_of_week = ( Weekday(dates.firs) - 1 ) '  +
-  'ORDER BY    '  +
-    'dates.firs '  +
-  ') AS testing3 ON testing1.date = testing3.firs';
-
-  if (action = 'right') then
-  begin
-    getPathSQLMainRequest := firstPath + ' RIGHT ' + secondPath;
-    Exit;
-  end;
-
-  if (action = 'left') then
-  begin
-    getPathSQLMainRequest := firstPath + ' LEFT ' + secondPath;
-    Exit;
-  end;
-end;
-
 
 end.

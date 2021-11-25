@@ -36,6 +36,7 @@ type
     selectId: TDBLookupComboBox;
     Button1: TButton;
     selectGroupPanel: TDBLookupComboBox;
+    Panel2: TPanel;
     procedure selectGroupClick(Sender: TObject);
     function getGroupId(groupName: String): Integer;
     procedure showMainTable(groupId: Integer);
@@ -57,6 +58,8 @@ type
     procedure buttonChangeClick(Sender: TObject);
     procedure buttonDeleteClick(Sender: TObject);
     function getGroupNameFromStudentId(studentId: Integer): String;
+    procedure FormMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
   private
     { Private declarations }
   public
@@ -132,6 +135,30 @@ begin
   CheckBox1Click(CheckBox1);
 end;
 
+procedure TUsers.FormMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+  If selectGroup.Focused then begin
+     If (WheelDelta < 0) then begin
+        selectGroup.Perform(WM_KEYDOWN, VK_DOWN, 0)
+     end
+     else begin
+        selectGroup.Perform(WM_KEYDOWN, VK_UP, 0);
+     end;
+  end;
+
+  If selectGroupPanel.Focused then begin
+     If (WheelDelta < 0) then begin
+        selectGroupPanel.Perform(WM_KEYDOWN, VK_DOWN, 0)
+     end
+     else begin
+        selectGroupPanel.Perform(WM_KEYDOWN, VK_UP, 0);
+     end;
+  end;
+
+  Handled := True;
+end;
+
 function TUsers.getGroupId(groupName: String): Integer;
 begin
   DataModule1.ADOQueryUsers.Close;
@@ -146,7 +173,7 @@ end;
 
 procedure TUsers.openPanelClick(Sender: TObject);
 begin
-  Panel1.Visible := true;
+  Panel1.Visible := NOT Panel1.Visible;
   updatePanelFields();
 end;
 

@@ -18,6 +18,7 @@ type
     buttonDelete: TButton;
     nameEdit: TEdit;
     openPanel: TButton;
+    Panel2: TPanel;
     procedure showGroupsTable();
     procedure DBGrid1CellClick(Column: TColumn);
     procedure addRecordInGroups(name: String);
@@ -146,7 +147,7 @@ end;
 
 procedure TGroups.openPanelClick(Sender: TObject);
 begin
-  Panel1.Visible := true;
+  Panel1.Visible := NOT Panel1.Visible;
 end;
 
 procedure TGroups.FormActivate(Sender: TObject);

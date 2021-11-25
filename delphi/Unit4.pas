@@ -5,19 +5,20 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
-  Vcl.DBCtrls, Vcl.StdCtrls;
+  Vcl.DBCtrls, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type
   TTimetable = class(TForm)
     DBGrid1: TDBGrid;
-    selectGroup: TDBLookupComboBox;
-    selectSubject: TDBLookupComboBox;
-    Group: TLabel;
-    Label2: TLabel;
+    Panel1: TPanel;
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
     Button4: TButton;
+    Group: TLabel;
+    Label2: TLabel;
+    selectGroup: TDBLookupComboBox;
+    selectSubject: TDBLookupComboBox;
     procedure selectGroupClick(Sender: TObject);
     procedure selectSubjectClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -30,6 +31,8 @@ type
     procedure Button4Click(Sender: TObject);
     function getGroupNameFromStudentId(studentId: Integer): String;
     function getSubjectNameFromTeacherId(teacherId: Integer): String;
+    procedure FormMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
   private
     { Private declarations }
   public
@@ -190,6 +193,30 @@ begin
     currentType := 'group';
     showTable('group');
   end;
+end;
+
+procedure TTimetable.FormMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+  If selectGroup.Focused then begin
+     If (WheelDelta < 0) then begin
+        selectGroup.Perform(WM_KEYDOWN, VK_DOWN, 0)
+     end
+     else begin
+        selectGroup.Perform(WM_KEYDOWN, VK_UP, 0);
+     end;
+  end;
+
+  If selectSubject.Focused then begin
+     If (WheelDelta < 0) then begin
+        selectSubject.Perform(WM_KEYDOWN, VK_DOWN, 0)
+     end
+     else begin
+        selectSubject.Perform(WM_KEYDOWN, VK_UP, 0);
+     end;
+  end;
+
+  Handled := True;
 end;
 
 procedure TTimetable.selectGroupClick(Sender: TObject);

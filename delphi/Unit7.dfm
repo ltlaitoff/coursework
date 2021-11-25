@@ -1,8 +1,9 @@
 object Teachers: TTeachers
   Left = 0
   Top = 0
+  AutoSize = True
   Caption = 'Teachers'
-  ClientHeight = 565
+  ClientHeight = 564
   ClientWidth = 963
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -15,10 +16,11 @@ object Teachers: TTeachers
   PixelsPerInch = 96
   TextHeight = 13
   object DBGrid1: TDBGrid
-    Left = 22
-    Top = 8
-    Width = 923
-    Height = 225
+    Left = 0
+    Top = 0
+    Width = 963
+    Height = 285
+    Align = alBottom
     DataSource = DataModule1.DataSourceTeachersShow
     TabOrder = 0
     TitleFont.Charset = DEFAULT_CHARSET
@@ -28,41 +30,24 @@ object Teachers: TTeachers
     TitleFont.Style = []
     OnCellClick = DBGrid1CellClick
   end
-  object openPanel: TButton
-    Left = 748
-    Top = 239
-    Width = 197
-    Height = 34
-    Caption = #1048#1079#1084#1077#1085#1080#1090#1100
-    TabOrder = 1
-    OnClick = openPanelClick
-  end
-  object CheckBox1: TCheckBox
-    Left = 22
-    Top = 239
-    Width = 97
-    Height = 17
-    Caption = 'Password show'
-    TabOrder = 2
-    OnClick = CheckBox1Click
-  end
   object Panel1: TPanel
-    Left = 22
-    Top = 279
-    Width = 923
-    Height = 275
-    TabOrder = 3
+    Left = 0
+    Top = 335
+    Width = 963
+    Height = 229
+    Align = alBottom
+    TabOrder = 1
     Visible = False
     object Label4: TLabel
-      Left = 73
-      Top = 66
+      Left = 249
+      Top = 58
       Width = 51
       Height = 13
       Caption = #1060#1072#1084#1080#1083#1080#1103': '
     end
     object errorLabel: TLabel
-      Left = 318
-      Top = 143
+      Left = 494
+      Top = 135
       Width = 3
       Height = 13
       Color = clWhite
@@ -76,50 +61,50 @@ object Teachers: TTeachers
       Transparent = True
     end
     object Label2: TLabel
-      Left = 101
-      Top = 93
+      Left = 277
+      Top = 85
       Width = 23
       Height = 13
       Caption = #1048#1084#1103':'
     end
     object Label5: TLabel
-      Left = 71
-      Top = 120
+      Left = 247
+      Top = 112
       Width = 53
       Height = 13
       Caption = #1054#1090#1095#1077#1089#1090#1074#1086':'
     end
     object Label7: TLabel
-      Left = 72
-      Top = 174
+      Left = 248
+      Top = 166
       Width = 52
       Height = 13
       Caption = 'Username:'
     end
     object Label8: TLabel
-      Left = 74
-      Top = 201
+      Left = 250
+      Top = 193
       Width = 50
       Height = 13
       Caption = 'Password:'
     end
     object Label9: TLabel
-      Left = 109
-      Top = 28
+      Left = 285
+      Top = 20
       Width = 15
       Height = 13
       Caption = 'ID:'
     end
     object Label6: TLabel
-      Left = 96
-      Top = 147
+      Left = 272
+      Top = 139
       Width = 28
       Height = 13
       Caption = 'Email:'
     end
     object buttonAdd: TButton
-      Left = 318
-      Top = 50
+      Left = 494
+      Top = 42
       Width = 159
       Height = 25
       Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1085#1086#1074#1086#1075#1086' '#1091#1095#1080#1090#1077#1083#1103
@@ -127,8 +112,8 @@ object Teachers: TTeachers
       OnClick = buttonAddClick
     end
     object buttonChange: TButton
-      Left = 318
-      Top = 81
+      Left = 494
+      Top = 73
       Width = 159
       Height = 25
       Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1076#1072#1085#1085#1099#1077' '#1091#1095#1080#1090#1077#1083#1103
@@ -136,8 +121,8 @@ object Teachers: TTeachers
       OnClick = buttonChangeClick
     end
     object buttonDelete: TButton
-      Left = 318
-      Top = 112
+      Left = 494
+      Top = 104
       Width = 159
       Height = 25
       Caption = #1059#1076#1072#1083#1080#1090#1100' '#1076#1072#1085#1085#1099#1077' '#1091#1095#1080#1090#1077#1083#1103
@@ -145,43 +130,43 @@ object Teachers: TTeachers
       OnClick = buttonDeleteClick
     end
     object surnameEdit: TEdit
-      Left = 130
-      Top = 66
+      Left = 306
+      Top = 58
       Width = 121
       Height = 21
       TabOrder = 3
     end
     object nameEdit: TEdit
-      Left = 130
-      Top = 93
+      Left = 306
+      Top = 85
       Width = 121
       Height = 21
       TabOrder = 4
     end
     object patronymicEdit: TEdit
-      Left = 130
-      Top = 120
+      Left = 306
+      Top = 112
       Width = 121
       Height = 21
       TabOrder = 5
     end
     object usernameEdit: TEdit
-      Left = 130
-      Top = 174
+      Left = 306
+      Top = 166
       Width = 121
       Height = 21
       TabOrder = 6
     end
     object passwordEdit: TEdit
-      Left = 130
-      Top = 201
+      Left = 306
+      Top = 193
       Width = 121
       Height = 21
       TabOrder = 7
     end
     object selectId: TDBLookupComboBox
-      Left = 130
-      Top = 28
+      Left = 306
+      Top = 20
       Width = 145
       Height = 21
       Enabled = False
@@ -192,8 +177,8 @@ object Teachers: TTeachers
       TabOrder = 8
     end
     object Button1: TButton
-      Left = 318
-      Top = 216
+      Left = 494
+      Top = 192
       Width = 159
       Height = 25
       Caption = #1054#1095#1080#1089#1090#1080#1090#1100' '#1087#1086#1083#1103
@@ -201,11 +186,37 @@ object Teachers: TTeachers
       OnClick = Button1Click
     end
     object emailEdit: TEdit
-      Left = 130
-      Top = 145
+      Left = 306
+      Top = 137
       Width = 121
       Height = 21
       TabOrder = 10
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 285
+    Width = 963
+    Height = 50
+    Align = alBottom
+    TabOrder = 2
+    object CheckBox1: TCheckBox
+      Left = 22
+      Top = 16
+      Width = 97
+      Height = 17
+      Caption = 'Password show'
+      TabOrder = 0
+      OnClick = CheckBox1Click
+    end
+    object openPanel: TButton
+      Left = 698
+      Top = 6
+      Width = 197
+      Height = 34
+      Caption = #1048#1079#1084#1077#1085#1080#1090#1100
+      TabOrder = 1
+      OnClick = openPanelClick
     end
   end
 end

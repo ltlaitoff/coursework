@@ -29,12 +29,14 @@ object DataModule1: TDataModule1
     CursorType = ctStatic
     Parameters = <>
     SQL.Strings = (
-      'TRANSFORM Max(m.mark) AS [Max-mark]'
-      'SELECT t.fullname'
-      'FROM ('
-      '  SELECT testing1.*, testing3.firs'
-      '  FROM ('
-      '    SELECT u.surname AS fullname, j.mark_id, j.date'
+      ''
+      
+        'TRANSFORM Max(IIf(testing1.date=testing3.firs,testing1.mark_id,N' +
+        'ull)) AS 123'
+      'SELECT testing1.fullname'
+      
+        'FROM (SELECT (u.surname & " " & u.name) AS fullname, j.mark_id, ' +
+        'j.date'
       '    FROM '
       '      ('
       '        SELECT *'
@@ -56,147 +58,119 @@ object DataModule1: TDataModule1
       '      INNER JOIN Groups ON Users.group_id = Groups.id'
       '      WHERE Groups.id = 3'
       '      ORDER BY Users.id'
-      '    ) AS u ON j.user_id = u.id) AS testing1'
-      '  RIGHT JOIN ('
-      '    SELECT dates.firs'
-      '  FROM'
-      '    ('
-      '      SELECT Timetable.day_of_week'
-      '      FROM Timetable, Subjects, Groups'
-      '      WHERE ('
-      '        Subjects.id = Timetable.subject_id AND'
-      '        Groups.id = Timetable.group_id AND '
-      '        Subjects.id = 3 AND'
-      '        Groups.id = 3'
-      '    )) AS Timetable_get_group_subject,'
-      '    ('
-      '      SELECT DateValue("1.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("2.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("3.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("4.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("5.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("6.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("7.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("8.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("9.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("10.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("11.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("12.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("13.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("14.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("15.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("16.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("17.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("18.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("19.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("20.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("21.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("22.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("23.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("24.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("25.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("26.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("27.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("28.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("29.10.2021") AS firs FROM Teachers UNION'
+      '    ) AS u ON j.user_id = u.id)  AS testing1, (SELECT dates.firs'
+      '      FROM'
+      '        ('
+      '          SELECT Timetable.day_of_week'
+      '          FROM Timetable, Subjects, Groups'
+      '          WHERE ('
+      '            Subjects.id = Timetable.subject_id AND'
+      '            Groups.id = Timetable.group_id AND '
+      '            Subjects.id = 3 AND'
+      '            Groups.id = 3'
+      '        )) AS Timetable_get_group_subject,'
+      '        ('
       
-        '      SELECT DateValue("30.10.2021") AS firs FROM Teachers UNION' +
-        ' '
-      '      SELECT DateValue("31.10.2021") AS firs FROM Teachers'
-      '    ) AS dates'
+        '          SELECT DateValue("1.10.2021") AS firs FROM Teachers UN' +
+        'ION'
+      
+        '          SELECT DateValue("2.10.2021") AS firs FROM Teachers UN' +
+        'ION'
+      
+        '          SELECT DateValue("3.10.2021") AS firs FROM Teachers UN' +
+        'ION'
+      
+        '          SELECT DateValue("4.10.2021") AS firs FROM Teachers UN' +
+        'ION'
+      
+        '          SELECT DateValue("5.10.2021") AS firs FROM Teachers UN' +
+        'ION'
+      
+        '          SELECT DateValue("6.10.2021") AS firs FROM Teachers UN' +
+        'ION'
+      
+        '          SELECT DateValue("7.10.2021") AS firs FROM Teachers UN' +
+        'ION'
+      
+        '          SELECT DateValue("8.10.2021") AS firs FROM Teachers UN' +
+        'ION'
+      
+        '          SELECT DateValue("9.10.2021") AS firs FROM Teachers UN' +
+        'ION'
+      
+        '          SELECT DateValue("10.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("11.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("12.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("13.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("14.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("15.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("16.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("17.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("18.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("19.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("20.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("21.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("22.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("23.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("24.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("25.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("26.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("27.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("28.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("29.10.2021") AS firs FROM Teachers U' +
+        'NION'
+      
+        '          SELECT DateValue("30.10.2021") AS firs FROM Teachers U' +
+        'NION '
+      '          SELECT DateValue("31.10.2021") AS firs FROM Teachers'
+      '        ) AS dates'
       '  WHERE'
       
         '    Timetable_get_group_subject.day_of_week = ( Weekday(dates.fi' +
         'rs) - 1 )'
       '  ORDER BY'
       '    dates.firs'
-      '  ) AS testing3 ON testing1.date = testing3.firs'
-      ''
-      '  UNION'
-      ''
-      '  SELECT testing1.*, testing3.firs'
-      '  FROM ('
-      '    SELECT u.surname AS fullname, j.mark_id, j.date'
-      '    FROM '
-      '      ('
-      '        SELECT *'
-      '        FROM Journal'
-      '        WHERE ('
-      '          Journal.subject_id = 3 AND '
-      
-        '          Journal.date BETWEEN DateValue("01.10.2021") AND DateV' +
-        'alue("31.10.2021")'
-      '        )'
-      '      ) AS j '
-      '    RIGHT JOIN ('
-      '      SELECT'
-      '        Users.id AS id,'
-      '        Users.surname as surname,'
-      '        Users.name AS name,'
-      '        Users.patronymic AS patronymic'
-      '      FROM Users'
-      '      INNER JOIN Groups ON Users.group_id = Groups.id'
-      '      WHERE Groups.id = 3'
-      '      ORDER BY Users.id'
-      '    ) AS u ON j.user_id = u.id) AS testing1'
-      '  LEFT JOIN ('
-      '    SELECT dates.firs'
-      '  FROM'
-      '    ('
-      '      SELECT Timetable.day_of_week'
-      '      FROM Timetable, Subjects, Groups'
-      '      WHERE ('
-      '        Subjects.id = Timetable.subject_id AND'
-      '        Groups.id = Timetable.group_id AND '
-      '        Subjects.id = 3 AND'
-      '        Groups.id = 3'
-      '    )) AS Timetable_get_group_subject,'
-      '    ('
-      '      SELECT DateValue("1.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("2.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("3.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("4.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("5.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("6.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("7.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("8.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("9.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("10.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("11.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("12.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("13.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("14.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("15.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("16.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("17.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("18.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("19.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("20.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("21.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("22.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("23.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("24.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("25.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("26.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("27.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("28.10.2021") AS firs FROM Teachers UNION'
-      '      SELECT DateValue("29.10.2021") AS firs FROM Teachers UNION'
-      
-        '      SELECT DateValue("30.10.2021") AS firs FROM Teachers UNION' +
-        ' '
-      '      SELECT DateValue("31.10.2021") AS firs FROM Teachers'
-      '    ) AS dates'
-      '  WHERE'
-      
-        '    Timetable_get_group_subject.day_of_week = ( Weekday(dates.fi' +
-        'rs) - 1 )'
-      '  ORDER BY'
-      '    dates.firs'
-      '  ) AS testing3 ON testing1.date = testing3.firs'
-      ') AS t'
-      'LEFT JOIN Marks AS m ON t.mark_id = m.id '
-      'GROUP BY t.fullname '
-      'PIVOT t.firs;')
+      '  )  AS testing3'
+      'GROUP BY testing1.fullname'
+      'PIVOT DAY(testing3.firs);')
     Left = 112
     Top = 24
   end

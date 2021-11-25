@@ -32,6 +32,7 @@ type
     Label9: TLabel;
     Label6: TLabel;
     emailEdit: TEdit;
+    Panel2: TPanel;
     procedure openPanelClick(Sender: TObject);
     procedure updatePanelFields();
     procedure resetPanelFields();
@@ -99,7 +100,7 @@ end;
 
 procedure TTeachers.openPanelClick(Sender: TObject);
 begin
-  Panel1.Visible := true;
+  Panel1.Visible := NOT Panel1.Visible;
   updatePanelFields();
 end;
 

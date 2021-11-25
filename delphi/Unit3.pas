@@ -23,6 +23,7 @@ type
     audienceEdit: TEdit;
     clear: TButton;
     Label1: TLabel;
+    Panel2: TPanel;
     procedure subjectsActionController(action: String; nameEdit, audienceEdit: TEdit;
     teacherComboBox: TDBLookupComboBox; errorString: TLabel; recordId: Integer);
     function setRecordId(name: String; audienceNumber, teacherId: Integer): Integer;
@@ -41,6 +42,8 @@ type
     procedure DBGrid1CellClick(Column: TColumn);
     function getSurname(fullName: String): String;
     procedure clearClick(Sender: TObject);
+    procedure FormMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
   private
     { Private declarations }
   public
@@ -232,7 +235,7 @@ end;
 
 procedure TSubjects.openPanelClick(Sender: TObject);
 begin
-  Panel1.Visible := true;
+  Panel1.Visible := NOT Panel1.Visible;
 end;
 
 procedure TSubjects.FormActivate(Sender: TObject);
@@ -255,6 +258,21 @@ end;
 procedure TSubjects.FormCreate(Sender: TObject);
 begin
   NullStrictConvert := False;
+end;
+
+procedure TSubjects.FormMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+  If teacherComboBox.Focused then begin
+     If (WheelDelta < 0) then begin
+        teacherComboBox.Perform(WM_KEYDOWN, VK_DOWN, 0)
+     end
+     else begin
+        teacherComboBox.Perform(WM_KEYDOWN, VK_UP, 0);
+     end;
+  end;
+
+  Handled := True;
 end;
 
 end.
