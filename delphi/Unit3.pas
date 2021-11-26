@@ -263,6 +263,15 @@ end;
 procedure TSubjects.FormMouseWheel(Sender: TObject; Shift: TShiftState;
   WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 begin
+  If DBGrid1.Focused then begin
+     If (WheelDelta < 0) then begin
+        DBGrid1.Perform(WM_KEYDOWN, VK_DOWN, 0)
+     end
+     else begin
+        DBGrid1.Perform(WM_KEYDOWN, VK_UP, 0);
+     end;
+  end;
+
   If teacherComboBox.Focused then begin
      If (WheelDelta < 0) then begin
         teacherComboBox.Perform(WM_KEYDOWN, VK_DOWN, 0)

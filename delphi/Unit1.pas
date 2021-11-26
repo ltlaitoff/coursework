@@ -616,6 +616,15 @@ end;
 procedure TMain.FormMouseWheel(Sender: TObject; Shift: TShiftState;
   WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 begin
+  If DBGrid1.Focused then begin
+     If (WheelDelta < 0) then begin
+        DBGrid1.Perform(WM_KEYDOWN, VK_DOWN, 0)
+     end
+     else begin
+        DBGrid1.Perform(WM_KEYDOWN, VK_UP, 0);
+     end;
+  end;
+
   If selectGroup.Focused then begin
      If (WheelDelta < 0) then begin
         selectGroup.Perform(WM_KEYDOWN, VK_DOWN, 0)

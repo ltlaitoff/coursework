@@ -4,8 +4,9 @@ object Teachers: TTeachers
   AutoSize = True
   Caption = 'Teachers'
   ClientHeight = 564
-  ClientWidth = 963
+  ClientWidth = 944
   Color = clBtnFace
+  Constraints.MinWidth = 960
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -13,12 +14,13 @@ object Teachers: TTeachers
   Font.Style = []
   OldCreateOrder = False
   OnActivate = FormActivate
+  OnMouseWheel = FormMouseWheel
   PixelsPerInch = 96
   TextHeight = 13
   object DBGrid1: TDBGrid
     Left = 0
     Top = 0
-    Width = 963
+    Width = 944
     Height = 285
     Align = alBottom
     DataSource = DataModule1.DataSourceTeachersShow
@@ -33,7 +35,7 @@ object Teachers: TTeachers
   object Panel1: TPanel
     Left = 0
     Top = 335
-    Width = 963
+    Width = 944
     Height = 229
     Align = alBottom
     TabOrder = 1
@@ -196,7 +198,7 @@ object Teachers: TTeachers
   object Panel2: TPanel
     Left = 0
     Top = 285
-    Width = 963
+    Width = 944
     Height = 50
     Align = alBottom
     TabOrder = 2

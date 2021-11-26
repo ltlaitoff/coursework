@@ -51,6 +51,8 @@ type
     procedure DBGrid1CellClick(Column: TColumn);
     procedure selectGroupClick(Sender: TObject);
     procedure showErrorLabel(text: String);
+    procedure FormMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
   private
     { Private declarations }
   public
@@ -96,6 +98,19 @@ begin
   end;
 
   CheckBox1Click(CheckBox1);
+end;
+
+procedure TTeachers.FormMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+  If DBGrid1.Focused then begin
+     If (WheelDelta < 0) then begin
+        DBGrid1.Perform(WM_KEYDOWN, VK_DOWN, 0)
+     end
+     else begin
+        DBGrid1.Perform(WM_KEYDOWN, VK_UP, 0);
+     end;
+  end;
 end;
 
 procedure TTeachers.openPanelClick(Sender: TObject);

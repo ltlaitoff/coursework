@@ -32,6 +32,8 @@ type
     procedure openPanelClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
   private
     { Private declarations }
   public
@@ -166,6 +168,20 @@ end;
 procedure TGroups.FormCreate(Sender: TObject);
 begin
   NullStrictConvert := False;
+end;
+
+
+procedure TGroups.FormMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+  If DBGrid1.Focused then begin
+     If (WheelDelta < 0) then begin
+        DBGrid1.Perform(WM_KEYDOWN, VK_DOWN, 0)
+     end
+     else begin
+        DBGrid1.Perform(WM_KEYDOWN, VK_UP, 0);
+     end;
+  end;
 end;
 
 end.

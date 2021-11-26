@@ -4,8 +4,9 @@ object Timetable: TTimetable
   AutoSize = True
   Caption = 'Timetable'
   ClientHeight = 617
-  ClientWidth = 870
+  ClientWidth = 620
   Color = clBtnFace
+  Constraints.MinWidth = 636
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -20,7 +21,7 @@ object Timetable: TTimetable
   object DBGrid1: TDBGrid
     Left = 0
     Top = 0
-    Width = 870
+    Width = 620
     Height = 481
     Align = alBottom
     BiDiMode = bdLeftToRight
@@ -63,10 +64,11 @@ object Timetable: TTimetable
   object Panel1: TPanel
     Left = 0
     Top = 481
-    Width = 870
+    Width = 620
     Height = 136
     Align = alBottom
     TabOrder = 1
+    ExplicitWidth = 304
     object Group: TLabel
       Left = 36
       Top = 28

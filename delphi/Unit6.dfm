@@ -4,8 +4,9 @@ object Users: TUsers
   AutoSize = True
   Caption = 'Users'
   ClientHeight = 707
-  ClientWidth = 830
+  ClientWidth = 847
   Color = clBtnFace
+  Constraints.MinWidth = 863
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -19,7 +20,7 @@ object Users: TUsers
   object DBGrid1: TDBGrid
     Left = 0
     Top = 0
-    Width = 830
+    Width = 847
     Height = 385
     Align = alBottom
     DataSource = DataModule1.DataSourceUsersShow
@@ -76,7 +77,7 @@ object Users: TUsers
   object Panel1: TPanel
     Left = 0
     Top = 432
-    Width = 830
+    Width = 847
     Height = 275
     Align = alBottom
     TabOrder = 1
@@ -257,7 +258,7 @@ object Users: TUsers
   object Panel2: TPanel
     Left = 0
     Top = 385
-    Width = 830
+    Width = 847
     Height = 47
     Align = alBottom
     TabOrder = 2

@@ -4,8 +4,9 @@ object Subjects: TSubjects
   AutoSize = True
   Caption = 'Subjects'
   ClientHeight = 590
-  ClientWidth = 644
+  ClientWidth = 575
   Color = clBtnFace
+  Constraints.MinWidth = 591
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -20,7 +21,7 @@ object Subjects: TSubjects
   object DBGrid1: TDBGrid
     Left = 0
     Top = 0
-    Width = 644
+    Width = 575
     Height = 369
     Align = alBottom
     DataSource = DataModule1.DataSourceSubjectsShow
@@ -59,7 +60,7 @@ object Subjects: TSubjects
   object Panel1: TPanel
     Left = 0
     Top = 420
-    Width = 644
+    Width = 575
     Height = 170
     Align = alBottom
     TabOrder = 1
@@ -166,7 +167,7 @@ object Subjects: TSubjects
   object Panel2: TPanel
     Left = 0
     Top = 369
-    Width = 644
+    Width = 575
     Height = 51
     Align = alBottom
     TabOrder = 2
