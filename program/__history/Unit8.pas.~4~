@@ -1,0 +1,27 @@
+unit Unit8;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, QuickRpt;
+
+type
+  TTimeTableReport = class(TForm)
+    QuickRep1: TQuickRep;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TimeTableReport: TTimeTableReport;
+
+implementation
+
+{$R *.dfm}
+
+uses Unit4, Unit2;
+
+end.
