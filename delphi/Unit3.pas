@@ -70,25 +70,25 @@ end;
 
 procedure TSubjects.showSubjectsTable();
 begin
- DataModule1.ADOQuerySubjectsShow.Close;
- DataModule1.ADOQuerySubjectsShow.SQL.Text :=
-  'SELECT s.id, s.name, s.audience, (t.surname & " " & t.name) AS teacher ' +
-  'FROM Subjects AS s ' +
-  'INNER JOIN Teachers AS t ON (t.ID = s.teacher_id) ' +
-  'ORDER BY s.id';
- DataModule1.ADOQuerySubjectsShow.Open;
+  DataModule1.ADOQuerySubjectsShow.Close;
+  DataModule1.ADOQuerySubjectsShow.SQL.Text :=
+    'SELECT s.id, s.name, s.audience, (t.surname & " " & t.name) AS teacher ' +
+    'FROM Subjects AS s ' +
+    'INNER JOIN Teachers AS t ON (t.ID = s.teacher_id) ' +
+    'ORDER BY s.id';
+  DataModule1.ADOQuerySubjectsShow.Open;
 end;
 
- procedure TSubjects.DBGrid1CellClick(Column: TColumn);
- var
+procedure TSubjects.DBGrid1CellClick(Column: TColumn);
+var
   colName: String;
   fmt: TFormatSettings;
- begin
-    recordId := DBGrid1.Fields[0].AsInteger;
-    nameEdit.Text := DBGrid1.Fields[1].AsString;
-    audienceEdit.Text := DBGrid1.Fields[2].AsString;
-    teacherComboBox.KeyValue := getSurname(DBGrid1.Fields[3].AsString);
- end;
+begin
+  recordId := DBGrid1.Fields[0].AsInteger;
+  nameEdit.Text := DBGrid1.Fields[1].AsString;
+  audienceEdit.Text := DBGrid1.Fields[2].AsString;
+  teacherComboBox.KeyValue := getSurname(DBGrid1.Fields[3].AsString);
+end;
 
 function TSubjects.getTeacherId(surname: String): Integer;
 begin
@@ -220,17 +220,17 @@ end;
 
 procedure TSubjects.buttonAddClick(Sender: TObject);
 begin
-   subjectsActionController('add', nameEdit, audienceEdit, teacherComboBox, errorLabel, recordId);
+  subjectsActionController('add', nameEdit, audienceEdit, teacherComboBox, errorLabel, recordId);
 end;
 
 procedure TSubjects.buttonChangeClick(Sender: TObject);
 begin
-   subjectsActionController('update', nameEdit, audienceEdit, teacherComboBox, errorLabel, recordId);
+  subjectsActionController('update', nameEdit, audienceEdit, teacherComboBox, errorLabel, recordId);
 end;
 
 procedure TSubjects.buttonDeleteClick(Sender: TObject);
 begin
-   subjectsActionController('delete', nameEdit, audienceEdit, teacherComboBox, errorLabel, recordId);
+  subjectsActionController('delete', nameEdit, audienceEdit, teacherComboBox, errorLabel, recordId);
 end;
 
 procedure TSubjects.openPanelClick(Sender: TObject);
@@ -264,21 +264,21 @@ procedure TSubjects.FormMouseWheel(Sender: TObject; Shift: TShiftState;
   WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 begin
   If DBGrid1.Focused then begin
-     If (WheelDelta < 0) then begin
-        DBGrid1.Perform(WM_KEYDOWN, VK_DOWN, 0)
-     end
-     else begin
-        DBGrid1.Perform(WM_KEYDOWN, VK_UP, 0);
-     end;
+    If (WheelDelta < 0) then begin
+      DBGrid1.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      DBGrid1.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
   end;
 
   If teacherComboBox.Focused then begin
-     If (WheelDelta < 0) then begin
-        teacherComboBox.Perform(WM_KEYDOWN, VK_DOWN, 0)
-     end
-     else begin
-        teacherComboBox.Perform(WM_KEYDOWN, VK_UP, 0);
-     end;
+    If (WheelDelta < 0) then begin
+      teacherComboBox.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      teacherComboBox.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
   end;
 
   Handled := True;

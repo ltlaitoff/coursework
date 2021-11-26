@@ -6,6 +6,7 @@ object Users: TUsers
   ClientHeight = 707
   ClientWidth = 847
   Color = clBtnFace
+  Constraints.MaxWidth = 863
   Constraints.MinWidth = 863
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

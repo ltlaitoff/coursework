@@ -6,6 +6,7 @@ object Groups: TGroups
   ClientHeight = 542
   ClientWidth = 633
   Color = clBtnFace
+  Constraints.MaxWidth = 649
   Constraints.MinWidth = 649
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

@@ -8,6 +8,7 @@ object Main: TMain
   AutoSize = True
   Caption = 'ltlaitoff coursework'
   Color = clBtnFace
+  Constraints.MaxWidth = 626
   Constraints.MinWidth = 626
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -45,6 +46,8 @@ object Main: TMain
     Align = alBottom
     TabOrder = 1
     Visible = False
+    ExplicitLeft = 24
+    ExplicitTop = 499
     object Label3: TLabel
       Left = 109
       Top = 30

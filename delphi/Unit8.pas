@@ -1,4 +1,4 @@
-unit Unit8;
+п»їunit Unit8;
 
 interface
 
@@ -16,7 +16,6 @@ type
     QRLabel2: TQRLabel;
     QRLabel3: TQRLabel;
     QRLabel4: TQRLabel;
-    Рассписание: TQRLabel;
     QRDBText1: TQRDBText;
     QRDBText2: TQRDBText;
     QRDBText4: TQRDBText;

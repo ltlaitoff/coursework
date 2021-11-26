@@ -6,6 +6,7 @@ object Timetable: TTimetable
   ClientHeight = 617
   ClientWidth = 620
   Color = clBtnFace
+  Constraints.MaxWidth = 636
   Constraints.MinWidth = 636
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -68,7 +69,6 @@ object Timetable: TTimetable
     Height = 136
     Align = alBottom
     TabOrder = 1
-    ExplicitWidth = 304
     object Group: TLabel
       Left = 36
       Top = 28

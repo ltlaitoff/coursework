@@ -6,6 +6,7 @@ object Teachers: TTeachers
   ClientHeight = 564
   ClientWidth = 944
   Color = clBtnFace
+  Constraints.MaxWidth = 960
   Constraints.MinWidth = 960
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

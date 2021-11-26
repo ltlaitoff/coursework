@@ -1,4 +1,4 @@
-﻿object TimeTableReport: TTimeTableReport
+object TimeTableReport: TTimeTableReport
   Left = 0
   Top = 0
   Caption = 'TimeTableReport'
@@ -90,14 +90,14 @@
       PreCaluculateBandHeight = False
       KeepOnOnePage = False
       BandType = rbTitle
-      object Рассписание: TQRLabel
-        Left = 269
+      object title: TQRLabel
+        Left = 277
         Top = 18
         Width = 127
         Height = 25
         Size.Values = (
           66.145833333333330000
-          711.729166666666700000
+          732.895833333333300000
           47.625000000000000000
           336.020833333333300000)
         XLColumn = 0

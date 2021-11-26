@@ -6,6 +6,7 @@ object Subjects: TSubjects
   ClientHeight = 590
   ClientWidth = 575
   Color = clBtnFace
+  Constraints.MaxWidth = 591
   Constraints.MinWidth = 591
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

@@ -361,6 +361,7 @@ end;
 
 procedure TMain.openPanelClick(Sender: TObject);
 begin
+  errorLabel.Visible := False;
   Panel1.Visible := NOT Panel1.Visible;
   selectStudent.KeyValue := '';
 end;
@@ -576,6 +577,7 @@ end;
 
 procedure TMain.FormActivate(Sender: TObject);
 begin
+  errorLabel.Visible := False;
   ComboBox1.Clear;
   currentMounth := -1;
   Groups1.Visible := True;
@@ -617,48 +619,48 @@ procedure TMain.FormMouseWheel(Sender: TObject; Shift: TShiftState;
   WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 begin
   If DBGrid1.Focused then begin
-     If (WheelDelta < 0) then begin
-        DBGrid1.Perform(WM_KEYDOWN, VK_DOWN, 0)
-     end
-     else begin
-        DBGrid1.Perform(WM_KEYDOWN, VK_UP, 0);
-     end;
+    If (WheelDelta < 0) then begin
+      DBGrid1.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      DBGrid1.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
   end;
 
   If selectGroup.Focused then begin
-     If (WheelDelta < 0) then begin
-        selectGroup.Perform(WM_KEYDOWN, VK_DOWN, 0)
-     end
-     else begin
-        selectGroup.Perform(WM_KEYDOWN, VK_UP, 0);
-     end;
+    If (WheelDelta < 0) then begin
+      selectGroup.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      selectGroup.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
   end;
 
   If selectSubject.Focused then begin
-     If (WheelDelta < 0) then begin
-        selectSubject.Perform(WM_KEYDOWN, VK_DOWN, 0)
-     end
-     else begin
-        selectSubject.Perform(WM_KEYDOWN, VK_UP, 0);
-     end;
+    If (WheelDelta < 0) then begin
+      selectSubject.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      selectSubject.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
   end;
 
   If selectStudent.Focused then begin
-     If (WheelDelta < 0) then begin
-        selectStudent.Perform(WM_KEYDOWN, VK_DOWN, 0)
-     end
-     else begin
-        selectStudent.Perform(WM_KEYDOWN, VK_UP, 0);
-     end;
+    If (WheelDelta < 0) then begin
+      selectStudent.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      selectStudent.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
   end;
 
   If selectMark.Focused then begin
-     If (WheelDelta < 0) then begin
-        selectMark.Perform(WM_KEYDOWN, VK_DOWN, 0)
-     end
-     else begin
-        selectMark.Perform(WM_KEYDOWN, VK_UP, 0);
-     end;
+    If (WheelDelta < 0) then begin
+      selectMark.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      selectMark.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
   end;
 
   Handled := True;

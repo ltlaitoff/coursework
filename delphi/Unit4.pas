@@ -199,30 +199,30 @@ procedure TTimetable.FormMouseWheel(Sender: TObject; Shift: TShiftState;
   WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 begin
   If DBGrid1.Focused then begin
-     If (WheelDelta < 0) then begin
-        DBGrid1.Perform(WM_KEYDOWN, VK_DOWN, 0)
-     end
-     else begin
-        DBGrid1.Perform(WM_KEYDOWN, VK_UP, 0);
-     end;
+    If (WheelDelta < 0) then begin
+      DBGrid1.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      DBGrid1.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
   end;
 
   If selectGroup.Focused then begin
-     If (WheelDelta < 0) then begin
-        selectGroup.Perform(WM_KEYDOWN, VK_DOWN, 0)
-     end
-     else begin
-        selectGroup.Perform(WM_KEYDOWN, VK_UP, 0);
-     end;
+    If (WheelDelta < 0) then begin
+      selectGroup.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      selectGroup.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
   end;
 
   If selectSubject.Focused then begin
-     If (WheelDelta < 0) then begin
-        selectSubject.Perform(WM_KEYDOWN, VK_DOWN, 0)
-     end
-     else begin
-        selectSubject.Perform(WM_KEYDOWN, VK_UP, 0);
-     end;
+    If (WheelDelta < 0) then begin
+      selectSubject.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      selectSubject.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
   end;
 
   Handled := True;
@@ -230,14 +230,14 @@ end;
 
 procedure TTimetable.selectGroupClick(Sender: TObject);
 begin
-   groupName := selectGroup.KeyValue;
-   showTable(currentType);
+  groupName := selectGroup.KeyValue;
+  showTable(currentType);
 end;
 
 procedure TTimetable.selectSubjectClick(Sender: TObject);
 begin
-   subjectName := selectSubject.KeyValue;
-   showTable(currentType);
+  subjectName := selectSubject.KeyValue;
+  showTable(currentType);
 end;
 
 end.
