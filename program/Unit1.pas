@@ -98,6 +98,7 @@ var
   currentMounth: Integer;
   mounthArr: array[1..MOUNTH_COUNT] of String;
   selectDates: String;
+  firstShow: Boolean;
 
 implementation
 
@@ -183,11 +184,6 @@ begin
   DBGrid1.Columns[0].Width := 200;
 end;
 
-procedure TMain.TeachersTabClick(Sender: TObject);
-begin
-  Teachers.Show();
-end;
-
 function TMain.getGroupId(groupName: String): Integer;
 begin
   DataModule1.ADOQueryMain.Close;
@@ -237,21 +233,11 @@ begin
   getGroupNameFromStudentId := DataModule1.DataSourceMain.DataSet.Fields[0].AsString;
 end;
 
-procedure TMain.Groups1Click(Sender: TObject);
-begin
-  Groups.Show();
-end;
-
-procedure TMain.timetable1Click(Sender: TObject);
-begin
-  Timetable.Show();
-end;
-
 procedure TMain.doQueryDaysOfWeek(groupId, subjectId: Integer);
 begin
   DataModule1.ADOQueryTimetableGet.Close;
   DataModule1.ADOQueryTimetableGet.SQL.Text :=
-    'SELECT  day_of_week '
+    'SELECT day_of_week '
   + 'FROM Timetable '
   + 'WHERE (group_id = ' + IntToStr(groupId) + ') AND '
   + '(subject_id = ' + IntToStr(subjectId) + ')';
@@ -304,11 +290,6 @@ begin
   daysOfWeekLabel.Caption := result;
 end;
 
-procedure TMain.Users1Click(Sender: TObject);
-begin
-  Users.Show();
-end;
-
 procedure TMain.doQueryStudentsFromGroup(groupId: Integer);
 begin
   DataModule1.ADOQueryStudentsFromGroup.Close;
@@ -353,6 +334,7 @@ begin
   begin
     selectSubject.KeyValue := DataModule1.ADOTableSubjects.FieldByName('name').AsString;
   end;
+
   showMainTable(groupId, subjectId);
 
   updateStringDaysOfWeek(groupId, subjectId);
@@ -501,11 +483,6 @@ begin
 
 end;
 
-procedure TMain.Main2Click(Sender: TObject);
-begin
-  Subjects.Show();
-end;
-
 function TMain.checkRecordInDataBase(studentID, subjectID: Integer; date: TDateTime): Integer;
 begin
   DataModule1.ADOQueryAddMarks.Close;
@@ -578,8 +555,7 @@ end;
 procedure TMain.FormActivate(Sender: TObject);
 begin
   errorLabel.Visible := False;
-  ComboBox1.Clear;
-  currentMounth := -1;
+
   Groups1.Visible := True;
   Panel1.Visible := False;
 
@@ -596,7 +572,14 @@ begin
     Groups1.Visible := False;
   end;
 
-  fillDatesComboBox();
+  if firstShow = False then begin
+    currentMounth := -1;
+    ComboBox1.Clear;
+    fillDatesComboBox();
+
+    firstShow := True;
+  end;
+
   updateGrid();
 end;
 
@@ -740,6 +723,31 @@ begin
   createDataSelectRequest();
 
   showMainTable(groupId, subjectId);
+end;
+
+procedure TMain.Users1Click(Sender: TObject);
+begin
+  Users.Show();
+end;
+
+procedure TMain.TeachersTabClick(Sender: TObject);
+begin
+  Teachers.Show();
+end;
+
+procedure TMain.Groups1Click(Sender: TObject);
+begin
+  Groups.Show();
+end;
+
+procedure TMain.timetable1Click(Sender: TObject);
+begin
+  Timetable.Show();
+end;
+
+procedure TMain.Main2Click(Sender: TObject);
+begin
+  Subjects.Show();
 end;
 
 end.

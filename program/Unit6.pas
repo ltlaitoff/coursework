@@ -100,15 +100,15 @@ end;
 
 function TUsers.getGroupNameFromStudentId(studentId: Integer): String;
 begin
-  DataModule1.ADOQueryMain.Close;
-  DataModule1.ADOQueryMain.SQL.Text :=
+  DataModule1.ADOQueryUsers.Close;
+  DataModule1.ADOQueryUsers.SQL.Text :=
   'SELECT g.name ' +
   'FROM Users AS u ' +
   'INNER JOIN Groups AS g ON g.id = u.group_id ' +
   'WHERE u.id = ' + IntToStr(studentId) + ';';
-  DataModule1.ADOQueryMain.Open;
+  DataModule1.ADOQueryUsers.Open;
 
-  getGroupNameFromStudentId := DataModule1.DataSourceMain.DataSet.Fields[0].AsString;
+  getGroupNameFromStudentId := DataModule1.DataSourceUsers.DataSet.Fields[0].AsString;
 end;
 
 

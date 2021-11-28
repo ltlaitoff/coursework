@@ -76,7 +76,7 @@ object Timetable: TTimetable
       Height = 13
       Caption = 'Group'
     end
-    object Label2: TLabel
+    object Subject: TLabel
       Left = 21
       Top = 55
       Width = 44
@@ -127,7 +127,7 @@ object Timetable: TTimetable
       KeyField = 'name'
       ListField = 'name'
       ListFieldIndex = 2
-      ListSource = DataModule1.DataSourceGroupsShow
+      ListSource = DataModule1.DataSourceTableGroups
       TabOrder = 4
       OnClick = selectGroupClick
     end
@@ -139,7 +139,7 @@ object Timetable: TTimetable
       KeyField = 'name'
       ListField = 'name'
       ListFieldIndex = 2
-      ListSource = DataModule1.DataSourceSubjectsShow
+      ListSource = DataModule1.DataSourceTableSubjects
       TabOrder = 5
       OnClick = selectSubjectClick
     end

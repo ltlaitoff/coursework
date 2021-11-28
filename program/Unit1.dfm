@@ -46,8 +46,6 @@ object Main: TMain
     Align = alBottom
     TabOrder = 1
     Visible = False
-    ExplicitLeft = 24
-    ExplicitTop = 499
     object Label3: TLabel
       Left = 109
       Top = 30

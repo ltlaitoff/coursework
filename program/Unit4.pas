@@ -16,7 +16,7 @@ type
     Button3: TButton;
     Button4: TButton;
     Group: TLabel;
-    Label2: TLabel;
+    Subject: TLabel;
     selectGroup: TDBLookupComboBox;
     selectSubject: TDBLookupComboBox;
     procedure selectGroupClick(Sender: TObject);
@@ -136,27 +136,27 @@ end;
 
 function TTimetable.getSubjectNameFromTeacherId(teacherId: Integer): String;
 begin
-  DataModule1.ADOQueryMain.Close;
-  DataModule1.ADOQueryMain.SQL.Text :=
+  DataModule1.ADOQueryTimetable.Close;
+  DataModule1.ADOQueryTimetable.SQL.Text :=
   'SELECT name ' +
   'FROM Subjects ' +
   'WHERE teacher_id = ' + IntToStr(teacherId) + ';';
-  DataModule1.ADOQueryMain.Open;
+  DataModule1.ADOQueryTimetable.Open;
 
-  getSubjectNameFromTeacherId := DataModule1.DataSourceMain.DataSet.Fields[0].AsString;
+  getSubjectNameFromTeacherId := DataModule1.DataSourceTimetable.DataSet.Fields[0].AsString;
 end;
 
 function TTimetable.getGroupNameFromStudentId(studentId: Integer): String;
 begin
-  DataModule1.ADOQueryMain.Close;
-  DataModule1.ADOQueryMain.SQL.Text :=
+  DataModule1.ADOQueryTimetable.Close;
+  DataModule1.ADOQueryTimetable.SQL.Text :=
   'SELECT g.name ' +
   'FROM Users AS u ' +
   'INNER JOIN Groups AS g ON g.id = u.group_id ' +
   'WHERE u.id = ' + IntToStr(studentId) + ';';
-  DataModule1.ADOQueryMain.Open;
+  DataModule1.ADOQueryTimetable.Open;
 
-  getGroupNameFromStudentId := DataModule1.DataSourceMain.DataSet.Fields[0].AsString;
+  getGroupNameFromStudentId := DataModule1.DataSourceTimetable.DataSet.Fields[0].AsString;
 end;
 
 procedure TTimetable.FormActivate(Sender: TObject);
@@ -165,6 +165,15 @@ begin
   Button2.Visible := True;
   Button3.Visible := True;
   currentType := 'all';
+
+  selectGroup.Visible := True;
+  selectSubject.Visible := True;
+
+  selectGroup.Enabled := True;
+  selectSubject.Enabled := True;
+
+  Group.Visible := True;
+  Subject.Visible := True;
 
   selectGroup.KeyValue := DataModule1.ADOTableGroups.FieldByName('name').AsString;
   selectSubject.KeyValue := DataModule1.ADOQuerySubjectsShow.FieldByName('name').AsString;
@@ -175,6 +184,8 @@ begin
   if (Authorization.userType = 'teacher') then begin
     selectSubject.KeyValue := getSubjectNameFromTeacherId(Authorization.userID);
     subjectName := selectSubject.KeyValue;
+    selectGroup.Visible := False;
+    Group.Visible := False;
     selectSubject.Enabled := False;
     Button1.Visible := False;
     Button2.Visible := False;
@@ -187,6 +198,8 @@ begin
     selectGroup.KeyValue := getGroupNameFromStudentId(Authorization.userID);
     groupName := selectGroup.KeyValue;
     selectGroup.Enabled := False;
+    selectSubject.Visible := False;
+    Subject.Visible := False;
     Button1.Visible := False;
     Button2.Visible := False;
     Button3.Visible := False;
