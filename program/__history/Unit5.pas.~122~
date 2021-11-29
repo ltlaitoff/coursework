@@ -52,11 +52,11 @@ uses Unit2, StrUtils, Unit9;
 
 procedure TGroups.showGroupsTable();
 begin
- DataModule1.ADOQueryGroupsShow.Close;
- DataModule1.ADOQueryGroupsShow.SQL.Text :=
-  'SELECT *' +
-  'FROM Groups';
- DataModule1.ADOQueryGroupsShow.Open;
+  DataModule1.ADOQueryGroupsShow.Close;
+  DataModule1.ADOQueryGroupsShow.SQL.Text :=
+    'SELECT *' +
+    'FROM Groups';
+  DataModule1.ADOQueryGroupsShow.Open;
 end;
 
 procedure TGroups.DBGrid1CellClick(Column: TColumn);
@@ -103,7 +103,7 @@ var
 begin
   if ((name = '') AND NOT (action = 'delete')) then begin
     errorString.Visible := True;
-    errorString.Caption := 'Укажите название!';
+    errorString.Caption := 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!';
     groupsActionControllerCheckOnError := True;
     Exit;
   end;
@@ -134,17 +134,17 @@ end;
 
 procedure TGroups.buttonAddClick(Sender: TObject);
 begin
-   groupsActionController('add', nameEdit, groupId, errorLabel);
+  groupsActionController('add', nameEdit, groupId, errorLabel);
 end;
 
 procedure TGroups.buttonChangeClick(Sender: TObject);
 begin
-   groupsActionController('update', nameEdit, groupId, errorLabel);
+  groupsActionController('update', nameEdit, groupId, errorLabel);
 end;
 
 procedure TGroups.buttonDeleteClick(Sender: TObject);
 begin
-   groupsActionController('delete', nameEdit, groupId, errorLabel);
+  groupsActionController('delete', nameEdit, groupId, errorLabel);
 end;
 
 procedure TGroups.openPanelClick(Sender: TObject);
@@ -170,10 +170,18 @@ begin
   NullStrictConvert := False;
 end;
 
-eprocedure TGroups.FormMouseWheel(Sender: TObject; Shift: TShiftState;
+
+procedure TGroups.FormMouseWheel(Sender: TObject; Shift: TShiftState;
   WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 begin
-
+  If DBGrid1.Focused then begin
+    If (WheelDelta < 0) then begin
+      DBGrid1.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      DBGrid1.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
+  end;
 end;
 
-nd.
+end.

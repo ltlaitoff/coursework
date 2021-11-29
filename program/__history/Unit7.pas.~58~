@@ -32,6 +32,7 @@ type
     Label9: TLabel;
     Label6: TLabel;
     emailEdit: TEdit;
+    Panel2: TPanel;
     procedure openPanelClick(Sender: TObject);
     procedure updatePanelFields();
     procedure resetPanelFields();
@@ -50,6 +51,8 @@ type
     procedure DBGrid1CellClick(Column: TColumn);
     procedure selectGroupClick(Sender: TObject);
     procedure showErrorLabel(text: String);
+    procedure FormMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
   private
     { Private declarations }
   public
@@ -80,6 +83,7 @@ end;
 
 procedure TTeachers.FormActivate(Sender: TObject);
 begin
+  CheckBox1Click(CheckBox1);
   CheckBox1.Visible := True;
   openPanel.Visible := True;
   Panel1.Visible := False;
@@ -97,10 +101,24 @@ begin
   CheckBox1Click(CheckBox1);
 end;
 
+procedure TTeachers.FormMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+  If DBGrid1.Focused then begin
+    If (WheelDelta < 0) then begin
+      DBGrid1.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      DBGrid1.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
+  end;
+end;
+
 procedure TTeachers.openPanelClick(Sender: TObject);
 begin
   Panel1.Visible := NOT Panel1.Visible;
   updatePanelFields();
+  CheckBox1Click(CheckBox1);
 end;
 
 procedure TTeachers.updatePanelFields();

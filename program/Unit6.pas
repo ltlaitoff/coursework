@@ -79,6 +79,7 @@ Uses Unit2, StrUtils, Unit9;
 
 procedure TUsers.Button1Click(Sender: TObject);
 begin
+  errorLabel.Visible := False;
   resetPanelFields();
 end;
 
@@ -182,6 +183,7 @@ end;
 
 procedure TUsers.openPanelClick(Sender: TObject);
 begin
+  errorLabel.Visible := False;
   Panel1.Visible := NOT Panel1.Visible;
   updatePanelFields();
 end;
@@ -270,7 +272,7 @@ begin
   end;
 
   if String(groupId) = '' then begin
-    showErrorLabel('Ошибка ИД группы'); 
+    showErrorLabel('Ошибка группы');
     usersActionControllerCheckOnError := True;
     Exit;
   end;
@@ -363,6 +365,7 @@ procedure TUsers.usersActionController(action: String; id: Integer; group, surna
 var
   groupId: Integer;
 begin
+  errorLabel.Visible := False;
   groupId := getGroupId(group);
 
   if (usersActionControllerCheckOnError(action, id, groupId, surname, name, patronymic, email, username, password) = true) then begin
@@ -376,6 +379,9 @@ begin
   end;
 
   showMainTable(groupId);
+  selectGroup.KeyValue := group;
+  CheckBox1Click(CheckBox1);
+  Button1Click(Button1);
 end;
 
 procedure TUsers.buttonAddClick(Sender: TObject);

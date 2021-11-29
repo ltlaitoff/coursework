@@ -1,10 +1,13 @@
 object Subjects: TSubjects
   Left = 0
   Top = 0
+  AutoSize = True
   Caption = 'Subjects'
-  ClientHeight = 607
-  ClientWidth = 644
+  ClientHeight = 590
+  ClientWidth = 575
   Color = clBtnFace
+  Constraints.MaxWidth = 591
+  Constraints.MinWidth = 591
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -17,10 +20,11 @@ object Subjects: TSubjects
   PixelsPerInch = 96
   TextHeight = 13
   object DBGrid1: TDBGrid
-    Left = 35
-    Top = 8
-    Width = 574
+    Left = 0
+    Top = 0
+    Width = 575
     Height = 369
+    Align = alBottom
     DataSource = DataModule1.DataSourceSubjectsShow
     TabOrder = 0
     TitleFont.Charset = DEFAULT_CHARSET
@@ -55,10 +59,11 @@ object Subjects: TSubjects
       end>
   end
   object Panel1: TPanel
-    Left = 27
-    Top = 429
-    Width = 558
+    Left = 0
+    Top = 420
+    Width = 575
     Height = 170
+    Align = alBottom
     TabOrder = 1
     Visible = False
     object Label3: TLabel
@@ -160,13 +165,21 @@ object Subjects: TSubjects
       OnClick = clearClick
     end
   end
-  object openPanel: TButton
-    Left = 526
-    Top = 383
-    Width = 75
-    Height = 25
-    Caption = #1048#1079#1084#1077#1085#1080#1090#1100
+  object Panel2: TPanel
+    Left = 0
+    Top = 369
+    Width = 575
+    Height = 51
+    Align = alBottom
     TabOrder = 2
-    OnClick = openPanelClick
+    object openPanel: TButton
+      Left = 470
+      Top = 10
+      Width = 75
+      Height = 25
+      Caption = #1048#1079#1084#1077#1085#1080#1090#1100
+      TabOrder = 0
+      OnClick = openPanelClick
+    end
   end
 end

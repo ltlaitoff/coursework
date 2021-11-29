@@ -120,6 +120,7 @@ object Subjects: TSubjects
       ListFieldIndex = 5
       ListSource = DataModule1.DataSourceTableTeachers
       TabOrder = 1
+      OnClick = teacherComboBoxClick
     end
     object buttonChange: TButton
       Left = 327

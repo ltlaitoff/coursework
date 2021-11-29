@@ -1,4 +1,4 @@
-unit Unit5;
+Ôªøunit Unit5;
 
 interface
 
@@ -18,6 +18,7 @@ type
     buttonDelete: TButton;
     nameEdit: TEdit;
     openPanel: TButton;
+    Panel2: TPanel;
     procedure showGroupsTable();
     procedure DBGrid1CellClick(Column: TColumn);
     procedure addRecordInGroups(name: String);
@@ -31,6 +32,8 @@ type
     procedure openPanelClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
   private
     { Private declarations }
   public
@@ -49,11 +52,11 @@ uses Unit2, StrUtils, Unit9;
 
 procedure TGroups.showGroupsTable();
 begin
- DataModule1.ADOQueryGroupsShow.Close;
- DataModule1.ADOQueryGroupsShow.SQL.Text :=
-  'SELECT *' +
-  'FROM Groups';
- DataModule1.ADOQueryGroupsShow.Open;
+  DataModule1.ADOQueryGroupsShow.Close;
+  DataModule1.ADOQueryGroupsShow.SQL.Text :=
+    'SELECT *' +
+    'FROM Groups';
+  DataModule1.ADOQueryGroupsShow.Open;
 end;
 
 procedure TGroups.DBGrid1CellClick(Column: TColumn);
@@ -100,7 +103,7 @@ var
 begin
   if ((name = '') AND NOT (action = 'delete')) then begin
     errorString.Visible := True;
-    errorString.Caption := '”Í‡ÊËÚÂ Ì‡Á‚‡ÌËÂ!';
+    errorString.Caption := '–ù–µ–≤–µ—Ä–Ω–æ–µ –Ω–∞–∑–≤–∞–Ω–∏–µ!';
     groupsActionControllerCheckOnError := True;
     Exit;
   end;
@@ -112,6 +115,7 @@ procedure TGroups.groupsActionController(action: String; nameEdit: TEdit; groupI
 var
   name: String;
 begin
+  errorLabel.Visible := False;
   name := nameEdit.Text;
 
   if (groupsActionControllerCheckOnError(action, name, errorString) = true) then begin
@@ -131,21 +135,22 @@ end;
 
 procedure TGroups.buttonAddClick(Sender: TObject);
 begin
-   groupsActionController('add', nameEdit, groupId, errorLabel);
+  groupsActionController('add', nameEdit, groupId, errorLabel);
 end;
 
 procedure TGroups.buttonChangeClick(Sender: TObject);
 begin
-   groupsActionController('update', nameEdit, groupId, errorLabel);
+  groupsActionController('update', nameEdit, groupId, errorLabel);
 end;
 
 procedure TGroups.buttonDeleteClick(Sender: TObject);
 begin
-   groupsActionController('delete', nameEdit, groupId, errorLabel);
+  groupsActionController('delete', nameEdit, groupId, errorLabel);
 end;
 
 procedure TGroups.openPanelClick(Sender: TObject);
 begin
+  errorLabel.Visible := False;
   Panel1.Visible := NOT Panel1.Visible;
 end;
 
@@ -165,6 +170,20 @@ end;
 procedure TGroups.FormCreate(Sender: TObject);
 begin
   NullStrictConvert := False;
+end;
+
+
+procedure TGroups.FormMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+  If DBGrid1.Focused then begin
+    If (WheelDelta < 0) then begin
+      DBGrid1.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      DBGrid1.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
+  end;
 end;
 
 end.

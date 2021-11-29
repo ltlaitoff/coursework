@@ -117,6 +117,7 @@ procedure TTeachers.openPanelClick(Sender: TObject);
 begin
   Panel1.Visible := NOT Panel1.Visible;
   updatePanelFields();
+  CheckBox1Click(CheckBox1);
 end;
 
 procedure TTeachers.updatePanelFields();
@@ -285,6 +286,7 @@ begin
   end;
 
   showMainTable();
+  Button1Click(Button1);
 end;
 
 procedure TTeachers.buttonAddClick(Sender: TObject);

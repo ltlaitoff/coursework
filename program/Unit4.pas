@@ -191,7 +191,6 @@ begin
     Button2.Visible := False;
     Button3.Visible := False;
     currentType := 'subject';
-    showTable('subject');
   end;
 
   if (Authorization.userType = 'student') then begin
@@ -204,8 +203,9 @@ begin
     Button2.Visible := False;
     Button3.Visible := False;
     currentType := 'group';
-    showTable('group');
   end;
+
+  showTable(currentType);
 end;
 
 procedure TTimetable.FormMouseWheel(Sender: TObject; Shift: TShiftState;

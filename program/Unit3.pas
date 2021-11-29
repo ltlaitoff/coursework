@@ -44,6 +44,7 @@ type
     procedure clearClick(Sender: TObject);
     procedure FormMouseWheel(Sender: TObject; Shift: TShiftState;
       WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+    procedure teacherComboBoxClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -183,12 +184,19 @@ begin
   subjectsActionControllerCheckOnError := False;
 end;
 
+procedure TSubjects.teacherComboBoxClick(Sender: TObject);
+begin
+  errorLabel.Visible := False;
+end;
+
 procedure TSubjects.subjectsActionController(action: String; nameEdit, audienceEdit: TEdit;
   teacherComboBox: TDBLookupComboBox; errorString: TLabel; recordId: Integer);
 var
   name, audience, teacher: String;
   teacherId: Integer;
 begin
+  errorLabel.Visible := False;
+
   name := nameEdit.Text;
   audience := audienceEdit.Text;
   teacher := teacherComboBox.KeyValue;
@@ -212,6 +220,7 @@ end;
 
 procedure TSubjects.clearClick(Sender: TObject);
 begin
+  errorLabel.Visible := False;
   recordId := -1;
   nameEdit.Text := '';
   audienceEdit.Text := '';
@@ -235,6 +244,7 @@ end;
 
 procedure TSubjects.openPanelClick(Sender: TObject);
 begin
+  errorLabel.Visible := False;
   Panel1.Visible := NOT Panel1.Visible;
 end;
 

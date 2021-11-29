@@ -1,4 +1,4 @@
-unit Unit5;
+﻿unit Unit5;
 
 interface
 
@@ -103,7 +103,7 @@ var
 begin
   if ((name = '') AND NOT (action = 'delete')) then begin
     errorString.Visible := True;
-    errorString.Caption := '������� ��������!';
+    errorString.Caption := 'Неверное название!';
     groupsActionControllerCheckOnError := True;
     Exit;
   end;
@@ -115,6 +115,7 @@ procedure TGroups.groupsActionController(action: String; nameEdit: TEdit; groupI
 var
   name: String;
 begin
+  errorLabel.Visible := False;
   name := nameEdit.Text;
 
   if (groupsActionControllerCheckOnError(action, name, errorString) = true) then begin
@@ -149,6 +150,7 @@ end;
 
 procedure TGroups.openPanelClick(Sender: TObject);
 begin
+  errorLabel.Visible := False;
   Panel1.Visible := NOT Panel1.Visible;
 end;
 

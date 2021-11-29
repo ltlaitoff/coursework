@@ -36,6 +36,7 @@ type
     selectId: TDBLookupComboBox;
     Button1: TButton;
     selectGroupPanel: TDBLookupComboBox;
+    Panel2: TPanel;
     procedure selectGroupClick(Sender: TObject);
     function getGroupId(groupName: String): Integer;
     procedure showMainTable(groupId: Integer);
@@ -78,7 +79,9 @@ Uses Unit2, StrUtils, Unit9;
 
 procedure TUsers.Button1Click(Sender: TObject);
 begin
+  errorLabel.Visible := False;
   resetPanelFields();
+  CheckBox1Click(CheckBox1);
 end;
 
 procedure TUsers.CheckBox1Click(Sender: TObject);
@@ -99,15 +102,15 @@ end;
 
 function TUsers.getGroupNameFromStudentId(studentId: Integer): String;
 begin
-  DataModule1.ADOQueryMain.Close;
-  DataModule1.ADOQueryMain.SQL.Text :=
+  DataModule1.ADOQueryUsers.Close;
+  DataModule1.ADOQueryUsers.SQL.Text :=
   'SELECT g.name ' +
   'FROM Users AS u ' +
   'INNER JOIN Groups AS g ON g.id = u.group_id ' +
   'WHERE u.id = ' + IntToStr(studentId) + ';';
-  DataModule1.ADOQueryMain.Open;
+  DataModule1.ADOQueryUsers.Open;
 
-  getGroupNameFromStudentId := DataModule1.DataSourceMain.DataSet.Fields[0].AsString;
+  getGroupNameFromStudentId := DataModule1.DataSourceUsers.DataSet.Fields[0].AsString;
 end;
 
 
@@ -137,22 +140,31 @@ end;
 procedure TUsers.FormMouseWheel(Sender: TObject; Shift: TShiftState;
   WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 begin
+  If DBGrid1.Focused then begin
+    If (WheelDelta < 0) then begin
+      DBGrid1.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      DBGrid1.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
+  end;
+
   If selectGroup.Focused then begin
-     If (WheelDelta < 0) then begin
-        selectGroup.Perform(WM_KEYDOWN, VK_DOWN, 0)
-     end
-     else begin
-        selectGroup.Perform(WM_KEYDOWN, VK_UP, 0);
-     end;
+    If (WheelDelta < 0) then begin
+      selectGroup.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      selectGroup.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
   end;
 
   If selectGroupPanel.Focused then begin
-     If (WheelDelta < 0) then begin
-        selectGroupPanel.Perform(WM_KEYDOWN, VK_DOWN, 0)
-     end
-     else begin
-        selectGroupPanel.Perform(WM_KEYDOWN, VK_UP, 0);
-     end;
+    If (WheelDelta < 0) then begin
+      selectGroupPanel.Perform(WM_KEYDOWN, VK_DOWN, 0)
+    end
+    else begin
+      selectGroupPanel.Perform(WM_KEYDOWN, VK_UP, 0);
+    end;
   end;
 
   Handled := True;
@@ -172,7 +184,8 @@ end;
 
 procedure TUsers.openPanelClick(Sender: TObject);
 begin
-  Panel1.Visible := true;
+  errorLabel.Visible := False;
+  Panel1.Visible := NOT Panel1.Visible;
   updatePanelFields();
 end;
 
@@ -353,6 +366,7 @@ procedure TUsers.usersActionController(action: String; id: Integer; group, surna
 var
   groupId: Integer;
 begin
+  errorLabel.Visible := False;
   groupId := getGroupId(group);
 
   if (usersActionControllerCheckOnError(action, id, groupId, surname, name, patronymic, email, username, password) = true) then begin
@@ -366,6 +380,7 @@ begin
   end;
 
   showMainTable(groupId);
+  CheckBox1Click(CheckBox1);
 end;
 
 procedure TUsers.buttonAddClick(Sender: TObject);

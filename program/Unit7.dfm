@@ -41,6 +41,8 @@ object Teachers: TTeachers
     Align = alBottom
     TabOrder = 1
     Visible = False
+    ExplicitLeft = -8
+    ExplicitTop = 331
     object Label4: TLabel
       Left = 249
       Top = 58
